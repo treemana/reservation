@@ -1,18 +1,22 @@
-import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-
+import React, { Component,PropTypes  } from 'react';
+import { Form, Icon, Input, Button } from 'antd';
 const FormItem = Form.Item;
 
-class NormalLoginForm extends React.Component {
-  handleSubmit = (e) => {
+class NormalLoginForm extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        //console.log('Received values of form: ', values);
+        if(values.userName === 'student')
+            this.context.router.history.push({pathname:'/student/'});
+        else if(values.userName === 'teacher')
+            this.context.router.history.push({pathname:'/teacher/'});
       }
     });
   }
-
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -40,6 +44,6 @@ class NormalLoginForm extends React.Component {
     );
   }
 }
-
+NormalLoginForm.contextTypes = {router:()=> React.PropTypes.func.isRequired };
 const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
 export default WrappedNormalLoginForm;
