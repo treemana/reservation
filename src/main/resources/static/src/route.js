@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './app.css';
 import App from './app';
+import Stupart from './stu';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 class MainRouter extends Component {
@@ -9,7 +10,8 @@ class MainRouter extends Component {
       <BrowserRouter className="search">
       	<Switch>
   	   	  <Route exact path="/" component={App} ></Route>
-  	   	  <Route exact path="/student" component={App} ></Route>
+  	   	  <Route path="/student" component={Stupart} ></Route>
+          <Route path="/teacher" component={App} ></Route>
   	    </Switch>
   	  </BrowserRouter>
     );
