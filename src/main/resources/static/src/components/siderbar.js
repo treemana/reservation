@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import Login from './login';
-import './app.css';
-import logo from './logo.png';
+import '../css/app.css';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import Areacard from './area';
-import Footertext from './footer';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const { Header, Content, Sider, Footer } = Layout;
@@ -36,11 +32,6 @@ class Siderbar extends Component {
           <Icon type="shopping" />我的
         </Menu.Item>
       </Menu>
-      <Content style={{ padding: '0 50px' }}>
-      <br />
-        <Areacard/>
-      </Content>
-      <Footertext />
     </Layout>
     );
   }
