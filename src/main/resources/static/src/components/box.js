@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import './app.css';
+import '../css/app.css';
 import { Card, Row, Col, BackTop, Icon, Avatar, Button } from 'antd';
-import b2 from './2b.png';
-import b3 from './3b.png';
-import n2 from './2n.png';
-import n3 from './3n.png';
+import b2 from '../images/2b.png';
+import b3 from '../images/3b.png';
+import n2 from '../images/2n.png';
+import n3 from '../images/3n.png';
 const { Meta } = Card;
 
-class Areacard extends Component {
+class Box extends Component {
   render() {
     return (
       <Card title=" 预约还未开始" bordered={true} className="areacard">
@@ -58,4 +58,4 @@ class Areacard extends Component {
   }
 }
 
-export default Areacard;
+export default Box;

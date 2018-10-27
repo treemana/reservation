@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Login from './login';
-import './app.css';
-import logo from './logo.png';
-import Headerbar from './header';
-import Footertext from './footer';
+import Login from '../components/login';
+import '../css/app.css';
+import logo from '../images/logo.png';
+import Headerbar from '../components/headerbar';
+import Footertext from '../components/footertext';
 
 class App extends Component {
   render() {

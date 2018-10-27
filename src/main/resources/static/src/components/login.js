@@ -45,5 +45,5 @@ class NormalLoginForm extends Component {
   }
 }
 NormalLoginForm.contextTypes = {router:()=> React.PropTypes.func.isRequired };
-const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
-export default WrappedNormalLoginForm;
+const Login = Form.create()(NormalLoginForm);
+export default Login;
