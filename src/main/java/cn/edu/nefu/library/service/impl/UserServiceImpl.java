@@ -85,4 +85,14 @@ public class UserServiceImpl implements UserService {
 
 
     }
+
+    @Override
+    public Map<String, Object> postAddBlackList(User user) throws LibException {
+        Map<String, Object> rtv = null;
+        int x = userMapper.updateTypeByStudentId(user);
+        if(x==0){
+            throw new LibException("用户名不存在");
+        }
+        return rtv;
+    }
 }
