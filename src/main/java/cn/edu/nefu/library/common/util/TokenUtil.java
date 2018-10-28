@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by zhengyi on 17-7-29.
+ * @author ZhengYi
+ * @date 17-7-29
  */
 @Component
 public class TokenUtil {
