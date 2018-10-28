@@ -24,4 +24,7 @@ public interface UserMapper {
     @Update("UPDATE user SET user_token=#{token} WHERE user_system_id=#{systemId}")
     int updateTokenBySystemId(User user);
 
+    @SelectProvider(type = UserProvider.class, method = "selectByType")
+    List<User> selectByType();
+
 }

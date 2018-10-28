@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Map;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -54,5 +56,23 @@ public class UserServiceImpl implements UserService {
             throw new LibException("用户名或密码不正确!");
         }
         return rtv;
+    }
+
+    @Override
+    public List<Map<String, Object>> getBlackList() throws LibException {
+        List<Map<String, Object>> rtv = new ArrayList<>();
+        List<User> users = userMapper.selectByType();
+        if(null != users){
+            for (User user:users) {
+             Map<String, Object> map = new HashMap<>(2);
+             map.put("studentId",user.getStudentId());
+             map.put("name",user.getStudentName());
+             rtv.add(map);
+            }
+
+        }else{
+            throw  new LibException("黑名单为空");
+        }
+         return rtv;
     }
 }

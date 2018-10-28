@@ -4,8 +4,8 @@ import cn.edu.nefu.library.core.model.User;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
- * @author : Jimi
- * @date : 2018/10/27
+ * @author : Jimi,PC
+ * @date : 2018/10/27,10/28
  * @since : Java 8
  */
 public class UserProvider {
@@ -34,5 +34,16 @@ public class UserProvider {
 
             }
         }.toString();
+    }
+    public String selectByType(){
+        return new SQL(){
+            {
+                SELECT("user_username AS studentId, user_password AS studentName");
+                FROM("user");
+                WHERE("user_type=2");
+            }
+
+        }.toString();
+
     }
 }
