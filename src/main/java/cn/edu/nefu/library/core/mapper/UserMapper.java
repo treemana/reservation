@@ -3,6 +3,7 @@ package cn.edu.nefu.library.core.mapper;
 import cn.edu.nefu.library.core.mapper.provider.UserProvider;
 import cn.edu.nefu.library.core.model.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -26,5 +27,9 @@ public interface UserMapper {
 
     @SelectProvider(type = UserProvider.class, method = "selectByType")
     List<User> selectByType();
+
+    @Select("SELECT user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+            "user_type AS type, user_token AS token from user where user_username=#{studentId}")
+    User selectByStudenId(User user);
 
 }
