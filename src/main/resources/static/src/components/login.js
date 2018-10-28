@@ -1,8 +1,15 @@
-import React, { Component,PropTypes  } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { login } from '../model/actions';
 import { Form, Icon, Input, Button } from 'antd';
 const FormItem = Form.Item;
 
 class NormalLoginForm extends Component {
+  static propTypes = {
+    isLoading: PropTypes.bool,
+    loginUserName: PropTypes.string,
+    loginError: PropTypes.string
+  };
   constructor(props) {
     super(props);
     this.handleSubmit = (e) => {
@@ -16,6 +23,9 @@ class NormalLoginForm extends Component {
       }
     });
   }
+  }
+  componentDidMount() {
+    this.props.login();
   }
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -44,6 +54,6 @@ class NormalLoginForm extends Component {
     );
   }
 }
-NormalLoginForm.contextTypes = {router:()=> React.PropTypes.func.isRequired };
+NormalLoginForm.contextTypes = {router:()=> PropTypes.func.isRequired };
 const Login = Form.create()(NormalLoginForm);
 export default Login;

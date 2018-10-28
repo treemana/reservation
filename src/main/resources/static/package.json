@@ -10,13 +10,6 @@
   },
   "devDependencies": {
     "antd": "^3.8.0",
-    "history": "^4.7.2",
-    "jquery": "^3.3.1",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
     "babel-preset-env": "^1.7.0",
@@ -26,12 +19,25 @@
     "css-loader": "^0.15.0",
     "extract-loader": "^3.0.0",
     "file-loader": "^2.0.0",
+    "history": "^4.7.2",
     "html-loader": "^0.5.5",
+    "jquery": "^3.3.1",
     "jsx-loader": "^0.12.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
     "react-hot-loader": "^1.1.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "redux-logger": "^3.0.6",
     "style-loader": "^0.12.4",
     "url-loader": "^1.1.1",
     "webpack": "^4.20.2",
     "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "react-redux": "^5.1.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   }
 }
