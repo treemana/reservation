@@ -18,7 +18,6 @@ class Boxset extends Component {
         <Content style={{ padding: '0 50px' }}>
       		<Adbox />
         </Content>
-        
         </Layout>
         < Footertext />
       </Layout>
