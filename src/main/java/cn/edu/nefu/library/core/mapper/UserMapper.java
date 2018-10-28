@@ -32,4 +32,7 @@ public interface UserMapper {
     @UpdateProvider(type=UserProvider.class, method = "deleteBlackListByStudentId")
     int deleteBlackListByStudentId(User user);
 
+    @Update("UPDATE user SET user_type=2 WHERE user_username=#{studentId}")
+    int updateTypeByStudentId(User user);
+
 }
