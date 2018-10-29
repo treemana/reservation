@@ -56,5 +56,18 @@ public class BookCaseImpl implements BookCaseService {
         }
         return rtv;
         }
+
+
+    @Override
+    public int setKeepByNumber(BookCase bookCase) {
+        int success = 0;
+        success = bookCaseMapper.setByNumber(bookCase);
+        if (0 < success) {
+            return 1;
+        } else {
+            return 0;
+
+        }
+    }
 }
 

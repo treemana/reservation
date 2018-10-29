@@ -1,5 +1,6 @@
 package cn.edu.nefu.library.core.mapper.provider;
 
+import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -20,4 +21,16 @@ public class BookCaseProvider {
             }
         }.toString();
     }
+
+    public String setByNumber(BookCase bookCase) {
+        return new SQL() {
+            {
+                UPDATE("bookcase");
+                SET("bc_status=1");
+                WHERE("bc_number=#{number}");
+            }
+        }.toString();
+    }
 }
+
+
