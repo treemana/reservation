@@ -10,7 +10,6 @@ CREATE TABLE `bookcase` (
   INDEX `idx_l` (`bc_location`),
   INDEX `idx_u` (`bc_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
   `config_system_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '配置的id',
@@ -18,7 +17,6 @@ CREATE TABLE `config` (
   `config_value` VARCHAR(255) DEFAULT NULL  COMMENT '配置的value（时间）',
   PRIMARY KEY (`config_system_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_system_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'user表的id',
