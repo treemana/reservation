@@ -14,11 +14,10 @@ class Boxset extends Component {
       <Layout className="stupart">
         < Headerbar className="headerbar"/>
         <Layout>
-        < Adsiderbar className="siderbar" />
+        < Adsiderbar className="siderbar" current="1"/>
         <Content style={{ padding: '0 50px' }}>
       		<Adbox />
         </Content>
-        
         </Layout>
         < Footertext />
       </Layout>

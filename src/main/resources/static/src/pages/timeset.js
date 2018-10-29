@@ -14,7 +14,7 @@ class Timeset extends Component {
       <Layout className="stupart">
         < Headerbar className="headerbar"/>
         <Layout>
-        < Adsiderbar className="siderbar" />
+        < Adsiderbar className="siderbar" current="2"/>
         <Content style={{ padding: '0 50px' }}>
         <br />
       		<Time />
