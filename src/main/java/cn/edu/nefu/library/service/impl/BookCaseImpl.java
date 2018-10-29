@@ -10,11 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * @author : chenchenT
+ * @author : chenchenT CMY
  * @date : 2018/10/28
  * @since : Java 8
  */
@@ -80,6 +82,24 @@ public class BookCaseImpl implements BookCaseService {
             return 0;
 
         }
+    }
+
+
+    @Override
+    public List<Map<String,Object>> getBagNum() throws  LibException{
+        List<Map<String,Object>> rtv = new ArrayList<>();
+        List<BookCase> result = bookCaseMapper.selectBagNum();
+        if(result!=null){
+            for(BookCase bookCase:result){
+                Map<String,Object> map = new HashMap<>();
+                map.put("location",bookCase.getLocation());
+                map.put("num",bookCase.getNumber());
+                rtv.add(map);
+            }
+        }else{
+            throw new LibException("没有柜子的信息");
+        }
+        return rtv;
     }
 
 }

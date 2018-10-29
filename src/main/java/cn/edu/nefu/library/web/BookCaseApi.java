@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author : chenchenT
+ * @author : chenchenT CMY
  * @date : 2018/10/28
  * @since : Java 8
  */
@@ -97,4 +97,13 @@ public class BookCaseApi {
         }
     }
 
+    @RequestMapping(value = "/num",method = RequestMethod.GET)
+    public RestData getNum(HttpServletRequest request){
+        logger.info("getNum is running");
+        try {
+            List<Map<String,Object>> data = bookCaseService.getBagNum();
+            return new RestData(data);
+        } catch (LibException e) {
+            return new RestData(1,e.getMessage());
+        }
 }

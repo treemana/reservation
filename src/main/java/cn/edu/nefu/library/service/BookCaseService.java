@@ -6,10 +6,11 @@ import cn.edu.nefu.library.core.model.User;
 import org.apache.ibatis.annotations.UpdateProvider;
 import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * @author : chenchenT
+ * @author : chenchenT CMY
  * @date : 2018/10/28
  * @since : Java 8
  */
@@ -38,4 +39,5 @@ public interface BookCaseService {
      */
     int updateShipByNumber(BookCase bookCase);
 
+    List<Map<String,Object>> getBagNum()throws LibException;
 }
