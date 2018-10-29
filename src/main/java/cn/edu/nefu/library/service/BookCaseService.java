@@ -3,6 +3,8 @@ package cn.edu.nefu.library.service;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
+import org.apache.ibatis.annotations.UpdateProvider;
+import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 
 import java.util.Map;
 
@@ -28,5 +30,12 @@ public interface BookCaseService {
      * @throws LibException 是否预留成功
      */
     int setKeepByNumber(BookCase bookCase);
+
+    /**
+     * 清空/删除关系
+     * @param bookCase 书包柜编号
+     * @return 是否清除成功
+     */
+    int updateShipByNumber(BookCase bookCase);
 
 }

@@ -40,13 +40,13 @@ public class BookCaseImpl implements BookCaseService {
 
         if (null != user1 ) {
 
-            if (user1.getType() == 2) {
+            if (2 == user1.getType()) {
                 throw new LibException("当前用户已被禁用!");
             }
             else {
                 BookCase bookCase = bookCaseMapper.selectByUserId(user1);
                 if (null != bookCase) {
-                    rtv = new HashMap<>();
+                    rtv = new HashMap<>(2);
                     rtv.put("location", bookCase.getLocation());
                     rtv.put("number", bookCase.getNumber());
                 } else {
@@ -69,5 +69,18 @@ public class BookCaseImpl implements BookCaseService {
 
         }
     }
+
+    @Override
+    public int updateShipByNumber(BookCase bookCase) {
+        int success = 0;
+        success = bookCaseMapper.updateShipByNumber(bookCase);
+        if (0 < success) {
+            return 1;
+        } else {
+            return 0;
+
+        }
+    }
+
 }
 
