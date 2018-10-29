@@ -31,6 +31,16 @@ public class BookCaseProvider {
             }
         }.toString();
     }
+
+    public String updateShipByNumber(BookCase bookCase) {
+        return new SQL() {
+            {
+                UPDATE("bookcase");
+                SET("bc_user_id=null, bc_status=0");
+                WHERE("bc_number=#{number}");
+            }
+        }.toString();
+    }
 }
 
 

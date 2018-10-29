@@ -13,7 +13,7 @@ public class BookCase {
     private Integer systemId;
 
     /**
-     * 柜子位置
+     * 柜子位置 null 全部 1 二楼北 2 二楼南 3 三楼北 4 三楼南
      */
     private Integer location;
 
@@ -28,7 +28,7 @@ public class BookCase {
     private Integer userId;
 
     /**
-     * 柜子当前状态
+     * 柜子当前状态 0 开放 1 占用或预留
      */
     private Integer status;
 

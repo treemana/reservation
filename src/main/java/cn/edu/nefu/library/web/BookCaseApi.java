@@ -75,4 +75,26 @@ public class BookCaseApi {
         }
     }
 
+    @RequestMapping(value = "/ship", method = RequestMethod.DELETE)
+    public RestData setShip(@RequestBody List<BookCase> bookCases, HttpServletRequest request) {
+
+        User currentUser = TokenUtil.getUserByToken(request);
+        int success = 0;
+        if (null != currentUser) {
+            for (BookCase bookCase : bookCases) {
+                if (0 >= bookCaseService.updateShipByNumber(bookCase)) {
+                    success = 1;
+                    break;
+                }
+            }
+            if (0 == success) {
+                return new RestData(0, "操作成功!");
+            } else {
+                return new RestData(1, "操作失败,请重试!");
+            }
+        } else{
+            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+        }
+    }
+
 }
