@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author : chenchenT
+ * @author : chenchenT CMY
  * @date : 2018/10/28
  * @since : Java 8
  */
@@ -40,15 +40,14 @@ public class BookCaseApi {
     public RestData getLocation(User user, HttpServletRequest request) {
         logger.info("getLocation : " + JsonUtil.getJsonString(user));
         User currentUser = TokenUtil.getUserByToken(request);
-        if(null!=currentUser){
-                try {
+        if (null != currentUser) {
+            try {
                 Map<String, Object> data = bookCaseService.getLocationByUserId(user);
                 return new RestData(data);
             } catch (LibException e) {
                 return new RestData(1, e.getMessage());
             }
-        }
-        else{
+        } else {
             return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
         }
     }
@@ -70,7 +69,7 @@ public class BookCaseApi {
             } else {
                 return new RestData(1, "操作失败,请重试!");
             }
-        } else{
+        } else {
             return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
         }
     }
@@ -92,9 +91,20 @@ public class BookCaseApi {
             } else {
                 return new RestData(1, "操作失败,请重试!");
             }
-        } else{
+        } else {
             return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
         }
     }
 
+
+    @RequestMapping(value = "/num", method = RequestMethod.GET)
+    public RestData getNum(HttpServletRequest request) {
+        logger.info("getNum is running");
+        try {
+            List<Map<String, Object>> data = bookCaseService.getBagNum();
+            return new RestData(data);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+    }
 }

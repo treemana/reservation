@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author : chenchenT
  * @date : 2018/10/28
@@ -40,5 +42,8 @@ public interface BookCaseMapper {
      */
     @UpdateProvider(type = BookCaseProvider.class, method = "updateShipByNumber")
     int updateShipByNumber(BookCase bookcase);
+
+    @SelectProvider(type = BookCaseProvider.class,method = "selectBagNum")
+    List<BookCase> selectBagNum();
 
 }
