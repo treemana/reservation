@@ -55,7 +55,7 @@ public class BlackListApi {
         logger.info("delete blacklist studentId = "+studentId);
         User user = new User();
         user.setStudentId(studentId);
-        System.out.println(user.getStudentId());
+        
         User token = TokenUtil.getUserByToken(request);
         if(null == token){
             logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
