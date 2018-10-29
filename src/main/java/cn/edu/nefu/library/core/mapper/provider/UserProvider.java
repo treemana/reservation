@@ -46,4 +46,14 @@ public class UserProvider {
         }.toString();
 
     }
+    public String deleteBlackListByStudentId(User user){
+        return new SQL(){
+            {
+                UPDATE("user");
+                SET("user_type=0");
+                WHERE("user_username=#{studentId}");
+
+            }
+        }.toString();
+    }
 }

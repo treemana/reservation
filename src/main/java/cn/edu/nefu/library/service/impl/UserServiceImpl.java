@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author : Jimi
+ * @author : Jimi,pc
  * @date : 2018/10/27
  * @since : Java 8
  */
@@ -74,5 +74,15 @@ public class UserServiceImpl implements UserService {
             throw  new LibException("黑名单为空");
         }
          return rtv;
+    }
+
+    @Override
+    public boolean deleteBlackListByStudentId(User user) throws LibException {
+
+
+        logger.info("delete BalckList,studentId： "+user.getStudentId());
+        return  0 < userMapper.deleteBlackListByStudentId(user);
+
+
     }
 }
