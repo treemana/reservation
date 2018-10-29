@@ -1,10 +1,10 @@
 package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
-import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import org.apache.ibatis.annotations.UpdateProvider;
+import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 
 import java.util.Map;
 
