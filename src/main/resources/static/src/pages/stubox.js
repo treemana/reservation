@@ -13,7 +13,7 @@ class Stubox extends Component {
     return (
       <Layout className="stupart">
         < Headerbar className="headerbar"/>
-        < Siderbar className="siderbar" />
+        < Siderbar className="siderbar" current="order"/>
         <Content style={{ padding: '0 50px' }}>
       		<br />
         	<Box />

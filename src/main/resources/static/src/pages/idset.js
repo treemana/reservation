@@ -14,7 +14,7 @@ class Stubox extends Component {
       <Layout className="stupart">
         < Headerbar className="headerbar"/>
         <Layout>
-        < Adsiderbar className="siderbar" />
+        < Adsiderbar className="siderbar" current="3"/>
         <Content style={{ padding: '0 50px' }}>
           <Stuid />
         </Content>
