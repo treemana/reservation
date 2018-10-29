@@ -7,6 +7,7 @@ import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.service.UserService;
 import org.slf4j.Logger;
+import cn.edu.nefu.library.common.util.JsonUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -59,13 +60,28 @@ public class BlackListApi {
         User token = TokenUtil.getUserByToken(request);
         if(null == token){
             logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
         }
 
         try{
             return new RestData(userService.deleteBlackListByStudentId(user));
         }catch (LibException e){
             return new RestData(1, e.getMessage());
+        }
+    }
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public RestData postLogin(@RequestBody User user, HttpServletRequest request) {
+        logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
+        User token = TokenUtil.getUserByToken(request);
+        if (null == token) {
+            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+            try {
+                Map<String, Object> data = userService.postAddBlackList(user);
+                return new RestData(null);
+            } catch (LibException e) {
+                return new RestData(1, e.getMessage());
+            }
         }
     }
 }
