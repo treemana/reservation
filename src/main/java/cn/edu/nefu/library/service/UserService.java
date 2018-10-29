@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @author : Jimi,PC
- * @date : 2018/10/27,10/28
+ * @date : 2018/10/27
  * @since : Java 8
  */
 public interface UserService {
@@ -27,4 +27,12 @@ public interface UserService {
      * @throws LibException
      */
     List<Map<String, Object>> getBlackList() throws LibException;
+
+    /**
+     * 删除黑名单
+     * @param user 用户的id信息
+     * @return 返回是否删除成功
+     * @throws LibException 异常信息
+     */
+    boolean deleteBlackListByStudentId(User user) throws LibException;
 }

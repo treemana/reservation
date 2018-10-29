@@ -9,10 +9,7 @@ import cn.edu.nefu.library.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -53,4 +50,22 @@ public class BlackListApi {
 
     }
 
+    @RequestMapping(value = "/list/{studentId}", method = RequestMethod.DELETE)
+    public RestData deleteBlackList(@PathVariable String studentId, HttpServletRequest request){
+        logger.info("delete blacklist studentId = "+studentId);
+        User user = new User();
+        user.setStudentId(studentId);
+
+        User token = TokenUtil.getUserByToken(request);
+        if(null == token){
+            logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        }
+
+        try{
+            return new RestData(userService.deleteBlackListByStudentId(user));
+        }catch (LibException e){
+            return new RestData(1, e.getMessage());
+        }
+    }
 }
