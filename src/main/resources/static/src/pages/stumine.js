@@ -13,7 +13,7 @@ class Stumine extends Component {
     return (
       <Layout className="stupart">
         < Headerbar className="headerbar"/>
-        < Siderbar className="siderbar" />
+        < Siderbar className="siderbar" current="my"/>
         <Content style={{ padding: '0 50px' }}>
       		<br />
         	<Mine />
