@@ -29,6 +29,14 @@ public interface UserService {
     List<Map<String, Object>> getBlackList() throws LibException;
 
     /**
+     * 添加黑名单
+     * @param user
+     * @return
+     * @throws LibException
+     */
+    Map<String, Object> postAddBlackList(User user) throws LibException;
+
+    /**
      * 删除黑名单
      * @param user 用户的id信息
      * @return 返回是否删除成功
