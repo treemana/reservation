@@ -39,5 +39,10 @@ public interface BookCaseService {
      */
     int updateShipByNumber(BookCase bookCase);
 
+    /**
+     * 获取书包柜数量
+     * @return 书包柜位置和数量的列表
+     * @throws LibException
+     */
     List<Map<String,Object>> getBagNum()throws LibException;
 }
