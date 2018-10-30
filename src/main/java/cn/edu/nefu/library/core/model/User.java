@@ -6,6 +6,7 @@ package cn.edu.nefu.library.core.model;
  * @since : Java 8
  */
 public class User {
+
     Integer systemId;
 
     /**
