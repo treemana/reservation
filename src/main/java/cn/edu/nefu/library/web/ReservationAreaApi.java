@@ -41,14 +41,14 @@ public class ReservationAreaApi {
         logger.info("get reservationArea");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
-            logger.info(""+ErrorMessage.PLEASE_RELOGIN);
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try{
                 List<Integer> reservationArea = reservationAreaService.getReservationArea();
                 return new RestData(reservationArea);
             } catch (LibException e){
-                logger.info(""+e.getMessage());
+                logger.info(e.getMessage());
                 return new RestData(1,e.getMessage());
             }
         }
