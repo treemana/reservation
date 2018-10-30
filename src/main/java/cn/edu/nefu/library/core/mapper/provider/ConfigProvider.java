@@ -13,7 +13,7 @@ public class ConfigProvider {
             {
                 SELECT("config_key as configKey,config_value as configValue ");
                 FROM("config");
-                WHERE("config_key='reservation_area'");
+                WHERE("config_key like 'area%' and config_value = '1'");
             }
         }.toString();
     }

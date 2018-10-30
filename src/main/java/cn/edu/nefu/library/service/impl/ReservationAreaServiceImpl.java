@@ -33,15 +33,25 @@ public class ReservationAreaServiceImpl implements ReservationAreaService {
     @Override
     public List<Integer> getReservationArea() throws LibException {
 
-        Config config = configMapper.selectOpenAera();
-        if (null == config) {
+        List<Config> configs = configMapper.selectOpenAera();
+        if (null == configs) {
             throw new LibException("预约区域为空");
         } else {
-            String configValue = config.getConfigValue();
-            String[] values = configValue.split(",");
+
             List<Integer> rtv = new ArrayList<>(4);
-            for (String s : values) {
-                rtv.add(Integer.parseInt(s));
+            for (Config config : configs ) {
+                if( "area_two_n".equals(config.getConfigKey()) && "1".equals(config.getConfigValue())){
+                    rtv.add(1);
+                }
+                if( "area_two_s".equals(config.getConfigKey()) && "1".equals(config.getConfigValue())){
+                    rtv.add(2);
+                }
+                if( "area_three_n".equals(config.getConfigKey()) && "1".equals(config.getConfigValue())){
+                    rtv.add(3);
+                }
+                if( "area_three_s".equals(config.getConfigKey()) && "1".equals(config.getConfigValue())){
+                    rtv.add(4);
+                }
             }
 
             return rtv;

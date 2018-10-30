@@ -46,6 +46,7 @@ public class ReservationAreaApi {
         } else {
             try{
                 List<Integer> reservationArea = reservationAreaService.getReservationArea();
+                logger.info("get reservationArea successful");
                 return new RestData(reservationArea);
             } catch (LibException e){
                 logger.info(e.getMessage());
