@@ -4,9 +4,8 @@ import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
-
 import cn.edu.nefu.library.core.model.User;
-import cn.edu.nefu.library.service.ReservationAreaService;
+import cn.edu.nefu.library.service.ReservationTimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,47 +13,43 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author : pc
- * @date : 2018/10/30
+ * @date : 2018/10/31
  * @since : Java 8
  */
 @CrossOrigin(origins = "*", allowCredentials = "true", allowedHeaders = "*")
 @RequestMapping("api")
 @RestController
-public class ReservationAreaApi {
+public class TeacherApi {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final ReservationAreaService reservationAreaService;
+    private final ReservationTimeService reservationTimeService;
 
     @Autowired
-    public ReservationAreaApi(ReservationAreaService reservationAreaService) {
-        this.reservationAreaService = reservationAreaService;
+    public TeacherApi(ReservationTimeService reservationTimeService) {
+        this.reservationTimeService = reservationTimeService;
     }
 
-    @RequestMapping(value = "/open-area", method = RequestMethod.GET)
-    public RestData getReservationArea(HttpServletRequest request) {
-        logger.info("get reservationArea");
+    @RequestMapping(value = "/open-time", method = RequestMethod.GET)
+    public RestData getReservationTime(HttpServletRequest request){
+        logger.info("get reservationTime");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try{
-                List<Map<String, String>> reservationArea = reservationAreaService.getReservationArea();
-                logger.info("get reservationArea successful");
-                return new RestData(reservationArea);
-            } catch (LibException e){
-                logger.info(e.getMessage());
-                return new RestData(1,e.getMessage());
+                final Map<String, String> reservationTime = reservationTimeService.getReservationTime();
+                logger.info("get get reservationTime success");
+                return new RestData(reservationTime);
+
+            } catch ( LibException e) {
+                return new RestData(e.getMessage());
             }
         }
-
-   }
+    }
 }

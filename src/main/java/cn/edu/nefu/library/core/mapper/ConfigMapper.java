@@ -22,4 +22,11 @@ public interface ConfigMapper {
      */
     @SelectProvider(type= ConfigProvider.class,method = "selectOpenAera")
     List<Config> selectOpenAera();
+
+    /**
+     * 查询预约时间
+     * @return 返回list
+     */
+    @SelectProvider(type= ConfigProvider.class,method = "selectOpenTime")
+    List<Config> selectOpenTime();
 }

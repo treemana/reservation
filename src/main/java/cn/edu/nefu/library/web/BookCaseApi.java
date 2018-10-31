@@ -48,7 +48,7 @@ public class BookCaseApi {
                 return new RestData(1, e.getMessage());
             }
         } else {
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
     }
 
@@ -70,7 +70,7 @@ public class BookCaseApi {
                 return new RestData(1, "操作失败,请重试!");
             }
         } else {
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
     }
 
@@ -92,7 +92,7 @@ public class BookCaseApi {
                 return new RestData(1, "操作失败,请重试!");
             }
         } else {
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
     }
 
@@ -102,7 +102,7 @@ public class BookCaseApi {
         logger.info("getNum is running");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
 
             try {

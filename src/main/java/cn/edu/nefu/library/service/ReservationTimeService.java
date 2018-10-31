@@ -2,19 +2,16 @@ package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
 
-import java.util.List;
 import java.util.Map;
-
-
 /**
  * @author : pc
  * @date : 2018/10/30
  * @since : Java 8
  */
-public interface ReservationAreaService {
+public interface ReservationTimeService {
     /**
-     * 查询预约的区域
-     * @return
+     * 查询预约时间
+     * @return map
      */
-    List<Map<String,String>> getReservationArea() throws LibException;
+    Map<String, String>  getReservationTime() throws LibException;
 }
