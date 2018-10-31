@@ -54,7 +54,7 @@ class Adbox extends Component {
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <Layout style={{ padding: '24px 30px 24px' }}>
-        <div style={{ marginBottom: 16 }}>
+        <Card style={{ marginBottom: 16 }}>
           <Button
             type="primary"
             onClick={this.start}
@@ -66,8 +66,8 @@ class Adbox extends Component {
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
           </span>
-        </div>
         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        </Card>
       </Layout>
     );
   }

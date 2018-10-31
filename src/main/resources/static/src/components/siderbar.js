@@ -10,7 +10,8 @@ class Siderbar extends Component {
   constructor(props) {
     super(props);
       this.state = {
-        current: this.props.current,
+        id: this.props.id,
+        current: this.props.current
     };
     }
   componentWillReceiveProps(nextProps) {
@@ -31,10 +32,10 @@ class Siderbar extends Component {
         mode="horizontal"
       >
         <Menu.Item key="order">
-          <Link to="/stubox"><Icon type="pushpin" />书包柜预约</Link>
+          <Link to={"/stubox/"+this.state.id}><Icon type="pushpin" />书包柜预约</Link>
         </Menu.Item>
         <Menu.Item key="my">
-          <Link to="/stumine"><Icon type="shopping" />我的</Link>
+          <Link to={"/stumine/"+this.state.id}><Icon type="shopping" />我的</Link>
         </Menu.Item>
       </Menu>
     </Layout>

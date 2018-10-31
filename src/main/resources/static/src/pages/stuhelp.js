@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import '../css/app.css';
 import logo from '../images/logo.png';
-import Headerbar from '../components/headerbar';
+import Stuheaderbar from '../components/stuheaderbar';
 import Footertext from '../components/footertext';
 import Helper from '../components/helper';
+import Siderbar from '../components/siderbar';
 import { Layout } from 'antd';
 const { Content } = Layout;
 
-class Help extends Component {
+class Stuhelp extends Component {
 	constructor(props,context) {
         super(props,context);
           this.state = {
@@ -17,13 +18,17 @@ class Help extends Component {
     }
   render() {
     return (
-      <Layout className="App">
-          < Headerbar className="headerbar" current = { this.state.current } id={this.state.id}/>
+      <Layout>
+          < Stuheaderbar className="headerbar" current = { this.state.current } id={this.state.id}/>
+          < Siderbar className="siderbar" current="-1" id={this.state.id}/>
+          <Content style={{ padding: '0 50px' }}>
+          <br />
           < Helper />
+          </Content>
         <Footertext />
       </Layout>
     );
   }
 }
 
-export default Help;
+export default Stuhelp;

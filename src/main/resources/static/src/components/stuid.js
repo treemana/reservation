@@ -1,75 +1,96 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
+import req from '../url';
 import '../css/app.css';
-import { Card, Row, Col, BackTop, Icon, Avatar, Button, InputNumber, Layout, Table, Divider, Tag } from 'antd';
+import { Card, Row, Col, BackTop, Icon, Avatar, Button, InputNumber, Layout, Table, Divider, Tag, notification } from 'antd';
 const { Meta } = Card;
 const columns = [{
-  title: 'Name',
+  title: '姓名',
   dataIndex: 'name',
   key: 'name',
-  render: text => <a href="javascript:;">{text}</a>,
+  
 }, {
-  title: 'Age',
-  dataIndex: 'age',
-  key: 'age',
-}, {
-  title: 'Address',
-  dataIndex: 'address',
-  key: 'address',
-}, {
-  title: 'Tags',
-  key: 'tags',
-  dataIndex: 'tags',
-  render: tags => (
-    <span>
-      {tags.map(tag => <Tag color="blue" key={tag}>{tag}</Tag>)}
-    </span>
-  ),
-}, {
-  title: 'Action',
+  title: '学号',
+  dataIndex: 'studentId',
+  key: 'studentId',
+}, 
+{
+  title: '操作',
   key: 'action',
   render: (text, record) => (
     <span>
-      <a href="javascript:;">Invite {record.name}</a>
-      <Divider type="vertical" />
-      <a href="javascript:;">Delete</a>
+      <a href="javascript:;">删除{record.name}</a>
     </span>
-  ),
+  )
 }];
 
-const data = [{
-  key: '1',
-  name: 'John Brown',
-  age: 32,
-  address: 'New York No. 1 Lake Park',
-  tags: ['nice', 'developer'],
-}, {
-  key: '2',
-  name: 'Jim Green',
-  age: 42,
-  address: 'London No. 1 Lake Park',
-  tags: ['loser'],
-}, {
-  key: '3',
-  name: 'Joe Black',
-  age: 32,
-  address: 'Sidney No. 1 Lake Park',
-  tags: ['cool', 'teacher'],
-}];
-
-function onChange(value) {
-  console.log('changed', value);
-}
 
 class Stuid extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      data: [{
+        key: '1',
+        name: 'John Brown',
+        studentId: 32
+      }, {
+        key: '2',
+        name: 'John',
+        studentId: 32
+      }, {
+        key: '3',
+        name: 'Brown',
+        studentId: 32
+      }],
+      count:3,
+      startGrade: 2015,
+      endGrade: 2016
+    }
+    this.handleAdd = () => {
+      const { count, data } = this.state;
+      const newData = {
+        key: count,
+        name: `新增${count}`,
+        studentId: 32
+      };
+      this.setState({
+        data: [...data, newData],
+        count: count + 1,
+      });
+    }
+    this.handleClick = () => {
+      console.log(this.state);
+      // $.post(req+'open-grades',{
+      //   startGrade: this.state.startGrade,
+      //   endGrade: this.state.endGrade
+      // }, function(res){
+      //   if(res.code==0) {
+      //     notification.open({
+      //       messstudentId: '提示',
+      //       description: '修改成功！',
+      //     });
+      //   }
+      //   else {
+      //     notification.open({
+      //       messstudentId: '提示',
+      //       description: '修改失败！',
+      //     });
+      //   }
+      // });
+    }
+  }
 	render () {
 		return (
 		<Layout style={{ padding: '24px 24px 24px' }}>
 		    <Card title="可参与预约的学生" bordered={true} className="areacard" style={{ padding: '0 0 50px' }}>
-		      <InputNumber defaultValue={2016} onChange={onChange} />级 至 <InputNumber defaultValue={2017} onChange={onChange} />级
-		    </Card>
+		      <InputNumber defaultValue={this.state.startGrade} onChange={(value)=>this.setState({startGrade:value})}/> 级 至 <InputNumber defaultValue={this.state.endGrade} onChange={(value)=>this.setState({endGrade:value})} /> 级<Button type="primary" style={{marginLeft: '20px'}} onClick={this.handleClick}>保存</Button>
+        </Card>
 		    <Card title="黑名单" bordered={true} className="areacard" style={{ padding: '0 0 24px' }}>
 		      <div>
-			    <Table columns={columns} dataSource={data} />
+          <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+           添加
+          </Button>
+			    <Table columns={columns} dataSource={this.state.data} pagination={{position: 'none'}} />
 			  </div>
 		    </Card>
 		 </Layout>    
