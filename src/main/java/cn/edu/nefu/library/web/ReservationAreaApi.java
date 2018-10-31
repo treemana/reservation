@@ -6,14 +6,12 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
 
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.VO.GradeVO;
 import cn.edu.nefu.library.service.ReservationAreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author : pc
+ * @author : pc CMY
  * @date : 2018/10/30
  * @since : Java 8
  */
@@ -56,5 +54,24 @@ public class ReservationAreaApi {
             }
         }
 
+   }
+   @RequestMapping(value = "open-grades", method=RequestMethod.POST)
+   public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request){
+        logger.info("postGrade is running");
+       User currentUser = TokenUtil.getUserByToken(request);
+       if (null == currentUser) {
+           logger.info(ErrorMessage.PLEASE_RELOGIN);
+           return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+       } else {
+           try {
+               reservationAreaService.postGrade(gradeVO);
+               logger.info("postGrade is successful");
+               return new RestData(null);
+           } catch (LibException e) {
+               logger.info(e.getMessage());
+               return new RestData(1,e.getMessage());
+           }
+
+       }
    }
 }

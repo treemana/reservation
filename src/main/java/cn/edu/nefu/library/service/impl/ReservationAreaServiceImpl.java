@@ -3,6 +3,7 @@ package cn.edu.nefu.library.service.impl;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.core.mapper.ConfigMapper;
 import cn.edu.nefu.library.core.model.Config;
+import cn.edu.nefu.library.core.model.VO.GradeVO;
 import cn.edu.nefu.library.service.ReservationAreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * @author : pc
+ * @author : pc CMY
  * @date : 2018/10/30
  * @since : Java 8
  */
@@ -49,6 +50,16 @@ public class ReservationAreaServiceImpl implements ReservationAreaService {
             }
             return rtv;
 
+        }
+    }
+    @Override
+    public void postGrade(GradeVO gradeVO)throws LibException{
+        int startGrade = configMapper.updateStartGrade(gradeVO);
+        int endGrade = configMapper.updateEndGrade(gradeVO);
+        if(startGrade==0||endGrade==0){
+            throw new LibException("更新开放年级失败");
+        }else{
+            logger.info("更新成功");
         }
     }
 }
