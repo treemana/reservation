@@ -100,11 +100,17 @@ public class BookCaseApi {
     @RequestMapping(value = "/num", method = RequestMethod.GET)
     public RestData getNum(HttpServletRequest request) {
         logger.info("getNum is running");
-        try {
-            List<Map<String, Object>> data = bookCaseService.getBagNum();
-            return new RestData(data);
-        } catch (LibException e) {
-            return new RestData(1, e.getMessage());
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null == currentUser) {
+            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+
+            try {
+                List<Map<String, Object>> data = bookCaseService.getBagNum();
+                return new RestData(data);
+            } catch (LibException e) {
+                return new RestData(1, e.getMessage());
+            }
         }
     }
 }
