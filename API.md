@@ -9,6 +9,7 @@
 - code :
   - 0 : 一切正常
   - 1 : 添加 message 字段展示错误
+  - 2 : 登陆失败
 
 - url : host + uri
   - example :
@@ -190,8 +191,30 @@
 
 ```json
 {
-    "code" : 0,
-    "data" : [1, 2]
+    "code": 0,
+    "data": 
+    [
+        {
+            "configKey" : "area_two_n",
+            "configValue" : "1",
+            "systemId" : "1"
+        },
+        {
+            "configKey" : "area_two_s",
+            "configValue" : "1",
+            "systemId" : "2"
+        },
+        {
+            "configKey": "area_three_n",
+            "configValue": "1",
+            "systemId": "3"
+        },
+        {
+            "configKey": "area_three_s",
+            "configValue": "0",
+            "systemId": "4"
+        }
+    ]
 }
 ```
 

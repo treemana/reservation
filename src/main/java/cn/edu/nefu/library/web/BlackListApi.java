@@ -60,7 +60,7 @@ public class BlackListApi {
         User token = TokenUtil.getUserByToken(request);
         if(null == token){
             logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
 
         try{
@@ -74,7 +74,7 @@ public class BlackListApi {
         logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
         User token = TokenUtil.getUserByToken(request);
         if (null == token) {
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
                 Map<String, Object> data = userService.postAddBlackList(user);

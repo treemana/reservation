@@ -33,8 +33,8 @@ class Time extends React.Component {
       <div>
 	    
 	    <RangePicker locale={locale}
-	      showTime={{ format: 'HH:mm' }}
-	      format="YYYY-MM-DD HH:mm"
+	      showTime={{ format: 'HH:mm:ss' }}
+	      format="YYYY-MM-DD HH:mm:ss"
 	      placeholder={['开始时间', '结束时间']}
 	      onChange={onChange}
 	      onOk={onOk}
