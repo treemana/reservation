@@ -7,6 +7,7 @@ import Stubox from './pages/stubox';
 import Stumine from './pages/stumine';
 import Boxset from './pages/boxset';
 import Timeset from './pages/timeset';
+import Areaset from './pages/areaset';
 import Idset from './pages/idset';
 import Help from './pages/help';
 import Adhelp from './pages/adhelp';
@@ -22,6 +23,7 @@ ReactDOM.render(
   	   	  <Route path="/stubox/:id" component={Stubox} ></Route>
           <Route path="/stumine/:id" component={Stumine} ></Route>
           <Route path="/boxset/:id" component={Boxset} ></Route>
+          <Route path="/areaset/:id" component={Areaset} ></Route>
           <Route path="/timeset/:id" component={Timeset} ></Route>
           <Route path="/idset/:id" component={Idset} ></Route>
           <Route path="/help" component={Help} ></Route>

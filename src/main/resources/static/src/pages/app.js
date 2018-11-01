@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Login from '../components/login';
 import '../css/app.css';
 import logo from '../images/logo.png';

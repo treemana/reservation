@@ -4,11 +4,11 @@ import '../css/app.css';
 import logo from '../images/logo.png';
 import Adheaderbar from '../components/adheaderbar';
 import Adsiderbar from '../components/adsiderbar';
-import Stuid from '../components/stuid';
+import Area from '../components/area';
 import Footertext from '../components/footertext';
 const { Content } = Layout;
 
-class Stubox extends Component {
+class Areaset extends Component {
   constructor(props,context) {
     super(props,context);
     this.state = {
@@ -20,9 +20,9 @@ class Stubox extends Component {
       <Layout className="stupart">
        < Adheaderbar className="headerbar" current = '-1' id={this.state.id}/>
         <Layout>
-        < Adsiderbar className="siderbar" current="4" id={this.state.id}/>
+        < Adsiderbar className="siderbar" current="3" id={this.state.id}/>
         <Content style={{ padding: '0 50px' }}>
-          <Stuid />
+          <Area />
         </Content>
         </Layout>
         < Footertext />
@@ -31,4 +31,4 @@ class Stubox extends Component {
   }
 }
 
-export default Stubox;
+export default Areaset;
