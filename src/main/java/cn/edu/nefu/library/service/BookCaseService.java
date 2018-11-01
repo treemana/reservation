@@ -1,8 +1,11 @@
 package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
+import cn.edu.nefu.library.common.Page;
+import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import org.apache.ibatis.annotations.UpdateProvider;
 import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 
@@ -45,4 +48,29 @@ public interface BookCaseService {
      * @throws LibException
      */
     List<Map<String,Object>> getBagNum()throws LibException;
+    /**
+     * 根据条件获取书包柜详情
+     * @param bookCaseVo
+     * @param user
+     * @return
+     */
+    RestData selectDetailByCondition(BookCaseVo bookCaseVo) ;
+
+    /**
+     * 统一处理参数
+     * @param bookCaseVo
+     * @return bookCaseVo
+     */
+    String ProcessParameter(BookCaseVo bookCaseVo);
+
+    /**
+     * 统一封装数据
+     * @param bookCases
+     * @param bookCaseVo
+     * @param page
+     * @return
+     */
+    RestData encapsulate(List<BookCase> bookCases,BookCaseVo bookCaseVo, Page page);
+
+
 }

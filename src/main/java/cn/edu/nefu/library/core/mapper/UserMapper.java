@@ -1,6 +1,7 @@
 package cn.edu.nefu.library.core.mapper;
 
 import cn.edu.nefu.library.core.mapper.provider.UserProvider;
+import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -63,5 +64,9 @@ public interface UserMapper {
      */
     @Update("UPDATE user SET user_type=2 WHERE user_username=#{studentId}")
     int updateTypeByStudentId(User user);
+
+    @Select("SELECT user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+            "user_type AS type, user_token AS token from user where user_system_id=#{userId}")
+    User selectByUserId(BookCase bookCase);
 
 }

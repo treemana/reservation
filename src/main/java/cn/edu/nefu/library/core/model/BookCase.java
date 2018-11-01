@@ -8,7 +8,7 @@ package cn.edu.nefu.library.core.model;
 public class BookCase {
 
     /**
-     * 柜子ID
+     * 书包柜主键
      */
     private Integer systemId;
 

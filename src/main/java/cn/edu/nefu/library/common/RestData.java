@@ -19,6 +19,12 @@ public class RestData {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Object data;
 
+    /**
+     * 分页信息
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Page page;
+
     public RestData(int code, String message) {
         this.code = code;
         this.message = message;
@@ -27,6 +33,12 @@ public class RestData {
     public RestData(Object data) {
         this.code = 0;
         this.data = data;
+    }
+
+    public RestData(Object data, Page page) {
+        this.code = 0;
+        this.data = data;
+        this.page = page;
     }
 
     public int getCode() {
@@ -51,5 +63,13 @@ public class RestData {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
     }
 }
