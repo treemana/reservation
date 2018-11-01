@@ -18,7 +18,9 @@ class Help extends Component {
     return (
       <Layout className="App">
           < Headerbar className="headerbar" current = { this.state.current }/>
+          <Content style={{ padding: '24px 24px 0 24px'}}>
           < Devline />
+          </Content>
         <Footertext />
       </Layout>
     );

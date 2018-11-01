@@ -2,61 +2,70 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import req from '../url';
 import '../css/app.css';
-import { Card, Row, Col, BackTop, Icon, Avatar, Button, InputNumber, Layout, Table, Divider, Tag, notification } from 'antd';
+import { Card, Row, Col, BackTop, Icon, Avatar, Button, InputNumber, Layout, Table, Divider, Tag, notification, Input, Popconfirm } from 'antd';
 const { Meta } = Card;
-const columns = [{
-  title: '姓名',
-  dataIndex: 'name',
-  key: 'name',
-  
-}, {
-  title: '学号',
-  dataIndex: 'studentId',
-  key: 'studentId',
-}, 
-{
-  title: '操作',
-  key: 'action',
-  render: (text, record) => (
-    <span>
-      <a href="javascript:;">删除{record.name}</a>
-    </span>
-  )
-}];
-
+const Search = Input.Search;
 
 class Stuid extends Component {
   constructor (props) {
     super(props);
+    this.columns = [{
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name',
+      
+    }, {
+      title: '学号',
+      dataIndex: 'studentId',
+      key: 'studentId',
+    }, 
+    {
+      title: '操作',
+      key: 'action',
+      render: (text, record) => (
+              <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record.studentId)} okText="确定" cancelText="取消">
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
+      )
+    }]
     this.state = {
-      data: [{
-        key: '1',
-        name: 'John Brown',
-        studentId: 32
-      }, {
-        key: '2',
-        name: 'John',
-        studentId: 32
-      }, {
-        key: '3',
-        name: 'Brown',
-        studentId: 32
-      }],
-      count:3,
       startGrade: 2015,
       endGrade: 2016
     }
-    this.handleAdd = () => {
-      const { count, data } = this.state;
-      const newData = {
-        key: count,
-        name: `新增${count}`,
-        studentId: 32
-      };
-      this.setState({
-        data: [...data, newData],
-        count: count + 1,
-      });
+    this.handleDelete = (key) => {
+      console.log(key);
+      // $.delete(req+'list/'+key,null,function(res) {
+      //   if(res.code == 0) {
+      //     const data = [...this.state.data];
+      //     this.setState({ data: data.filter(item => item.studentId !== key) });
+      //   }
+      //   else {
+      //     notification.open({
+      //       messstudentId: '提示',
+      //       description: '添加成功！'
+      //     });
+      //   }
+      // });
+      
+    }
+    this.handleAdd = (value) => {
+      console.log(value);
+      // $.post(req+list,{
+      //   studentId: value
+      // },function(res) {
+      //   if(res.code == 0) {
+      //     notification.open({
+      //       messstudentId: '提示',
+      //       description: '添加成功！'
+      //     });
+      //   }
+      //   else {
+      //     notification.open({
+      //       messstudentId: '提示',
+      //       description: '添加失败！'
+      //     })
+      //   }
+      // });
     }
     this.handleClick = () => {
       console.log(this.state);
@@ -79,6 +88,23 @@ class Stuid extends Component {
       // });
     }
   }
+  componentDidMount() {
+    this.setState({
+      data: [
+        {
+          studentId: 123,
+          name: "name"
+        }
+      ]
+    });
+    // $.get(req+'list',null,function(res) {
+    //   var data = [];
+    //   if(res.code == 0) {
+    //     var data = res.data;
+    //     this.setState(data: data);
+    //   }
+    // }.bind(this));
+  }
 	render () {
 		return (
 		<Layout style={{ padding: '24px 24px 24px' }}>
@@ -87,10 +113,13 @@ class Stuid extends Component {
         </Card>
 		    <Card title="黑名单" bordered={true} className="areacard" style={{ padding: '0 0 24px' }}>
 		      <div>
-          <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-           添加
-          </Button>
-			    <Table columns={columns} dataSource={this.state.data} pagination={{position: 'none'}} />
+           <Search
+              style={{width: "300px"}}
+              placeholder="请输入学生学号"
+              enterButton="添加到黑名单"
+              onSearch={value => this.handleAdd(value)}
+            />
+			    <Table columns={this.columns} dataSource={this.state.data} pagination={{position: 'none'}} />
 			  </div>
 		    </Card>
 		 </Layout>    
