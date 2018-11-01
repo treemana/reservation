@@ -4,7 +4,6 @@ import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
-
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.VO.GradeVO;
 import cn.edu.nefu.library.service.ReservationAreaService;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +53,24 @@ public class ReservationAreaApi {
         }
 
    }
+    @RequestMapping(value = "/open-area", method = RequestMethod.PUT)
+    public RestData putReservationArea(@RequestBody List<Integer> list, HttpServletRequest request) {
+        logger.info("put reservationArea"+list.toString());
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null == currentUser) {
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+            try{
+
+                return new RestData(reservationAreaService.putReservationArea(list));
+            } catch ( LibException e) {
+                return new RestData(1,e.getMessage());
+            }
+        }
+
+
+   }
    @RequestMapping(value = "open-grades", method=RequestMethod.POST)
    public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request){
         logger.info("postGrade is running");
@@ -74,4 +90,6 @@ public class ReservationAreaApi {
 
        }
    }
-}
+    }
+
+

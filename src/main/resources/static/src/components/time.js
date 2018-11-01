@@ -26,7 +26,7 @@ class Time extends Component {
       })
     };
     this.onOk = (value) => {
-       console.log(this.state); 
+       console.log(this.state);
        // $.ajax({
        //    type: 'PUT',
        //    url: req+'open-time',

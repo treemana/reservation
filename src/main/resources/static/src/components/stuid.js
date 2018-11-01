@@ -13,12 +13,12 @@ class Stuid extends Component {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      
+
     }, {
       title: '学号',
       dataIndex: 'studentId',
       key: 'studentId',
-    }, 
+    },
     {
       title: '操作',
       key: 'action',
@@ -46,7 +46,7 @@ class Stuid extends Component {
       //     });
       //   }
       // });
-      
+
     }
     this.handleAdd = (value) => {
       console.log(value);
