@@ -46,7 +46,8 @@ CREATE TABLE `user` (
   COMMENT '用户的状态，黑名单的同学为2，老师设置为1，学生设置为0，默认为0',
   `user_token`     VARCHAR(255)             DEFAULT NULL
   COMMENT '令牌',
-  PRIMARY KEY (`user_system_id`)
+  PRIMARY KEY (`user_system_id`),
+  UNIQUE KEY (`user_username`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
