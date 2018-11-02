@@ -2,7 +2,7 @@ package cn.edu.nefu.library.core.mapper;
 
 import cn.edu.nefu.library.core.mapper.provider.ConfigProvider;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;

@@ -5,7 +5,7 @@ import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 import cn.edu.nefu.library.service.ReservationAreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

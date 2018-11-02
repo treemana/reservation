@@ -1,4 +1,4 @@
-package cn.edu.nefu.library.core.model.VO;
+package cn.edu.nefu.library.core.model.vo;
 
 /**
  * author:CMY

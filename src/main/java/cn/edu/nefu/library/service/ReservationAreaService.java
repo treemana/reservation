@@ -1,7 +1,7 @@
 package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 
 import java.util.List;
 import java.util.Map;

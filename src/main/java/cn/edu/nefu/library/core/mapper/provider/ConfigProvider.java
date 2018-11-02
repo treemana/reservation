@@ -1,12 +1,8 @@
 package cn.edu.nefu.library.core.mapper.provider;
 
-import cn.edu.nefu.library.core.model.VO.GradeVO;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
-import cn.edu.nefu.library.core.model.VO.TimeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 import org.apache.ibatis.jdbc.SQL;
-
-import java.util.List;
 
 /**
  * @author : pc CMY
