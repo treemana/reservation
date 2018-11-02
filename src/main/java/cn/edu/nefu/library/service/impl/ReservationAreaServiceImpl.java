@@ -30,6 +30,28 @@ public class ReservationAreaServiceImpl implements ReservationAreaService {
     }
 
     @Override
+    public Boolean putReservationArea(List<Integer> list) throws LibException {
+        int count = 0;
+        for(int i=1;i<=4;i++ ){
+            Config config = new Config();
+            config.setSystemId(i);
+            if(list.contains(i)){
+                config.setConfigValue("1");
+                count++;
+            }else{
+                config.setConfigValue("0");
+            }
+            configMapper.updateOpenArea(config);
+        }
+        if(count == list.size()){
+            return true;
+        }else{
+            throw new LibException("修改失败");
+        }
+
+    }
+
+    @Override
     public List<Map<String,String>> getReservationArea() throws LibException {
 
         List<Config> configs = configMapper.selectOpenAera();
@@ -50,6 +72,7 @@ public class ReservationAreaServiceImpl implements ReservationAreaService {
             }
             return rtv;
 
+
         }
     }
     @Override
@@ -62,4 +85,5 @@ public class ReservationAreaServiceImpl implements ReservationAreaService {
             logger.info("更新成功");
         }
     }
+
 }

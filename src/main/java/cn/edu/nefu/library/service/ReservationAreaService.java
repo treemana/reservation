@@ -26,4 +26,18 @@ public interface ReservationAreaService {
      */
     void postGrade(GradeVO gradeVO)throws LibException;
 
+    /**
+     * 修改
+     * @param list dasd
+     * @return dasd
+     * @throws LibException sdas
+     */
+    /**
+     * 修改预约区域
+     * @param list
+     * @return
+     * @throws LibException
+     */
+    Boolean putReservationArea(List<Integer> list) throws LibException;
+
 }

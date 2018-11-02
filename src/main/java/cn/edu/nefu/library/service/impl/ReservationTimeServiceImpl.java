@@ -3,6 +3,7 @@ package cn.edu.nefu.library.service.impl;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.core.mapper.ConfigMapper;
 import cn.edu.nefu.library.core.model.Config;
+import cn.edu.nefu.library.core.model.VO.TimeVO;
 import cn.edu.nefu.library.service.ReservationTimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,5 +49,21 @@ public class ReservationTimeServiceImpl implements ReservationTimeService {
         }
 
         return rtv;
+    }
+
+    @Override
+    public boolean putReservationTime(TimeVO timeVO) throws LibException {
+
+        Config config = new Config();
+        config.setConfigKey("startTime");
+        config.setConfigValue(timeVO.getStartTime());
+        Config config1 = new Config();
+        config1.setConfigKey("endTime");
+        config1.setConfigValue(timeVO.getEndTime());
+        if(0 == configMapper.updateOpenTime(config) || 0 == configMapper.updateOpenTime(config1)){
+            throw new LibException("修改失败");
+        }
+        return 0 < configMapper.updateOpenTime(config)*configMapper.updateOpenTime(config1);
+
     }
 }

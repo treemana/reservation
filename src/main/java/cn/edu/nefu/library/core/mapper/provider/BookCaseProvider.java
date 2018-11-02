@@ -1,7 +1,10 @@
 package cn.edu.nefu.library.core.mapper.provider;
 
+import cn.edu.nefu.library.common.Page;
+import cn.edu.nefu.library.common.util.PageUtil;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
@@ -43,15 +46,70 @@ public class BookCaseProvider {
     }
 
 
-    public String selectBagNum(){
-        return new SQL(){
+    public String selectBagNum() {
+        return new SQL() {
             {
-                SELECT("bc_system_id AS systemId,bc_location AS location, bc_number AS number, "+
-                    "bc_user_id AS userId, bc_status AS status");
-                FROM( "bookcase");
+                SELECT("bc_system_id AS systemId,bc_location AS location, bc_number AS number, " +
+                        "bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
             }
         }.toString();
     }
+
+    public String selectDetailByCondition(BookCaseVo bookCaseVo, Page page) {
+
+        String limit = "9";
+        if (null != page) {
+            limit = PageUtil.getLimit(page.getNowPage(), page.getPageSize());
+        }
+        String finalLimit = limit;
+
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location, bc_number AS number, " +
+                        "bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                if (null != bookCaseVo.getLocation()) {
+                    WHERE(" bc_location=" + bookCaseVo.getLocation());
+                }
+                if (null != bookCaseVo.getStatus()) {
+                    WHERE(" bc_status=" + bookCaseVo.getStatus());
+                }
+
+                if (null != bookCaseVo.getId()) {
+                    WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                }
+                if (null != bookCaseVo.getUserId()) {
+                    WHERE(" bc_user_id=" + bookCaseVo.getUserId());
+                }
+                ORDER_BY(" bc_system_id LIMIT " + finalLimit);
+            }
+        }.toString();
+    }
+
+
+    public String countByCondition(BookCaseVo bookCaseVo) {
+
+        return new SQL() {
+            {
+                SELECT("count(bc_system_id) AS totalSize");
+                FROM("bookcase");
+                if (null != bookCaseVo.getLocation()) {
+                    WHERE(" bc_location=" + bookCaseVo.getLocation());
+                }
+                if (null != bookCaseVo.getStatus()) {
+                    WHERE(" bc_status=" + bookCaseVo.getStatus());
+                }
+                if (null != bookCaseVo.getId()) {
+                    WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                }
+                if (null != bookCaseVo.getUserId()) {
+                    WHERE(" bc_user_id=" + bookCaseVo.getUserId());
+                }
+            }
+        }.toString();
+    }
+
 }
 
 

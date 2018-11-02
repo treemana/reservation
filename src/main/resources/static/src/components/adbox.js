@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import '../css/app.css';
-import { Card, Row, Col, BackTop, Icon, Avatar, Button, Table, Layout } from 'antd';
+import { Card, Row, Col, BackTop, Icon, Avatar, Button, Table, Layout, Popconfirm } from 'antd';
 const { Meta } = Card;
 const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
+  title: '区域',
+  dataIndex: 'location',
 }, {
-  title: 'Age',
-  dataIndex: 'age',
+  title: '编号',
+  dataIndex: 'number',
 }, {
-  title: 'Address',
-  dataIndex: 'address',
+  title: '状态',
+  dataIndex: 'status',
+},{
+  title: '使用者学号',
+  dataIndex: 'studentId'
+},{
+  title: '操作',
+  key: 'action',
+  render: (text, record) => (
+    <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record.studentId)} okText="确定" cancelText="取消">
+      <a href="javascript:;">删除</a>
+    </Popconfirm>
+  )
 }];
 
 const data = [];

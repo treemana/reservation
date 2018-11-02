@@ -7,6 +7,7 @@ import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.service.BookCaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,9 @@ public class BookCaseApi {
     }
 
     @RequestMapping(value = "/info/{studentId}", method = RequestMethod.GET)
-    public RestData getLocation(User user, HttpServletRequest request) {
+    public RestData getLocation(@PathVariable(value = "studentId") String studentId, HttpServletRequest request) {
+        User user = new User();
+        user.setStudentId(studentId);
         logger.info("getLocation : " + JsonUtil.getJsonString(user));
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
@@ -113,4 +116,17 @@ public class BookCaseApi {
             }
         }
     }
+
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
+
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null != currentUser) {
+            return bookCaseService.selectDetailByCondition(bookCaseVo);
+        } else {
+            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
+        }
+    }
+
+
 }

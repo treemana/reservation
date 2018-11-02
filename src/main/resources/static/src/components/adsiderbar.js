@@ -33,7 +33,8 @@ class Adsiderbar extends Component {
         >
           <Menu.Item key="1"><Link to={"/boxset/"+this.state.id}><Icon type="book" />书包柜管理</Link></Menu.Item>
           <Menu.Item key="2"><Link to={"/timeset/"+this.state.id}><Icon type="hourglass" />预约时间管理</Link></Menu.Item>
-          <Menu.Item key="3"><Link to={"/idset/"+this.state.id}><Icon type="team" />学号管理</Link></Menu.Item>
+          <Menu.Item key="3"><Link to={"/areaset/"+this.state.id}><Icon type="appstore" />区域管理</Link></Menu.Item>
+          <Menu.Item key="4"><Link to={"/idset/"+this.state.id}><Icon type="team" />学号管理</Link></Menu.Item>
         </Menu>
       </Sider>
     );
