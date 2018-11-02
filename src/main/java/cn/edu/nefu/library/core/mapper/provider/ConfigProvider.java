@@ -2,6 +2,7 @@ package cn.edu.nefu.library.core.mapper.provider;
 
 import cn.edu.nefu.library.core.model.Config;
 import cn.edu.nefu.library.core.model.vo.GradeVO;
+import cn.edu.nefu.library.core.model.Config;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
@@ -38,21 +39,12 @@ public String updateOpenTime( Config config) {
     }.toString();
 }
 
-    public String updateStartGrade(GradeVO gradeVO){
+    public String updateGrade(Config config) {
         return new SQL(){
             {
                 UPDATE("config");
-                SET("config_value=#{startGrade}");
-                WHERE("config_key='startGrade'");
-            }
-        }.toString();
-    }
-    public String updateEndGrade(GradeVO gradeVO){
-        return new SQL(){
-            {
-                UPDATE("config");
-                SET("config_value=#{endGrade}");
-                WHERE("config_key='endGrade'");
+                SET("config_value=#{configValue}");
+                WHERE("config_key=#{configKey}");
             }
         }.toString();
     }
@@ -67,4 +59,5 @@ public String updateOpenTime( Config config) {
             }
         }.toString();
 }
+
 }

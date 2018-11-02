@@ -24,7 +24,7 @@ public interface ReservationAreaService {
      * @param gradeVO
      * @throws LibException
      */
-    void postGrade(GradeVO gradeVO)throws LibException;
+    boolean postGrade(GradeVO gradeVO) throws LibException;
 
     /**
      * 修改

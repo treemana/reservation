@@ -70,21 +70,27 @@ public class ReservationAreaApi {
 
 
    }
+
    @RequestMapping(value = "open-grades", method=RequestMethod.POST)
-   public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request){
-        logger.info("postGrade is running");
+   public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request) {
+       logger.info("postGrade is running");
        User currentUser = TokenUtil.getUserByToken(request);
        if (null == currentUser) {
            logger.info(ErrorMessage.PLEASE_RELOGIN);
            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
        } else {
            try {
-               reservationAreaService.postGrade(gradeVO);
-               logger.info("postGrade is successful");
-               return new RestData(null);
+               boolean result = reservationAreaService.postGrade(gradeVO);
+               if (result) {
+                   logger.info("postGrade is successful");
+                   return new RestData(null);
+               } else {
+                   logger.info("postGrade is failure");
+                   return new RestData(1, "postGrade is failure");
+               }
            } catch (LibException e) {
                logger.info(e.getMessage());
-               return new RestData(1,e.getMessage());
+               return new RestData(1, e.getMessage());
            }
 
        }
