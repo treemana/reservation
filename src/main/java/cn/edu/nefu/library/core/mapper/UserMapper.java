@@ -40,14 +40,6 @@ public interface UserMapper {
     @SelectProvider(type = UserProvider.class, method = "selectByType")
     List<User> selectByType();
 
-    /**
-     * 根据ID筛选
-     * @param user
-     * @return
-     */
-    @Select("SELECT user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
-            "user_type AS type, user_token AS token from user where user_username=#{studentId}")
-    User selectByStudenId(User user);
 
     /**
      * 删除黑名单t

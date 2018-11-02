@@ -49,7 +49,7 @@ public interface BookCaseMapper {
     int updateShipByNumber(BookCase bookcase);
 
     @SelectProvider(type = BookCaseProvider.class,method = "selectBagNum")
-    List<BookCase> selectBagNum();
+    int selectBagNum(BookCase bookCase);
 
     /**
      *根据条件查询书包柜详情
