@@ -33,7 +33,6 @@ public class ReservationAreaApi {
     public ReservationAreaApi(ReservationAreaService reservationAreaService) {
         this.reservationAreaService = reservationAreaService;
     }
-
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
     public RestData getReservationArea(HttpServletRequest request) {
         logger.info("get reservationArea");
@@ -90,6 +89,6 @@ public class ReservationAreaApi {
 
        }
    }
-    }
+}
 
 
