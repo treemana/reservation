@@ -90,7 +90,7 @@ public class BookCaseImpl implements BookCaseService {
 
 
     @Override
-    public List<Map<String, Object>> getBagNum() throws LibException {
+    public List<Map<String, Object>> getBagNum() {
         List<Map<String, Object>> rtv = new ArrayList<>();
         BookCase bookCase = new BookCase();
         for (int i = 0; i < 4; i++) {
@@ -119,7 +119,7 @@ public class BookCaseImpl implements BookCaseService {
             }
         }
 
-        String mes=null;
+        String mes = null;
         if (null != bookCaseVo.getStudentId() && 0 != bookCaseVo.getStudentId().length()) {
             User user = new User();
             user.setStudentId(bookCaseVo.getStudentId());
@@ -127,8 +127,7 @@ public class BookCaseImpl implements BookCaseService {
             User u = users.get(0);
             if (null != u) {
                 bookCaseVo.setUserId(u.getSystemId());
-            }
-            else {
+            } else {
                 mes = "请确认学号是否有误";
                 return mes;
             }
@@ -153,14 +152,14 @@ public class BookCaseImpl implements BookCaseService {
             }
             rtv.add(map);
         }
-        return new RestData(rtv, page);
+        return new RestData(rtv);
     }
 
     @Override
     public RestData selectDetailByCondition(BookCaseVo bookCaseVo) {
 
-        String message=ProcessParameter(bookCaseVo);
-        if(null!=message){
+        String message = ProcessParameter(bookCaseVo);
+        if (null != message) {
             return new RestData(1, message);
         }
 
