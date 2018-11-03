@@ -46,12 +46,13 @@ public class BookCaseProvider {
     }
 
 
-    public String selectBagNum() {
-        return new SQL() {
+    public String selectBagNum(BookCase bookCase){
+        return new SQL(){
             {
-                SELECT("bc_system_id AS systemId,bc_location AS location, bc_number AS number, " +
-                        "bc_user_id AS userId, bc_status AS status");
+                SELECT("count(*)");
                 FROM("bookcase");
+                WHERE("bc_status=0");
+                WHERE("bc_location=#{location}");
             }
         }.toString();
     }

@@ -2,7 +2,7 @@ package cn.edu.nefu.library.core.mapper;
 
 import cn.edu.nefu.library.core.mapper.provider.ConfigProvider;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
@@ -55,19 +55,12 @@ public interface ConfigMapper {
     int updateOpenArea(Config config);
 
     /**
-     * 修改开始年级
-     * @param gradeVO
+     * 修改开始和结束年级年级
+     * @param config
      * @return 结果数量
      */
-    @UpdateProvider(type = ConfigProvider.class,method="updateStartGrade")
-    int updateStartGrade(GradeVO gradeVO);
+    @UpdateProvider(type = ConfigProvider.class, method = "updateGrade")
+    int updateGrade(Config config);
 
-    /**
-     * 修改结束年级
-     * @param gradeVO
-     * @return 结果数量
-     */
-    @UpdateProvider(type = ConfigProvider.class,method="updateEndGrade")
-    int updateEndGrade(GradeVO gradeVO);
 
 }

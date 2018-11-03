@@ -3,12 +3,13 @@ package cn.edu.nefu.library.service.impl;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.core.mapper.ConfigMapper;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 import cn.edu.nefu.library.service.ReservationAreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,14 +77,22 @@ public class ReservationAreaServiceImpl implements ReservationAreaService {
         }
     }
     @Override
-    public void postGrade(GradeVO gradeVO)throws LibException{
-        int startGrade = configMapper.updateStartGrade(gradeVO);
-        int endGrade = configMapper.updateEndGrade(gradeVO);
-        if(startGrade==0||endGrade==0){
+    public boolean postGrade(GradeVO gradeVO) throws LibException {
+        boolean rtv = false;
+        Config config = new Config();
+        config.setConfigKey("startGrade");
+        config.setConfigValue(gradeVO.getStartGrade());
+        int startGrade = configMapper.updateGrade(config);
+        config.setConfigKey("endGrade");
+        config.setConfigValue(gradeVO.getEndGrade());
+        int endGrade = configMapper.updateGrade(config);
+        if (0 == startGrade || 0 == endGrade) {
             throw new LibException("更新开放年级失败");
         }else{
             logger.info("更新成功");
+            rtv = true;
         }
+        return rtv;
     }
 
 }

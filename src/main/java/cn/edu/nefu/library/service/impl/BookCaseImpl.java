@@ -1,6 +1,5 @@
 package cn.edu.nefu.library.service.impl;
 
-import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.Page;
 import cn.edu.nefu.library.common.RestData;
@@ -43,7 +42,8 @@ public class BookCaseImpl implements BookCaseService {
     public Map<String, Object> getLocationByUserId(User user) throws LibException {
 
         Map<String, Object> rtv = null;
-        User user1 = userMapper.selectByStudenId(user);
+        List<User> u = userMapper.selectByCondition(user);
+        User user1 = u.get(0);
 
         if (null != user1) {
 
@@ -90,18 +90,16 @@ public class BookCaseImpl implements BookCaseService {
 
 
     @Override
-    public List<Map<String, Object>> getBagNum() throws LibException {
+    public List<Map<String, Object>> getBagNum() {
         List<Map<String, Object>> rtv = new ArrayList<>();
-        List<BookCase> result = bookCaseMapper.selectBagNum();
-        if (result != null) {
-            for (BookCase bookCase : result) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("location", bookCase.getLocation());
-                map.put("num", bookCase.getNumber());
-                rtv.add(map);
-            }
-        } else {
-            throw new LibException("没有柜子的信息");
+        BookCase bookCase = new BookCase();
+        for (int i = 0; i < 4; i++) {
+            Map<String, Object> map = new HashMap<>(2);
+            bookCase.setLocation(i + 1);
+            int num = bookCaseMapper.selectBagNum(bookCase);
+            map.put("location", i + 1);
+            map.put("num", num);
+            rtv.add(map);
         }
         return rtv;
     }
@@ -121,16 +119,16 @@ public class BookCaseImpl implements BookCaseService {
             }
         }
 
-        String mes=null;
+        String mes = null;
         if (null != bookCaseVo.getStudentId() && 0 != bookCaseVo.getStudentId().length()) {
             User user = new User();
             user.setStudentId(bookCaseVo.getStudentId());
-            User u = userMapper.selectByStudenId(user);
+            List<User> users = userMapper.selectByCondition(user);
+            User u = users.get(0);
             if (null != u) {
                 bookCaseVo.setUserId(u.getSystemId());
-            }
-            else {
-               mes="请确认学号是否有误";
+            } else {
+                mes = "请确认学号是否有误";
                 return mes;
             }
         }
@@ -154,14 +152,14 @@ public class BookCaseImpl implements BookCaseService {
             }
             rtv.add(map);
         }
-        return new RestData(rtv, page);
+        return new RestData(rtv);
     }
 
     @Override
     public RestData selectDetailByCondition(BookCaseVo bookCaseVo) {
 
-        String message=ProcessParameter(bookCaseVo);
-        if(null!=message){
+        String message = ProcessParameter(bookCaseVo);
+        if (null != message) {
             return new RestData(1, message);
         }
 

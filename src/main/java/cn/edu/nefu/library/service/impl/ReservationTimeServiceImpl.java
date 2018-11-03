@@ -3,7 +3,7 @@ package cn.edu.nefu.library.service.impl;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.core.mapper.ConfigMapper;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.VO.TimeVO;
+import cn.edu.nefu.library.core.model.vo.TimeVO;
 import cn.edu.nefu.library.service.ReservationTimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

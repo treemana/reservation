@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * @author ZhengYi
  * @date 17-7-25
+ * @since : Java 8
  */
 public class JsonUtil {
     private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
@@ -40,5 +41,15 @@ public class JsonUtil {
             logger.error(e.getLocalizedMessage());
         }
         return map;
+    }
+
+    public static <T> T getObjFromJson(String jsonString, Class<T> valueType) {
+        T rtv = null;
+        try {
+            rtv = objectMapper.readValue(jsonString, valueType);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return rtv;
     }
 }

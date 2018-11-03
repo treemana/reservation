@@ -1,4 +1,4 @@
-package cn.edu.nefu.library.core.model.VO;
+package cn.edu.nefu.library.core.model.vo;
 /**
  * @author : pc
  * @date : 2018/10/30

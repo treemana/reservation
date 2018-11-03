@@ -1,7 +1,7 @@
 package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
-import cn.edu.nefu.library.core.model.VO.TimeVO;
+import cn.edu.nefu.library.core.model.vo.TimeVO;
 
 import java.util.Map;
 /**

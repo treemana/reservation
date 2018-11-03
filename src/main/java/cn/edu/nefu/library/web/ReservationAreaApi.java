@@ -5,7 +5,7 @@ import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
-import cn.edu.nefu.library.core.model.VO.GradeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVO;
 import cn.edu.nefu.library.service.ReservationAreaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,6 @@ public class ReservationAreaApi {
     public ReservationAreaApi(ReservationAreaService reservationAreaService) {
         this.reservationAreaService = reservationAreaService;
     }
-
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
     public RestData getReservationArea(HttpServletRequest request) {
         logger.info("get reservationArea");
@@ -71,25 +70,31 @@ public class ReservationAreaApi {
 
 
    }
+
    @RequestMapping(value = "open-grades", method=RequestMethod.POST)
-   public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request){
-        logger.info("postGrade is running");
+   public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request) {
+       logger.info("postGrade is running");
        User currentUser = TokenUtil.getUserByToken(request);
        if (null == currentUser) {
            logger.info(ErrorMessage.PLEASE_RELOGIN);
            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
        } else {
            try {
-               reservationAreaService.postGrade(gradeVO);
-               logger.info("postGrade is successful");
-               return new RestData(null);
+               boolean result = reservationAreaService.postGrade(gradeVO);
+               if (result) {
+                   logger.info("postGrade is successful");
+                   return new RestData(null);
+               } else {
+                   logger.info("postGrade is failure");
+                   return new RestData(1, "postGrade is failure");
+               }
            } catch (LibException e) {
                logger.info(e.getMessage());
-               return new RestData(1,e.getMessage());
+               return new RestData(1, e.getMessage());
            }
 
        }
    }
-    }
+}
 
 
