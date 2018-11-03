@@ -63,4 +63,11 @@ public interface ConfigMapper {
     int updateGrade(Config config);
 
 
+    /**
+     * 查询开放时间
+     * @return config
+     */
+    @SelectProvider(type= ConfigProvider.class,method = "selectStartTime")
+    Config selectStartTime();
+
 }

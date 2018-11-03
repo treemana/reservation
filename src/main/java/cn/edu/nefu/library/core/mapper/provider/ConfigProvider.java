@@ -6,7 +6,7 @@ import cn.edu.nefu.library.core.model.Config;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
- * @author : pc CMY
+ * @author : pc CMY chenchenT
  * @date : 2018/10/30
  * @since : Java 8
  */
@@ -59,5 +59,16 @@ public String updateOpenTime( Config config) {
             }
         }.toString();
 }
+
+    public String selectStartTime(){
+        return new SQL(){
+            {
+                String str="startTime";
+                SELECT("config_key as configKey,config_value as configValue ");
+                FROM("config");
+                WHERE("config_key='"+str+"'");
+            }
+        }.toString();
+    }
 
 }
