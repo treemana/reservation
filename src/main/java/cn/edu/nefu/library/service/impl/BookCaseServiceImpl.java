@@ -5,19 +5,19 @@ import cn.edu.nefu.library.common.Page;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.PageUtil;
 import cn.edu.nefu.library.core.mapper.BookCaseMapper;
+import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.mapper.UserMapper;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.service.BookCaseService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author : chenchenT CMY
@@ -25,7 +25,7 @@ import java.util.Map;
  * @since : Java 8
  */
 @Service
-public class BookCaseImpl implements BookCaseService {
+public class BookCaseServiceImpl implements BookCaseService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -33,9 +33,14 @@ public class BookCaseImpl implements BookCaseService {
 
     private final UserMapper userMapper;
 
-    public BookCaseImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper) {
+
+    private final RedisDao redisDao;
+
+    @Autowired
+    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper, RedisDao redisDao) {
         this.bookCaseMapper = bookCaseMapper;
         this.userMapper = userMapper;
+        this.redisDao = redisDao;
     }
 
     @Override
@@ -182,7 +187,88 @@ public class BookCaseImpl implements BookCaseService {
         return encapsulate(bookCases, bookCaseVo, page);
 
     }
+
+
+    @Override
+    public Boolean postBoxOrder(BookCaseVo bookCaseVo) {
+        Boolean rtv = false;
+        String key = bookCaseVo.getStudentId();
+        String location = bookCaseVo.getLocation().toString();
+        long count = redisDao.getListSize("userQueue");
+        redisDao.set("l_" + key, location + "," + count);
+        int total = Integer.parseInt(redisDao.get("total"));
+
+        /**
+         * 1. 进来先查 location 是否还有柜子
+         * 2. 如果有，判断 c_ 大于一 入队 不大于一 total--
+         * 3. 如果没有柜子返回false
+         */
+
+        if (total > 0 && Integer.parseInt(redisDao.get("location_" + location)) > 0) {
+            if (redisDao.inc("c_" + key, 1) > 1) {
+                redisDao.pushValue("userQueue", key);
+            } else {
+                redisDao.pushValue("userQueue", key);
+                redisDao.dec("total", 1);
+            }
+            rtv = true;
+        }
+        return rtv;
+
+    }
+
+    int maxLocation() {
+        int maxValue = Integer.parseInt(redisDao.get("location_1"));
+        int maxL = 1;
+
+        for (int i = 2; i <= 4; i++) {
+            int nowValue = Integer.parseInt(redisDao.get("location" + i));
+            if (nowValue > maxValue) {
+                maxValue = nowValue;
+                maxL = i;
+            }
+        }
+
+        return maxL;
+    }
+
+    @Override
+    public void boxQueue(String studentId) {
+
+        // 当前是否是第一次排队，如果不是不处理
+        if (redisDao.dec("c_" + studentId, 1) == 0) {
+            logger.info("====当前处理{}", studentId);
+            int l = Integer.parseInt(redisDao.get("l_" + studentId).split(",")[0]);
+            // 如果当前区域没有柜子
+            if (redisDao.get("location_" + l).equals("0")) {
+                // 取当前区域中的最大值
+                l = maxLocation();
+            }
+            // 不包含在finish中就分配柜子
+            if (!redisDao.isMember("finish", studentId)) {
+                BookCase bookCase = bookCaseMapper.selectOneBookCaseNumber(l);
+                User user = new User();
+                user.setStudentId(studentId);
+                List<User> reUser = userMapper.selectByCondition(user);
+                bookCaseMapper.updateOwnerbyBcNumber(bookCase.getNumber(), reUser.get(0).getSystemId());
+                redisDao.dec("location_" + l, 1);
+                redisDao.add("finish", studentId);
+            } else {
+                logger.info(studentId + "已经分配柜子，存在刷柜子嫌疑");
+            }
+        }
+    }
+
+    @Override
+    public String popQueue() {
+        String studentId = redisDao.popValue("userQueue");
+
+        if(studentId != null) {
+            redisDao.inc("popCount", 1);
+        }
+
+        return studentId;
+    }
+
 }
-
-
 

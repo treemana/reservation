@@ -4,6 +4,8 @@ import cn.edu.nefu.library.common.Page;
 import cn.edu.nefu.library.common.util.PageUtil;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
+import jdk.nashorn.internal.objects.annotations.Where;
+import org.apache.ibatis.annotations.Param;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -111,6 +113,17 @@ public class BookCaseProvider {
         }.toString();
     }
 
+    public String selectOneBookCaseNumber(@Param("l")int l) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId,bc_number AS number");
+                FROM( "bookcase");
+                WHERE("bc_location=#{l}");
+                WHERE("bc_status=0");
+                ORDER_BY("bc_system_id LIMIT 1");
+            }
+        }.toString();
+    }
 }
 
 
