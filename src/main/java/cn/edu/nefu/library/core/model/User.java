@@ -7,27 +7,27 @@ package cn.edu.nefu.library.core.model;
  */
 public class User {
 
-    Integer systemId;
+    private Integer systemId;
 
     /**
      * 学号 or 账号
      */
-    String studentId;
+    private String studentId;
 
     /**
      * 姓名 or 密码
      */
-    String studentName;
+    private String studentName;
 
     /**
      * 用户类型 0 学生 1 老师 2 黑名单
      */
-    Integer type;
+    private Integer type;
 
     /**
      * token
      */
-    String token;
+    private String token;
 
     public Integer getSystemId() {
         return systemId;

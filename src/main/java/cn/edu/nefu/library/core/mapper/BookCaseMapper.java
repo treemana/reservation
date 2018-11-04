@@ -8,6 +8,7 @@ import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,6 +53,22 @@ public interface BookCaseMapper {
     int selectBagNum(BookCase bookCase);
 
     /**
+     * 查询出对应位置编号最小的一个书包柜
+     * @param l 地区
+     * @return
+     */
+    @SelectProvider(type = BookCaseProvider.class,method = "selectOneBookCaseNumber")
+    BookCase selectOneBookCaseNumber(@Param("l")int l);
+
+    /**
+     * 根据书包柜编号更新使用者ID
+     * @return
+     */
+    @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_number=#{bcNumber}")
+    int updateOwnerbyBcNumber(@Param("bcNumber")int bcNumber, @Param("studentId")int studentId);
+    
+
+    /**
      *根据条件查询书包柜详情
      *
      * @param bookCaseVo 书包柜编号
@@ -68,5 +85,4 @@ public interface BookCaseMapper {
      */
     @SelectProvider(type = BookCaseProvider.class, method = "countByCondition")
     Page countByCondition(BookCaseVo bookCaseVo);
-
 }

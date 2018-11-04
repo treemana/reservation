@@ -1,5 +1,6 @@
 package cn.edu.nefu.library.core.mapper;
 
+
 import java.util.List;
 
 /**
@@ -7,6 +8,7 @@ import java.util.List;
  * @date : 2018/10/28
  * @since : Java 8
  */
+
 public interface RedisDao {
 
     /**
@@ -74,4 +76,28 @@ public interface RedisDao {
      * @return
      */
     String get(String key);
+
+    /**
+     * 递增
+     * @param key 键
+     * @param number 增值
+     * @return 结果
+     */
+    long inc(String key, long number);
+
+    /**
+     * 添加记录到SET中
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean add(String key, String value);
+
+    /**
+     * 查询set中是否包含value
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean isMember(String key, String value);
 }

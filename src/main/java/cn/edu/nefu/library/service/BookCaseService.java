@@ -6,6 +6,7 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.ibatis.annotations.UpdateProvider;
 import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 
@@ -73,4 +74,24 @@ public interface BookCaseService {
     RestData encapsulate(List<BookCase> bookCases,BookCaseVo bookCaseVo, Page page);
 
 
+    /**
+     * 预约书包柜
+     *
+     * @param bookCaseVo
+     * @return 是否成功
+     */
+    Boolean postBoxOrder(BookCaseVo bookCaseVo);
+
+    /**
+     * redis书包柜队列
+     *
+     * @param
+     */
+    void boxQueue(String studentId);
+
+    /**
+     * redis 队列出队
+     * @return
+     */
+    String popQueue();
 }

@@ -5,7 +5,7 @@ import cn.edu.nefu.library.core.model.vo.TimeVO;
 
 import java.util.Map;
 /**
- * @author : pc
+ * @author : pc chenchenT
  * @date : 2018/10/30
  * @since : Java 8
  */
@@ -22,4 +22,11 @@ public interface ReservationTimeService {
      * @throws LibException 异常
      */
     boolean putReservationTime(TimeVO timeVO) throws LibException;
+
+    /**
+     * 查询开放时间
+     * @return
+     */
+    Map<String, Object> getStartTime();
+
 }
