@@ -5,6 +5,7 @@ import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import cn.edu.nefu.library.core.model.vo.ShipVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
@@ -85,4 +86,28 @@ public interface BookCaseMapper {
      */
     @SelectProvider(type = BookCaseProvider.class, method = "countByCondition")
     Page countByCondition(BookCaseVo bookCaseVo);
+
+    /**
+     * 根据学号查询学生的systemid
+     * @param shipVO 学号
+     * @return user
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectUserIdByStudentId")
+    User selectUserIdByStudentId(ShipVO shipVO);
+
+    /**
+     * 修改关系，书包柜与单个学生的关系
+     * @param shipVO 参数
+     * @return int
+     */
+    @UpdateProvider(type = BookCaseProvider.class, method = "updateSingleShip")
+    int updateSingleShip(ShipVO shipVO);
+
+    /**
+     * 查询是否存在这个number的书包柜
+     * @param shipVO number
+     * @return bookcase
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectByNumber")
+    BookCase selectByNumber(ShipVO shipVO);
 }

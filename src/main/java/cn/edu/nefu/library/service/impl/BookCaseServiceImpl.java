@@ -10,6 +10,7 @@ import cn.edu.nefu.library.core.mapper.UserMapper;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import cn.edu.nefu.library.core.model.vo.ShipVO;
 import cn.edu.nefu.library.service.BookCaseService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
@@ -68,6 +69,28 @@ public class BookCaseServiceImpl implements BookCaseService {
         return rtv;
     }
 
+    @Override
+    public boolean putShip(ShipVO shipVO) throws LibException{
+        if(null == shipVO.getStudentId()){
+            shipVO.setStatus(0);
+        } else {
+            shipVO.setStatus(1);
+            User user = bookCaseMapper.selectUserIdByStudentId(shipVO);
+            BookCase bookCase = bookCaseMapper.selectByNumber(shipVO);
+            if(null == bookCase || null == user ){
+                throw new LibException("此学号或者书包柜不存在");
+            }
+            shipVO.setUserId(user.getSystemId());
+        }
+        int i = bookCaseMapper.updateSingleShip(shipVO);
+        if(0 == i){
+            throw new LibException("修改失败");
+        } else {
+            return true;
+        }
+
+
+    }
 
     @Override
     public int setKeepByNumber(BookCase bookCase) {

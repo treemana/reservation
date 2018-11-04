@@ -6,6 +6,7 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import cn.edu.nefu.library.core.model.vo.ShipVO;
 import cn.edu.nefu.library.core.model.vo.TimeVO;
 import cn.edu.nefu.library.service.BookCaseService;
 import cn.edu.nefu.library.service.ReservationTimeService;
@@ -30,6 +31,8 @@ public class TeacherApi {
 
     private final ReservationTimeService reservationTimeService;
     private final BookCaseService bookCaseService;
+
+
 
     @Autowired
     public TeacherApi(ReservationTimeService reservationTimeService, BookCaseService bookCaseService) {
@@ -82,5 +85,21 @@ public class TeacherApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
     }
+    @RequestMapping(value = "/ship", method = RequestMethod.PUT)
+    public RestData putShip(@RequestBody ShipVO shipVO,HttpServletRequest request){
+        logger.info("put Ship");
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null == currentUser) {
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+            try{
+                return new RestData(bookCaseService.putShip(shipVO));
+            } catch ( LibException e){
+                return new RestData(1, e.getMessage());
 
+            }
+
+        }
+    }
 }
