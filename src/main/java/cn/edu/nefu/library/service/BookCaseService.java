@@ -52,7 +52,6 @@ public interface BookCaseService {
     /**
      * 根据条件获取书包柜详情
      * @param bookCaseVo
-     * @param user
      * @return
      */
     RestData selectDetailByCondition(BookCaseVo bookCaseVo) ;
@@ -62,7 +61,7 @@ public interface BookCaseService {
      * @param bookCaseVo
      * @return bookCaseVo
      */
-    String ProcessParameter(BookCaseVo bookCaseVo);
+    String processParameter(BookCaseVo bookCaseVo);
 
     /**
      * 统一封装数据

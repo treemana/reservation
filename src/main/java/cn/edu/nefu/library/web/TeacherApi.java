@@ -5,7 +5,9 @@ import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.core.model.vo.TimeVO;
+import cn.edu.nefu.library.service.BookCaseService;
 import cn.edu.nefu.library.service.ReservationTimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,45 +29,58 @@ public class TeacherApi {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ReservationTimeService reservationTimeService;
+    private final BookCaseService bookCaseService;
 
     @Autowired
-    public TeacherApi(ReservationTimeService reservationTimeService) {
+    public TeacherApi(ReservationTimeService reservationTimeService, BookCaseService bookCaseService) {
         this.reservationTimeService = reservationTimeService;
+        this.bookCaseService = bookCaseService;
     }
 
     @RequestMapping(value = "/open-time", method = RequestMethod.GET)
-    public RestData getReservationTime(HttpServletRequest request){
+    public RestData getReservationTime(HttpServletRequest request) {
         logger.info("get reservationTime");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            try{
+            try {
                 final Map<String, String> reservationTime = reservationTimeService.getReservationTime();
                 logger.info("get get reservationTime success");
                 return new RestData(reservationTime);
 
-            } catch ( LibException e) {
+            } catch (LibException e) {
                 return new RestData(e.getMessage());
             }
         }
     }
+
     @RequestMapping(value = "/open-time", method = RequestMethod.PUT)
-    public RestData putReservationTime(@RequestBody TimeVO timeVO, HttpServletRequest request){
-        logger.info("put reservationTime"+timeVO.getEndTime()+timeVO.getStartTime());
+    public RestData putReservationTime(@RequestBody TimeVO timeVO, HttpServletRequest request) {
+        logger.info("put reservationTime" + timeVO.getEndTime() + timeVO.getStartTime());
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            try{
-              return new RestData(reservationTimeService.putReservationTime(timeVO));
-            } catch (LibException e){
-                return new RestData(1,e.getMessage());
+            try {
+                return new RestData(reservationTimeService.putReservationTime(timeVO));
+            } catch (LibException e) {
+                return new RestData(1, e.getMessage());
             }
-
         }
-
     }
+
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
+
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null != currentUser) {
+            return bookCaseService.selectDetailByCondition(bookCaseVo);
+        } else {
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        }
+    }
+
 }

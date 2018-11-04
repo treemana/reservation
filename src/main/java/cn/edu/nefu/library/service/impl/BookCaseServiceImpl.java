@@ -110,7 +110,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public String ProcessParameter(BookCaseVo bookCaseVo) {
+    public String processParameter(BookCaseVo bookCaseVo) {
 
         if (null != bookCaseVo.getId() && 0 != bookCaseVo.getId().length()) {
             String id = bookCaseVo.getId();
@@ -129,12 +129,11 @@ public class BookCaseServiceImpl implements BookCaseService {
             User user = new User();
             user.setStudentId(bookCaseVo.getStudentId());
             List<User> users = userMapper.selectByCondition(user);
-            User u = users.get(0);
-            if (null != u) {
+            if (0 < users.size()) {
+                User u = users.get(0);
                 bookCaseVo.setUserId(u.getSystemId());
             } else {
                 mes = "请确认学号是否有误";
-                return mes;
             }
         }
         return mes;
@@ -143,27 +142,30 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page) {
 
-        List<Map<String, Object>> rtv = new ArrayList<>();
+        List<Object> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
             Map<String, Object> map = new HashMap<>(4);
             map.put("location", data.getLocation());
             map.put("id", data.getNumber());
             map.put("status", data.getStatus());
             Integer userId = data.getUserId();
-            if (null != bookCaseVo.getStudentId()) {
+            if (null != userId) {
                 map.put("studentId", userMapper.selectByUserId(data).getStudentId());
             } else {
                 map.put("studentId", "");
             }
             rtv.add(map);
         }
-        return new RestData(rtv);
+        Map<String, Object> map = new LinkedHashMap();
+        map.put("ships",rtv);
+        map.put("pages",page);
+        return new RestData(map);
     }
 
     @Override
     public RestData selectDetailByCondition(BookCaseVo bookCaseVo) {
 
-        String message = ProcessParameter(bookCaseVo);
+        String message = processParameter(bookCaseVo);
         if (null != message) {
             return new RestData(1, message);
         }
