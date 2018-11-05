@@ -12,7 +12,7 @@ CREATE TABLE `bookcase` (
   `bc_status`    TINYINT UNSIGNED NOT NULL DEFAULT '0'
   COMMENT '书包柜的状态 默认0为可选',
   PRIMARY KEY (`bc_system_id`),
-  INDEX `idx_n` (`bc_number`),
+  UNIQUE KEY (`bc_number`),
   INDEX `idx_l` (`bc_location`),
   INDEX `idx_u` (`bc_user_id`)
 )

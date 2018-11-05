@@ -6,6 +6,7 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import cn.edu.nefu.library.core.model.vo.ShipVO;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.ibatis.annotations.UpdateProvider;
 import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
@@ -37,6 +38,13 @@ public interface BookCaseService {
     int setKeepByNumber(BookCase bookCase);
 
     /**
+     * 修改单个关系
+     * @param shipVO 书包柜的编号贺学号
+     * @return 是否修改成功
+     */
+    boolean putShip(ShipVO shipVO)throws LibException;
+
+    /**
      * 清空/删除关系
      * @param bookCase 书包柜编号
      * @return 是否清除成功
@@ -52,7 +60,6 @@ public interface BookCaseService {
     /**
      * 根据条件获取书包柜详情
      * @param bookCaseVo
-     * @param user
      * @return
      */
     RestData selectDetailByCondition(BookCaseVo bookCaseVo) ;
@@ -62,7 +69,7 @@ public interface BookCaseService {
      * @param bookCaseVo
      * @return bookCaseVo
      */
-    String ProcessParameter(BookCaseVo bookCaseVo);
+    String processParameter(BookCaseVo bookCaseVo);
 
     /**
      * 统一封装数据

@@ -4,6 +4,7 @@ import cn.edu.nefu.library.common.Page;
 import cn.edu.nefu.library.common.util.PageUtil;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.vo.ShipVO;
 import jdk.nashorn.internal.objects.annotations.Where;
 import org.apache.ibatis.annotations.Param;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
@@ -123,6 +124,39 @@ public class BookCaseProvider {
                 ORDER_BY("bc_system_id LIMIT 1");
             }
         }.toString();
+    }
+
+    public String selectUserIdByStudentId(ShipVO shipVO) {
+        return new SQL(){
+            {
+                SELECT("user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+                        "user_type AS type, user_token AS token");
+                FROM("user");
+                WHERE("user_username=#{studentId}");
+            }
+        }.toString();
+    }
+    public String updateSingleShip(ShipVO shipVO){
+        return new SQL(){
+            {
+                UPDATE("bookcase");
+                SET("bc_user_id = #{userId}," +
+                        "bc_status = #{status}");
+                WHERE("bc_number = #{number}");
+            }
+        }.toString();
+    }
+
+
+    public String selectByNumber(ShipVO shipVO) {
+        return new SQL(){
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                WHERE("bc_number = #{number}");
+            }
+        } .toString();
     }
 }
 

@@ -117,14 +117,4 @@ public class BookCaseApi {
         }
     }
 
-    @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
-
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            return bookCaseService.selectDetailByCondition(bookCaseVo);
-        } else {
-            return new RestData(1, ErrorMessage.PLEASE_RELOGIN);
-        }
-    }
 }
