@@ -114,7 +114,7 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String selectOneBookCaseNumber(@Param("l")int l) {
+    public String selectBookCaseNumberByLocation(@Param("l")int l) {
         return new SQL() {
             {
                 SELECT("bc_system_id AS systemId,bc_number AS number");

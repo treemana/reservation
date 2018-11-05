@@ -58,8 +58,8 @@ public interface BookCaseMapper {
      * @param l 地区
      * @return
      */
-    @SelectProvider(type = BookCaseProvider.class,method = "selectOneBookCaseNumber")
-    BookCase selectOneBookCaseNumber(@Param("l")int l);
+    @SelectProvider(type = BookCaseProvider.class,method = "selectBookCaseNumberByLocation")
+    BookCase selectBookCaseNumberByLocation(@Param("l")int l);
 
     /**
      * 根据书包柜编号更新使用者ID

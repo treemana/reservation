@@ -269,7 +269,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
             // 不包含在finish中就分配柜子
             if (!redisDao.isMember("finish", studentId)) {
-                BookCase bookCase = bookCaseMapper.selectOneBookCaseNumber(l);
+                BookCase bookCase = bookCaseMapper.selectBookCaseNumberByLocation(l);
                 User user = new User();
                 user.setStudentId(studentId);
                 List<User> reUser = userMapper.selectByCondition(user);
