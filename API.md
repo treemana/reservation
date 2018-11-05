@@ -96,6 +96,7 @@
 
 - GET /vrifycode/{vrifyCode}
 - vrifyCode : 验证码数值
+- cookie : 验证码回传的Jsesson
 
 - 成功返回：
 ```json
@@ -137,7 +138,9 @@
 
 ### 1.3.2. 当前预约状态
 
-- GET /status/{studentId}
+- GET /status?studentid=2016210111&vrifycode=2nghs2
+
+- cookie : 验证码回传的Jsesson
 
 - return :
 

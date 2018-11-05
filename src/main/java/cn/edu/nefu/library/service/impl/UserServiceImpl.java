@@ -2,8 +2,10 @@ package cn.edu.nefu.library.service.impl;
 
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.util.TokenUtil;
+import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.mapper.UserMapper;
 import cn.edu.nefu.library.core.model.User;
+import cn.edu.nefu.library.core.model.vo.UserVo;
 import cn.edu.nefu.library.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +29,12 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserMapper userMapper;
+    private final RedisDao redisDao;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper) {
+    public UserServiceImpl(UserMapper userMapper, RedisDao redisDao) {
         this.userMapper = userMapper;
+        this.redisDao = redisDao;
     }
 
 
@@ -82,6 +86,19 @@ public class UserServiceImpl implements UserService {
 
         logger.info("delete BalckList,studentId： "+user.getStudentId());
         return  0 < userMapper.deleteBlackListByStudentId(user);
+
+
+    }
+
+    @Override
+    public int getStatus(UserVo userVo){
+        if(!redisDao.isMember("finish", userVo.getStudentId())) {
+            int currentCount =Integer.parseInt(redisDao.get("l_" + userVo.getStudentId()).split(",")[1]);
+            int popCount = Integer.parseInt(redisDao.get("popCount"));
+            return currentCount - popCount + 1;
+        } else {
+            return -1;
+        }
 
 
     }

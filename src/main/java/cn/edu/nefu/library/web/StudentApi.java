@@ -4,10 +4,13 @@ import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
+import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import cn.edu.nefu.library.core.model.vo.UserVo;
 import cn.edu.nefu.library.service.BookCaseService;
 import cn.edu.nefu.library.service.ReservationService;
+import cn.edu.nefu.library.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +33,16 @@ public class StudentApi {
 
     private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
+    private final RedisDao redisDao;
+    private final UserService userService;
 
 
     @Autowired
-    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService) {
+    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, RedisDao redisDao, UserService userService) {
         this.reservationService = reservationService;
         this.bookCaseService = bookCaseService;
+        this.redisDao = redisDao;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/time", method = RequestMethod.GET)
@@ -64,6 +71,26 @@ public class StudentApi {
         } else {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
+    }
 
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public RestData getStatus(UserVo userVo, HttpServletRequest request){
+        logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
+
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null != currentUser) {
+            String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+            if(captchaId.equals(userVo.getVrifyCode())) {
+                if(userService.getStatus(userVo) != -1) {
+                    return new RestData(userService.getStatus(userVo));
+                } else {
+                    return  new RestData(1, "用户已分配");
+                }
+            }else {
+                return new RestData(1, "验证码出错！");
+            }
+        } else {
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        }
     }
 }
