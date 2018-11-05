@@ -9,7 +9,7 @@ import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.core.model.vo.ShipVO;
 import cn.edu.nefu.library.core.model.vo.TimeVO;
 import cn.edu.nefu.library.service.BookCaseService;
-import cn.edu.nefu.library.service.ReservationTimeService;
+import cn.edu.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,14 @@ import java.util.Map;
 public class TeacherApi {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final ReservationTimeService reservationTimeService;
+    private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
 
 
 
     @Autowired
-    public TeacherApi(ReservationTimeService reservationTimeService, BookCaseService bookCaseService) {
-        this.reservationTimeService = reservationTimeService;
+    public TeacherApi(ReservationService reservationService, BookCaseService bookCaseService) {
+        this.reservationService = reservationService;
         this.bookCaseService = bookCaseService;
     }
 
@@ -49,7 +49,7 @@ public class TeacherApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
-                final Map<String, String> reservationTime = reservationTimeService.getReservationTime();
+                final Map<String, String> reservationTime = reservationService.getReservationTime();
                 logger.info("get get reservationTime success");
                 return new RestData(reservationTime);
 
@@ -68,7 +68,7 @@ public class TeacherApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
-                return new RestData(reservationTimeService.putReservationTime(timeVO));
+                return new RestData(reservationService.putReservationTime(timeVO));
             } catch (LibException e) {
                 return new RestData(1, e.getMessage());
             }

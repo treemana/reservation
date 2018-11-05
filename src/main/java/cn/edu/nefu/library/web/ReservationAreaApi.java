@@ -6,7 +6,7 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.GradeVO;
-import cn.edu.nefu.library.service.ReservationAreaService;
+import cn.edu.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +27,11 @@ import java.util.Map;
 public class ReservationAreaApi {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final ReservationAreaService reservationAreaService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public ReservationAreaApi(ReservationAreaService reservationAreaService) {
-        this.reservationAreaService = reservationAreaService;
+    public ReservationAreaApi(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
     public RestData getReservationArea(HttpServletRequest request) {
@@ -42,7 +42,7 @@ public class ReservationAreaApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try{
-                List<Map<String, String>> reservationArea = reservationAreaService.getReservationArea();
+                List<Map<String, String>> reservationArea = reservationService.getReservationArea();
                 logger.info("get reservationArea successful");
                 return new RestData(reservationArea);
             } catch (LibException e){
@@ -62,7 +62,7 @@ public class ReservationAreaApi {
         } else {
             try{
 
-                return new RestData(reservationAreaService.putReservationArea(list));
+                return new RestData(reservationService.putReservationArea(list));
             } catch ( LibException e) {
                 return new RestData(1,e.getMessage());
             }
@@ -80,7 +80,7 @@ public class ReservationAreaApi {
            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
        } else {
            try {
-               boolean result = reservationAreaService.postGrade(gradeVO);
+               boolean result = reservationService.postGrade(gradeVO);
                if (result) {
                    logger.info("postGrade is successful");
                    return new RestData(null);

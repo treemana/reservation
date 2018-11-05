@@ -242,7 +242,7 @@
 ```json
 {
     "code" : 0,
-    "data" : "修改成功"
+    "data" : true
 }
 ```
 

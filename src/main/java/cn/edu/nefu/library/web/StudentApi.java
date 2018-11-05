@@ -7,7 +7,7 @@ import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.service.BookCaseService;
-import cn.edu.nefu.library.service.ReservationTimeService;
+import cn.edu.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,13 @@ public class StudentApi {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final ReservationTimeService reservationTimeService;
+    private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
 
 
     @Autowired
-    public StudentApi(ReservationTimeService reservationTimeService, BookCaseService bookCaseService) {
-        this.reservationTimeService = reservationTimeService;
+    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService) {
+        this.reservationService = reservationService;
         this.bookCaseService = bookCaseService;
     }
 
@@ -42,7 +42,7 @@ public class StudentApi {
     public RestData getStartTime(HttpServletRequest request) {
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
-            Map<String, Object> data = reservationTimeService.getStartTime();
+            Map<String, Object> data = reservationService.getStartTime();
             return new RestData(data);
         } else {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
