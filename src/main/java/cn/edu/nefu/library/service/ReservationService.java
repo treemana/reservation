@@ -60,4 +60,10 @@ public interface ReservationService {
      */
     Map<String, Object> getStartTime();
 
+    /**
+     * 获取开放年级
+     *
+     * @return {"startGrade":2016,"endGrade":2018}
+     */
+    Map<String, Object> getOpenGrade();
 }

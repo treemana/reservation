@@ -3,6 +3,7 @@ package cn.edu.nefu.library.web;
 import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
+import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.GradeVO;
@@ -71,9 +72,9 @@ public class ReservationAreaApi {
 
    }
 
-   @RequestMapping(value = "open-grades", method=RequestMethod.POST)
+    @RequestMapping(value = "open-grades", method = RequestMethod.PUT)
    public RestData postGrade(@RequestBody GradeVO gradeVO, HttpServletRequest request) {
-       logger.info("postGrade is running");
+        logger.info("get postGrade" + JsonUtil.getJsonString(gradeVO));
        User currentUser = TokenUtil.getUserByToken(request);
        if (null == currentUser) {
            logger.info(ErrorMessage.PLEASE_RELOGIN);
@@ -82,10 +83,8 @@ public class ReservationAreaApi {
            try {
                boolean result = reservationService.postGrade(gradeVO);
                if (result) {
-                   logger.info("postGrade is successful");
-                   return new RestData(null);
+                   return new RestData(true);
                } else {
-                   logger.info("postGrade is failure");
                    return new RestData(1, "postGrade is failure");
                }
            } catch (LibException e) {
@@ -96,6 +95,25 @@ public class ReservationAreaApi {
        }
    }
 
+    @RequestMapping(value = "open-grades", method = RequestMethod.GET)
+    public RestData getGrade(HttpServletRequest request) {
+        logger.info("getGrade is running");
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null == currentUser) {
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+            try {
+                Map rtv = reservationService.getOpenGrade();
+                logger.info("getGrade  is  successful");
+                return new RestData(rtv);
+            } catch (Exception e) {
+                logger.info(e.getMessage());
+                return new RestData(1, e.getMessage());
+            }
+
+        }
+    }
 }
 
 

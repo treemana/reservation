@@ -144,4 +144,18 @@ public class ReservationServiceImpl implements ReservationService {
 
     }
 
+    @Override
+    public Map<String, Object> getOpenGrade() {
+        Map<String, Object> rtv = new HashMap<>(2);
+        Config config = new Config();
+        config.setConfigKey("startGrade");
+        Config c = configMapper.selectOpenGrade(config);
+        rtv.put("startGrade", c.getConfigValue());
+        config.setConfigKey("endGrade");
+        c = configMapper.selectOpenGrade(config);
+        rtv.put("endGrade", c.getConfigValue());
+        return rtv;
+    }
+
+
 }
