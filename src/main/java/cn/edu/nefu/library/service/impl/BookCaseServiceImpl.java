@@ -165,9 +165,9 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page) {
 
-        List<Object> rtv = new ArrayList<>();
+        List< Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
-            Map<String, Object> map = new HashMap<>(4);
+            Map<String, Object> map = new LinkedHashMap<>(4);
             map.put("location", data.getLocation());
             map.put("id", data.getNumber());
             map.put("status", data.getStatus());

@@ -63,10 +63,9 @@ public String updateOpenTime( Config config) {
     public String selectStartTime(){
         return new SQL(){
             {
-                String str="startTime";
                 SELECT("config_key as configKey,config_value as configValue ");
                 FROM("config");
-                WHERE("config_key='"+str+"'");
+                WHERE("config_key='startTime'");
             }
         }.toString();
     }
