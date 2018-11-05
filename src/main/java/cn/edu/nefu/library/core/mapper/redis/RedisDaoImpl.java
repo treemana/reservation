@@ -2,6 +2,7 @@
 package cn.edu.nefu.library.core.mapper.redis;
 
 import cn.edu.nefu.library.core.mapper.RedisDao;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,7 @@ public class RedisDaoImpl implements RedisDao {
 
 
     private final StringRedisTemplate stringRedisTemplate;
-
+    private Logger logger;
 
     @Autowired
     public RedisDaoImpl(StringRedisTemplate stringRedisTemplate) {
@@ -32,6 +33,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForList().range(key, 0, -1);
         } catch (Exception e) {
+            logger.info("getList" + e.getMessage());
             return null;
         }
     }
@@ -41,6 +43,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForList().size(key);
         } catch (Exception e) {
+            logger.info("add" + e.getMessage());
             return null;
         }
 
@@ -52,6 +55,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForList().rightPush(key, value);
             return true;
         } catch (Exception e) {
+            logger.info("pushValue" + e.getMessage());
             return false;
         }
 
@@ -63,6 +67,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForList().rightPushAll(key, list);
             return true;
         } catch (Exception e) {
+            logger.info("pushList" + e.getMessage());
             return false;
         }
 
@@ -73,6 +78,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForList().leftPop(key);
         } catch (Exception e) {
+            logger.info("popValue" + e.getMessage());
             return null;
         }
     }
@@ -83,6 +89,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForList().remove(key, 1, value);
             return true;
         } catch (Exception e) {
+            logger.info("removeListValue" + e.getMessage());
             return false;
         }
     }
@@ -93,6 +100,7 @@ public class RedisDaoImpl implements RedisDao {
             Long l = stringRedisTemplate.opsForValue().increment(key, -number);
             return l;
         } catch (Exception e) {
+            logger.info("dec" + e.getMessage());
             return 0;
         }
 
@@ -104,6 +112,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {
+            logger.info("set" + e.getMessage());
             return false;
         }
     }
@@ -113,7 +122,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            System.out.println(e);
+            logger.info("get" + e.getMessage());
             return null;
         }
     }
@@ -124,6 +133,7 @@ public class RedisDaoImpl implements RedisDao {
             Long l = stringRedisTemplate.opsForValue().increment(key, number);
             return l;
         } catch (Exception e) {
+            logger.info("inc" + e.getMessage());
             return 0;
         }
     }
@@ -134,6 +144,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForSet().add(key,value);
             return true;
         } catch (Exception e) {
+            logger.info("add" + e.getMessage());
             return false;
         }
     }
@@ -149,6 +160,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.delete(key);
             return true;
         } catch (Exception e) {
+            logger.info("remove" + e.getMessage());
             return false;
         }
     }
