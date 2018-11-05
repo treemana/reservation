@@ -51,7 +51,7 @@ public interface BookCaseMapper {
     int updateShipByNumber(BookCase bookcase);
 
     @SelectProvider(type = BookCaseProvider.class,method = "selectBagNum")
-    int selectBagNum(BookCase bookCase);
+    int selectBagNum(@Param("location")int location);
 
     /**
      * 查询出对应位置编号最小的一个书包柜

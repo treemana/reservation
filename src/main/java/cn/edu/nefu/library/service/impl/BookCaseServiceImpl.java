@@ -120,12 +120,10 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public List<Map<String, Object>> getBagNum() {
         List<Map<String, Object>> rtv = new ArrayList<>();
-        BookCase bookCase = new BookCase();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             Map<String, Object> map = new HashMap<>(2);
-            bookCase.setLocation(i + 1);
-            int num = bookCaseMapper.selectBagNum(bookCase);
-            map.put("location", i + 1);
+            int num = Integer.parseInt(redisDao.get("location_" + i));
+            map.put("location", i);
             map.put("num", num);
             rtv.add(map);
         }

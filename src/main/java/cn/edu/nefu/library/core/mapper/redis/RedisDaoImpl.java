@@ -143,5 +143,15 @@ public class RedisDaoImpl implements RedisDao {
         return stringRedisTemplate.opsForSet().isMember(key, value);
     }
 
+    @Override
+    public boolean remove(String key) {
+        try {
+            stringRedisTemplate.delete(key);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 }

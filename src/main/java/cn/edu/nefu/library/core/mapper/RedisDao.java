@@ -100,4 +100,11 @@ public interface RedisDao {
      * @return
      */
     boolean isMember(String key, String value);
+
+    /**
+     * 移除数据库中key值
+     * @param key
+     * @return
+     */
+    boolean remove(String key);
 }

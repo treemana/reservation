@@ -49,7 +49,7 @@ public class BookCaseProvider {
     }
 
 
-    public String selectBagNum(BookCase bookCase){
+    public String selectBagNum(@Param("location")int location){
         return new SQL(){
             {
                 SELECT("count(*)");
