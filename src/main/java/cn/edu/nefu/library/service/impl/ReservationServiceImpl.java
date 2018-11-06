@@ -1,7 +1,9 @@
 package cn.edu.nefu.library.service.impl;
 
 import cn.edu.nefu.library.common.LibException;
+import cn.edu.nefu.library.core.mapper.BookCaseMapper;
 import cn.edu.nefu.library.core.mapper.ConfigMapper;
+import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.model.Config;
 import cn.edu.nefu.library.core.model.vo.GradeVO;
 import cn.edu.nefu.library.core.model.vo.TimeVO;
@@ -24,10 +26,14 @@ public class ReservationServiceImpl implements ReservationService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ConfigMapper configMapper;
+    private final BookCaseMapper bookCaseMapper;
+    private final RedisDao redisDao;
 
     @Autowired
-    public ReservationServiceImpl(ConfigMapper configMapper) {
+    public ReservationServiceImpl(ConfigMapper configMapper, BookCaseMapper bookCaseMapper, RedisDao redisDao) {
         this.configMapper = configMapper;
+        this.bookCaseMapper = bookCaseMapper;
+        this.redisDao = redisDao;
     }
 
     @Override
@@ -115,17 +121,23 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean putReservationTime(TimeVO timeVO) throws LibException {
+    public boolean putReservationTime(TimeVO timeVO) {
 
+        int count = 0;
         Config config = new Config();
         config.setConfigKey("startTime");
         config.setConfigValue(timeVO.getStartTime());
         Config config1 = new Config();
         config1.setConfigKey("endTime");
         config1.setConfigValue(timeVO.getEndTime());
-        if (0 == configMapper.updateOpenTime(config) || 0 == configMapper.updateOpenTime(config1)) {
-            throw new LibException("修改失败");
+        for(int i = 1; i <= 4; i++) {
+            int num = bookCaseMapper.selectBagNum(i);
+            count += num;
+            redisDao.set("location_" + i, String.valueOf(num));
         }
+        redisDao.set("popCount","0");
+        redisDao.set("total", String.valueOf(count));
+        redisDao.remove("finish");
         return 0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1);
 
     }

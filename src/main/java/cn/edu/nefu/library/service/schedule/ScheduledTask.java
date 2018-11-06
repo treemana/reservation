@@ -30,9 +30,9 @@ public class ScheduledTask {
 
 
     @Scheduled(fixedDelay = 1000)        //fixedRate = 5000表示当前方法开始执行5000ms后，Spring scheduling会再次调用该方法
-    public void testFixedRate() {
+    public void doPopList() {
         while (true) {
-            logger.info("===fixedRate: 第{}次执行方法", fixedRateCount++);
+            logger.info("===fixedRate: 第{}次查询队列", fixedRateCount++);
             String studentId = bookCaseService.popQueue();
             if (studentId == null) {
                 break;

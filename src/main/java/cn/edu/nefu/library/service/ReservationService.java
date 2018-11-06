@@ -52,7 +52,7 @@ public interface ReservationService {
      * @return 是否修改着成功
      * @throws LibException 异常
      */
-    boolean putReservationTime(TimeVO timeVO) throws LibException;
+    boolean putReservationTime(TimeVO timeVO);
 
     /**
      * 查询开放时间

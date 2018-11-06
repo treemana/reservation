@@ -67,11 +67,14 @@ public class TeacherApi {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            try {
-                return new RestData(reservationService.putReservationTime(timeVO));
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
+            boolean bool = reservationService.putReservationTime(timeVO);
+            if(bool) {
+                return new RestData(true);
+            }else {
+                return new RestData(1,"修改失败");
             }
+
+
         }
     }
 
