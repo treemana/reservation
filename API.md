@@ -96,6 +96,7 @@
 
 - GET /vrifycode/{vrifyCode}
 - vrifyCode : 验证码数值
+- cookie : 验证码回传的Jsesson
 
 - 成功返回：
 ```json
@@ -137,7 +138,9 @@
 
 ### 1.3.2. 当前预约状态
 
-- GET /status/{studentId}
+- GET /status?studentid=2016210111&vrifycode=2nghs2
+
+- cookie : 验证码回传的Jsesson
 
 - return :
 
@@ -242,7 +245,7 @@
 ```json
 {
     "code" : 0,
-    "data" : "修改成功"
+    "data" : true
 }
 ```
 
@@ -396,9 +399,9 @@
 
 ### 1.4.3. 学生管理
 
-#### 1.4.3.1. 开放年级
+#### 1.4.3.1. 修改开放年级
 
-- POST /open-grades
+- PUT /open-grades
 - payload :
 
 ```json
@@ -412,9 +415,11 @@
 
 ```json
 {
-    "code" : 0
+    "code" : 0,
+    "data" : true
 }
 ```
+
 
 #### 1.4.3.2. 添加黑名单
 
@@ -466,5 +471,20 @@
             "studentId" : "1234556676"
         }
     ]
+}
+```
+####1.4.3.5. 获取开放年级
+
+ -GET /getopengrade
+ 
+ -return:
+ 
+ ```json
+{
+     "code":  0,
+     "data": {
+          "startGrade" : "2015",
+          "endGrade" : "2016"
+     }
 }
 ```

@@ -2,7 +2,6 @@ package cn.edu.nefu.library.core.mapper;
 
 import cn.edu.nefu.library.core.mapper.provider.ConfigProvider;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.vo.GradeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
@@ -70,4 +69,13 @@ public interface ConfigMapper {
     @SelectProvider(type= ConfigProvider.class,method = "selectStartTime")
     Config selectStartTime();
 
+
+    /**
+     * 查询开放年级
+     *
+     * @param config
+     * @return config 实例
+     */
+    @SelectProvider(type = ConfigProvider.class, method = "selectOpenGrade")
+    Config selectOpenGrade(Config config);
 }

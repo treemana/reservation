@@ -120,12 +120,10 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public List<Map<String, Object>> getBagNum() {
         List<Map<String, Object>> rtv = new ArrayList<>();
-        BookCase bookCase = new BookCase();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             Map<String, Object> map = new HashMap<>(2);
-            bookCase.setLocation(i + 1);
-            int num = bookCaseMapper.selectBagNum(bookCase);
-            map.put("location", i + 1);
+            int num = Integer.parseInt(redisDao.get("location_" + i));
+            map.put("location", i);
             map.put("num", num);
             rtv.add(map);
         }
@@ -165,9 +163,9 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page) {
 
-        List<Object> rtv = new ArrayList<>();
+        List< Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
-            Map<String, Object> map = new HashMap<>(4);
+            Map<String, Object> map = new LinkedHashMap<>(4);
             map.put("location", data.getLocation());
             map.put("id", data.getNumber());
             map.put("status", data.getStatus());
@@ -271,7 +269,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
             // 不包含在finish中就分配柜子
             if (!redisDao.isMember("finish", studentId)) {
-                BookCase bookCase = bookCaseMapper.selectOneBookCaseNumber(l);
+                BookCase bookCase = bookCaseMapper.selectBookCaseNumberByLocation(l);
                 User user = new User();
                 user.setStudentId(studentId);
                 List<User> reUser = userMapper.selectByCondition(user);
