@@ -48,8 +48,8 @@ public class WebTestRoot {
         Assert.assertNotNull(mockMvc);
 
         Map<String, String> user = new HashMap<>(2);
-        user.put("studentId", "2017111363");
-        user.put("studentName", "2017111363");
+        user.put("studentId", "admin");
+        user.put("studentName", "admin");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/api/login");
         builder.contentType(MediaType.APPLICATION_JSON_UTF8).content(JsonUtil.getJsonString(user));
