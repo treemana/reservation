@@ -7,6 +7,8 @@ import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.core.model.vo.ShipVO;
+import cn.edu.nefu.library.core.model.vo.ShipVO;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.ibatis.annotations.UpdateProvider;
 import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
@@ -23,6 +25,7 @@ public interface BookCaseService {
 
     /**
      * 获取我的书包柜信息
+     *
      * @param user 用户学号
      * @return 书包柜位置和编号
      * @throws LibException 是否有柜子
@@ -31,41 +34,48 @@ public interface BookCaseService {
 
     /**
      * 设置预留的书包柜
+     *
      * @param bookCase 书包柜编号
      * @return 是否预留成功
      * @throws LibException 是否预留成功
      */
-    int setKeepByNumber(BookCase bookCase);
+    RestData setKeepByNumber(List<Integer> data);
 
     /**
      * 修改单个关系
+     *
      * @param shipVO 书包柜的编号贺学号
      * @return 是否修改成功
      */
-    boolean putShip(ShipVO shipVO)throws LibException;
+    boolean putShip(ShipVO shipVO) throws LibException;
 
     /**
      * 清空/删除关系
-     * @param bookCase 书包柜编号
+     *
+     * @param data 书包柜编号数组
      * @return 是否清除成功
      */
-    int updateShipByNumber(BookCase bookCase);
+    RestData deleteShip(List<Integer> data);
 
     /**
      * 获取书包柜数量
+     *
      * @return 书包柜位置和数量的列表
      * @throws LibException
      */
-    List<Map<String,Object>> getBagNum()throws LibException;
+    List<Map<String, Object>> getBagNum() throws LibException;
+
     /**
      * 根据条件获取书包柜详情
+     *
      * @param bookCaseVo
      * @return
      */
-    RestData selectDetailByCondition(BookCaseVo bookCaseVo) ;
+    RestData selectDetailByCondition(BookCaseVo bookCaseVo);
 
     /**
      * 统一处理参数
+     *
      * @param bookCaseVo
      * @return bookCaseVo
      */
@@ -73,12 +83,13 @@ public interface BookCaseService {
 
     /**
      * 统一封装数据
+     *
      * @param bookCases
      * @param bookCaseVo
      * @param page
      * @return
      */
-    RestData encapsulate(List<BookCase> bookCases,BookCaseVo bookCaseVo, Page page);
+    RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page);
 
 
     /**
@@ -98,6 +109,7 @@ public interface BookCaseService {
 
     /**
      * redis 队列出队
+     *
      * @return
      */
     String popQueue();

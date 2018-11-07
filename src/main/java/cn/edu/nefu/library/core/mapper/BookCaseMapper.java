@@ -24,7 +24,7 @@ import java.util.List;
 public interface BookCaseMapper {
 
     /**
-     *通过用户ID获取书包柜信息
+     * 通过用户ID获取书包柜信息
      *
      * @param user 用户ID
      * @return bookCase 书包柜实体
@@ -33,7 +33,7 @@ public interface BookCaseMapper {
     BookCase selectByUserId(User user);
 
     /**
-     *设置预留的书包柜
+     * 设置预留的书包柜
      *
      * @param bookCase 书包柜编号
      * @return 操作是否成功 1 成功 0 失败
@@ -42,40 +42,51 @@ public interface BookCaseMapper {
     int setByNumber(BookCase bookCase);
 
     /**
-     *通过书包柜编号建立/释放关系
+     * 通过书包柜编号释放关系
      *
      * @param bookcase 书包柜编号
      * @return 操作是否成功 1 成功 0 失败
      */
-    @UpdateProvider(type = BookCaseProvider.class, method = "updateShipByNumber")
-    int updateShipByNumber(BookCase bookcase);
+    @UpdateProvider(type = BookCaseProvider.class, method = "deleteShipByNumber")
+    int deleteShipByNumber(BookCase bookcase);
+
+    /**
+     * 清空所有书包柜关系
+     *
+     * @return 操作是否成功 1 成功 0 失败
+     */
+    @UpdateProvider(type = BookCaseProvider.class, method = "deleteAllShip")
+    int deleteAllShip();
 
     /**
      * 通过location筛选书包柜数量
+     *
      * @param location
      * @return
      */
-    @SelectProvider(type = BookCaseProvider.class,method = "selectBagNum")
-    int selectBagNum(@Param("location")int location);
+    @SelectProvider(type = BookCaseProvider.class, method = "selectBagNum")
+    int selectBagNum(@Param("location") int location);
 
     /**
      * 查询出对应位置编号最小的一个书包柜
+     *
      * @param l 地区
      * @return
      */
-    @SelectProvider(type = BookCaseProvider.class,method = "selectBookCaseNumberByLocation")
-    BookCase selectBookCaseNumberByLocation(@Param("l")int l);
+    @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseNumberByLocation")
+    BookCase selectBookCaseNumberByLocation(@Param("l") int l);
 
     /**
      * 根据书包柜编号更新使用者ID
+     *
      * @return
      */
     @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_number=#{bcNumber}")
-    int updateOwnerbyBcNumber(@Param("bcNumber")int bcNumber, @Param("studentId")int studentId);
-    
+    int updateOwnerbyBcNumber(@Param("bcNumber") int bcNumber, @Param("studentId") int studentId);
+
 
     /**
-     *根据条件查询书包柜详情
+     * 根据条件查询书包柜详情
      *
      * @param bookCaseVo 书包柜编号
      * @return 操作是否成功 1 成功 0 失败
@@ -94,6 +105,7 @@ public interface BookCaseMapper {
 
     /**
      * 根据学号查询学生的systemid
+     *
      * @param shipVO 学号
      * @return user
      */
@@ -102,6 +114,7 @@ public interface BookCaseMapper {
 
     /**
      * 修改关系，书包柜与单个学生的关系
+     *
      * @param shipVO 参数
      * @return int
      */
@@ -110,6 +123,7 @@ public interface BookCaseMapper {
 
     /**
      * 查询是否存在这个number的书包柜
+     *
      * @param shipVO number
      * @return bookcase
      */

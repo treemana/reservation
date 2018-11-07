@@ -4,6 +4,7 @@ import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
+import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.core.model.vo.ShipVO;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -105,4 +107,27 @@ public class TeacherApi {
 
         }
     }
+
+    @RequestMapping(value = "/ship", method = RequestMethod.DELETE)
+    public RestData deleteShip(@RequestBody List<Integer> data, HttpServletRequest request) {
+
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null != currentUser) {
+            return bookCaseService.deleteShip(data);
+        } else {
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        }
+    }
+
+    @RequestMapping(value = "/preorder", method = RequestMethod.POST)
+    public RestData setKeep(@RequestBody List<Integer> data, HttpServletRequest request) {
+
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null != currentUser) {
+            return bookCaseService.setKeepByNumber(data);
+        } else {
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        }
+    }
+
 }

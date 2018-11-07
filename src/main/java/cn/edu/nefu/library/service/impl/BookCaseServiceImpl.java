@@ -70,20 +70,20 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public boolean putShip(ShipVO shipVO) throws LibException{
-        if(null == shipVO.getStudentId()){
+    public boolean putShip(ShipVO shipVO) throws LibException {
+        if (null == shipVO.getStudentId()) {
             shipVO.setStatus(0);
         } else {
             shipVO.setStatus(1);
             User user = bookCaseMapper.selectUserIdByStudentId(shipVO);
             BookCase bookCase = bookCaseMapper.selectByNumber(shipVO);
-            if(null == bookCase || null == user ){
+            if (null == bookCase || null == user) {
                 throw new LibException("此学号或者书包柜不存在");
             }
             shipVO.setUserId(user.getSystemId());
         }
         int i = bookCaseMapper.updateSingleShip(shipVO);
-        if(0 == i){
+        if (0 == i) {
             throw new LibException("修改失败");
         } else {
             return true;
@@ -93,29 +93,52 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public int setKeepByNumber(BookCase bookCase) {
+    public RestData setKeepByNumber(List<Integer> data) {
         int success = 0;
-        success = bookCaseMapper.setByNumber(bookCase);
-        if (0 < success) {
-            return 1;
+        if (0 == data.size() || null == data) {
+            return new RestData(1, "无预留柜子编号!");
         } else {
-            return 0;
-
+            for (int count = 0; count < data.size(); count++) {
+                BookCase bookCase = new BookCase();
+                bookCase.setNumber(data.get(count));
+                if (0 >= bookCaseMapper.setByNumber(bookCase)) {
+                    success = 1;
+                    break;
+                }
+            }
+            if (0 == success) {
+                return new RestData(0, "操作成功!");
+            } else {
+                return new RestData(1, "操作失败,请重试!");
+            }
         }
     }
 
     @Override
-    public int updateShipByNumber(BookCase bookCase) {
+    public RestData deleteShip(List<Integer> data) {
         int success = 0;
-        success = bookCaseMapper.updateShipByNumber(bookCase);
-        if (0 < success) {
-            return 1;
+        if (0 == data.size() || null == data) {
+            if (0 >= bookCaseMapper.deleteAllShip()) {
+                return new RestData(1, "柜子已全部清空关系!");
+            } else {
+                return new RestData(0, "操作成功!");
+            }
         } else {
-            return 0;
-
+            for (int count = 0; count < data.size(); count++) {
+                BookCase bookCase = new BookCase();
+                bookCase.setNumber(data.get(count));
+                if (0 >= bookCaseMapper.deleteShipByNumber(bookCase)) {
+                    success = 1;
+                    break;
+                }
+            }
+            if (0 == success) {
+                return new RestData(0, "操作成功!");
+            } else {
+                return new RestData(1, "操作失败,请重试!");
+            }
         }
     }
-
 
     @Override
     public List<Map<String, Object>> getBagNum() {
@@ -163,7 +186,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page) {
 
-        List< Map<String, Object>> rtv = new ArrayList<>();
+        List<Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
             Map<String, Object> map = new LinkedHashMap<>(4);
             map.put("location", data.getLocation());
@@ -178,8 +201,8 @@ public class BookCaseServiceImpl implements BookCaseService {
             rtv.add(map);
         }
         Map<String, Object> map = new LinkedHashMap();
-        map.put("ships",rtv);
-        map.put("pages",page);
+        map.put("ships", rtv);
+        map.put("pages", page);
         return new RestData(map);
     }
 
@@ -210,7 +233,6 @@ public class BookCaseServiceImpl implements BookCaseService {
         return encapsulate(bookCases, bookCaseVo, page);
 
     }
-
 
     @Override
     public Boolean postBoxOrder(BookCaseVo bookCaseVo) {
@@ -286,7 +308,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     public String popQueue() {
         String studentId = redisDao.popValue("userQueue");
 
-        if(studentId != null) {
+        if (studentId != null) {
             redisDao.inc("popCount", 1);
         }
 

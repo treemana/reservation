@@ -38,7 +38,7 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String updateShipByNumber(BookCase bookCase) {
+    public String deleteShipByNumber(BookCase bookCase) {
         return new SQL() {
             {
                 UPDATE("bookcase");
@@ -48,6 +48,15 @@ public class BookCaseProvider {
         }.toString();
     }
 
+    public String deleteAllShip() {
+        return new SQL() {
+            {
+                UPDATE("bookcase");
+                SET("bc_user_id=null, bc_status=0");
+                WHERE("bc_status=1");
+            }
+        }.toString();
+    }
 
     public String selectBagNum(@Param("location")int location){
         return new SQL(){
