@@ -48,8 +48,8 @@ public class WebTestRoot {
         Assert.assertNotNull(mockMvc);
 
         Map<String, String> user = new HashMap<>(2);
-        user.put("studentId", "zy");
-        user.put("studentName", "zy");
+        user.put("studentId", "2017111363");
+        user.put("studentName", "2017111363");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/api/login");
         builder.contentType(MediaType.APPLICATION_JSON_UTF8).content(JsonUtil.getJsonString(user));
@@ -74,7 +74,7 @@ public class WebTestRoot {
         if (null != restMap) {
             int code = Integer.parseInt(restMap.get("code").toString());
             String message = null != restMap.get("message") ? restMap.get("message").toString() : null;
-            String data = restMap.get("data").toString();
+            String data = null != restMap.get("data") ? restMap.get("data").toString() : null;
             rtv = new RestData(code, message, data);
         }
         return rtv;
