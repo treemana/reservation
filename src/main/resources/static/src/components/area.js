@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import req from '../url';
 import '../css/app.css';
 import { Card, Row, Col, Checkbox, Icon, Avatar, Button, InputNumber, Layout, Table, Divider, Tag, notification, Input, Popconfirm } from 'antd';
@@ -37,43 +38,53 @@ class Area extends Component {
         areaindex.push(this.plainOptions.indexOf(this.state.checkedList[i])+1);
       }
       console.log(areaindex);
-      // $.ajax({
-      //     type: 'PUT',
-      //     url: req+'open-area',
-      //     data: areaindex,
-      //     dataType: "json",
-      //     success: function(res) {
-      //       if(res.code == 0)
-      //       {
-      //         notification.open({
-      //           messstudentId: '提示',
-      //           description: '修改成功！'
-      //         });
-      //       }
-      //       else {
-      //         notification.open({
-      //           messstudentId: '提示',
-      //           description: '修改失败！'
-      //         });
-      //       }
-      //     }
-      //  });
+      $.ajax({
+          type: 'PUT',
+          url: req+'open-area',
+          data: JSON.stringify(areaindex),
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            'token': $.cookie('token')
+          },
+          success: function(res) {
+            if(res.code == 0)
+            {
+              notification.open({
+                messstudentId: '提示',
+                description: '修改成功！'
+              });
+            }
+            else {
+              notification.open({
+                messstudentId: '提示',
+                description: '修改失败！'
+              });
+            }
+          }.bind(this)
+       });
     }
   }
   componentDidMount () {
-    this.setState({checkedList: ['二楼北', '二楼南']});
-    // $.get(req+'open-area',null,function(res) {
-    //   if(res.code == 0) {
-    //     var data = res.data;
-    //     var list = [];
-    //     for(let i = 0;i<data.length;i++)
-    //     {
-    //       if(data[i].configValue == 1)
-    //         list.push(this.plainOptions[data[i].systemId-1]);
-    //     }
-    //     this.setState({checkedList: list});
-    //   }
-    // }.bind(this));
+    $.ajax({
+          type: 'GET',
+          url: req+'open-area',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            'token': $.cookie('token')
+          },
+          success: function(res) {
+            if(res.code == 0) {
+              var data = res.data;
+              var list = [];
+              for(let i = 0;i<data.length;i++)
+              {
+                if(data[i].configValue == 1)
+                  list.push(this.plainOptions[data[i].systemId-1]);
+              }
+              this.setState({checkedList: list});
+            }
+          }.bind(this)
+       });
   }
   render () {
     return (

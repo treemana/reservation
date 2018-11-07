@@ -34,7 +34,7 @@ class Stubox extends Component {
         < Siderbar className="siderbar" current="order" id={this.state.id}/>
         <Content style={{ padding: '0 50px' }}>
       		<br />
-        	<Box />
+        	<Box id={this.state.id}/>
         </Content>
         < Footertext />
       </Layout>
