@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -147,8 +150,9 @@ public class ReservationServiceImpl implements ReservationService {
 
         Config config = configMapper.selectStartTime();
         String StartTime = config.getConfigValue();
-        Date time = new Date();
-        String nowTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time);
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
+        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         Map<String, Object> rtv = new HashMap<>(2);
         rtv.put("startTime", config.getConfigValue());
         rtv.put("nowTime", nowTime);

@@ -50,6 +50,11 @@ public interface BookCaseMapper {
     @UpdateProvider(type = BookCaseProvider.class, method = "updateShipByNumber")
     int updateShipByNumber(BookCase bookcase);
 
+    /**
+     * 通过location筛选书包柜数量
+     * @param location
+     * @return
+     */
     @SelectProvider(type = BookCaseProvider.class,method = "selectBagNum")
     int selectBagNum(@Param("location")int location);
 
