@@ -90,6 +90,7 @@ public class TeacherApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
     }
+
     @RequestMapping(value = "/ship", method = RequestMethod.PUT)
     public RestData putShip(@RequestBody ShipVO shipVO,HttpServletRequest request){
         logger.info("put Ship");
@@ -102,9 +103,7 @@ public class TeacherApi {
                 return new RestData(bookCaseService.putShip(shipVO));
             } catch ( LibException e){
                 return new RestData(1, e.getMessage());
-
             }
-
         }
     }
 

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -158,6 +159,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public String processParameter(BookCaseVo bookCaseVo) {
 
+        /*对书包柜编号范围Id分割*/
         if (null != bookCaseVo.getId() && 0 != bookCaseVo.getId().length()) {
             String id = bookCaseVo.getId();
             if (id.indexOf("-") != -1) {
@@ -170,6 +172,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
         }
 
+        /*根据学号查找与书包柜关联的userId*/
         String mes = null;
         if (null != bookCaseVo.getStudentId() && 0 != bookCaseVo.getStudentId().length()) {
             User user = new User();
@@ -211,7 +214,14 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData selectDetailByCondition(BookCaseVo bookCaseVo) {
 
+        if (null != bookCaseVo.getStatus() && 2 == bookCaseVo.getStatus() && null != bookCaseVo.getStudentId()) {
+            return new RestData(1, "无效查询");
+        }
+        if (null != bookCaseVo.getStatus() && 0 == bookCaseVo.getStatus() && null != bookCaseVo.getStudentId()) {
+            return new RestData(1, "无效查询");
+        }
         String message = processParameter(bookCaseVo);
+        /*传入的学号有误*/
         if (null != message) {
             return new RestData(1, message);
         }

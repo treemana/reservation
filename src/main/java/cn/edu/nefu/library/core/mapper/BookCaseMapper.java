@@ -129,4 +129,5 @@ public interface BookCaseMapper {
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectByNumber")
     BookCase selectByNumber(ShipVO shipVO);
+
 }
