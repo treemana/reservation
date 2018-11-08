@@ -46,10 +46,10 @@ public class ReservationServiceImpl implements ReservationService {
             Config config = new Config();
             config.setSystemId(i);
             if(list.contains(i)){
-                config.setConfigValue("1");
+                config.setConfigValue("0");
                 count++;
             }else{
-                config.setConfigValue("0");
+                config.setConfigValue("1");
             }
             configMapper.updateOpenArea(config);
         }
