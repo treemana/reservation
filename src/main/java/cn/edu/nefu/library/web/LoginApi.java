@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -54,7 +55,7 @@ public class LoginApi {
 
 
     @RequestMapping(value = "/code", method = RequestMethod.GET)
-    public void getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception{
+    public String getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception{
         byte[] captchaChallengeAsJpeg = null;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         try {
@@ -66,20 +67,14 @@ public class LoginApi {
             ImageIO.write(challenge, "jpg", jpegOutputStream);
         } catch (IllegalArgumentException e) {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
+            return null;
         }
 
-        //定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
+        //定义response输出类型为image/jpeg类型，使用base64输出流输出图片的byte数组
         captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
-        httpServletResponse.setHeader("Cache-Control", "no-store");
-        httpServletResponse.setHeader("Pragma", "no-cache");
-        httpServletResponse.setDateHeader("Expires", 0);
-        httpServletResponse.setContentType("image/jpeg");
-        ServletOutputStream responseOutputStream =
-                httpServletResponse.getOutputStream();
-        responseOutputStream.write(captchaChallengeAsJpeg);
-        responseOutputStream.flush();
-        responseOutputStream.close();
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(captchaChallengeAsJpeg);
+
     }
 
     @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
