@@ -27,22 +27,21 @@ class Adheaderbar extends Component {
   
     render() {
     return (
-        <Header className="header">
-          <div className="logo" >
-            <img src={School} className="school" />
-          </div>
+        <Layout className="header">
           <Menu
-            className="headerMenu"
             theme="dark"
             selectedKeys={[this.state.current]}
             mode="horizontal"
-            style={{ lineHeight: '64px' }}
+            style={{textAlign:"right"}}
           >
+          <div className="logo" >
+            <img src={School} className="school" />
+          </div>
             <Menu.Item key="1"><Link to="/">{this.props.id?'登出':'登录'}</Link></Menu.Item>
             <Menu.Item key="2"><Link to={"/adhelp/"+this.state.id}>帮助</Link></Menu.Item>
             <Menu.Item key="3"><Link to={"/addev/"+this.state.id}>开发人员</Link></Menu.Item>
           </Menu>
-        </Header>
+        </Layout>
     );
   }
 }

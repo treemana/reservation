@@ -33,8 +33,17 @@ class Stumine extends Component {
         if(res.code === 0)
         {
           var data = res.data;
+          var str = '';
+          if(data.location == 1)
+            str = "二楼北";
+          else if(data.location == 2)
+            str = "二楼南";
+          else if(data.location == 3)
+            str = "三楼北";
+          else if(data.location == 4)
+            str = "三楼南";
           this.setState({
-            location: data.location,
+            location: str,
             number: data.number
           });
         }

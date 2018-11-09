@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import './css/app.css';
 import App from './pages/app';
 import Stubox from './pages/stubox';
@@ -17,7 +17,7 @@ import Addev from './pages/addev';
 import Studev from './pages/studev';
 
 ReactDOM.render(
-	  <BrowserRouter className="search">
+	  <HashRouter className="search">
       	<Switch>
   	   	  <Route exact path="/" component={App} ></Route>
   	   	  <Route path="/stubox/:id" component={Stubox} ></Route>
@@ -33,6 +33,6 @@ ReactDOM.render(
           <Route path="/studev/:id" component={Studev} ></Route>
           <Route path="/addev/:id" component={Addev} ></Route>
   	    </Switch>
-  	  </BrowserRouter>, 
+  	  </HashRouter>, 
 	document.getElementById('root')
 )

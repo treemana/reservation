@@ -537,13 +537,13 @@ class Adbox extends Component {
         <p>
           <span> 筛选：</span>
           <span> 区域：</span>
-          <Cascader defaultValue={[this.state.location]} allowClear={false} options={this.locationOpt} onChange={(value) => this.setState({location: value})} /><Divider type="vertical" />
+          <Cascader style={{width: "110px"}} defaultValue={[this.state.location]} allowClear={false} options={this.locationOpt} onChange={(value) => this.setState({location: value})} /><Divider type="vertical" />
           <span> 状态：</span>
           <Cascader defaultValue={[this.state.status]} allowClear={false} options={this.statusOpt} onChange={(value) => this.setState({status: value})} /><Divider type="vertical" />
           <span> 编号：</span>
           <InputNumber onChange={(value)=>this.setState({startId: value})}/> 至 <InputNumber onChange={(value)=>this.setState({endId:value})} /><Divider type="vertical" />
           <span> 学号：</span>
-          <InputNumber onChange={(value)=>this.setState({studentId: value})}/>
+          <InputNumber style={{width: "140px"}} onChange={(value)=>this.setState({studentId: value})}/>
           <Button type="primary" style={{marginLeft: '20px'}} onClick={this.search}>查询</Button>
           </p>
           <p>

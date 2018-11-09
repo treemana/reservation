@@ -15,7 +15,6 @@ class Box extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      endTime: " ",
       message: "活动关闭中",
       endTime: ' ',
       startTime: ' ',
@@ -135,87 +134,100 @@ class Box extends Component {
         'token': $.cookie('token')
       },
       success: function(res) {
-        this.setState({
-          endTime: res.data.endTime
-        });
-        console.log(this.state.endTime);
-      }.bind(this)
-    });
-    $.ajax({
-        method: "GET",
-        url: req+"time",
-        headers:{
-          'token': $.cookie('token')
-        },
-        success: function(res) {
-        if(res.code === 2) {
+        if(res.code === 0) {
+          this.setState({
+            endTime: res.data.endTime,
+            startTime: res.data.startTime
+          });
+        }
+        else {
           notification.open({
           message: '提示',
-          description: "登录超时，"+res.message,
+          description: res.message,
           active: 1,
           areaState: [1, 1, 1, 1]
           });
         }
-        if(res.code === 0) {
-          var startTime = res.data.startTime;
-          startTime = this.GetTimeByTimeStr(startTime);
-          var timestamp = startTime.getTime();
+        $.ajax({
+          method: 'GET',
+          url: req+"time",
+          headers: {
+            'token': $.cookie('token')
+          },
+          success: function(res) {
+            if(res.code === 0) {
+              this.setState({
+                nowTime: res.data.nowTime
+              });
+            var startTime = this.state.startTime;
+            startTime = this.GetTimeByTimeStr(startTime);
+            var timestamp = startTime.getTime();
 
-          var nowTime = res.data.nowTime;
-          nowTime = this.GetTimeByTimeStr(nowTime);
-          var timesnow = new Date(nowTime).getTime();
+            var nowTime = this.state.nowTime;
+            nowTime = this.GetTimeByTimeStr(nowTime);
+            var timesnow = new Date(nowTime).getTime();
 
-          var endTime = this.state.endTime;
-          endTime = this.GetTimeByTimeStr(endTime);
-          var timesend = new Date(endTime).getTime();
+            var endTime = this.state.endTime;
+            endTime = this.GetTimeByTimeStr(endTime);
+            var timesend = new Date(endTime).getTime();
           
-          if(timesnow < timestamp) {
-            this.setState({
-              mss: timestamp-timesnow,
-              active: 1,
-              areaState: [1, 1, 1, 1]
-            });
-            var mss = this.state.mss;
-            var timer = window.setInterval(
-              () => {
-                this.setState({
-                  message: '预约活动还未开始，距离开始还有'+this.timechanger(mss-1000),
-                  active: 0
-                });
-                mss -= 1000;
-              },1000);
-            if(mss <= 0 ){
-              clearInterval(timer);
+            if(timesnow < timestamp) {
               this.setState({
-              message: '活动已经结束！',
-              active: 1,
-              areaState: [1, 1, 1, 1]
-            });
-            }
-          }
-          else if(timesnow > timestamp) {
-            this.setState({
-              mss: timesend - timesnow
-            });
-            var mss = this.state.mss;
-            var timer = window.setInterval(
-              () => {
+                mss: timestamp-timesnow,
+                active: 1,
+                areaState: [1, 1, 1, 1]
+              });
+              var mss = this.state.mss;
+              var timer = window.setInterval(
+                () => {
+                  this.setState({
+                    message: '预约活动还未开始，距离开始还有'+this.timechanger(mss-1000),
+                    active: 0
+                  });
+                  mss -= 1000;
+                },1000);
+              if(mss <= 0 ){
+                clearInterval(timer);
                 this.setState({
-                  message: '预约活动已经开始，距离结束还有'+this.timechanger(mss-1000),
-                  active: 0
-                });
-                mss -= 1000;
-              },1000);
-            if(mss <= 0 ){
-              clearInterval(timer);
+                message: '活动已经结束！',
+                active: 1,
+                areaState: [1, 1, 1, 1]
+              });
+              }
+            }
+            else if(timesnow > timestamp) {
               this.setState({
-              message: '活动已经结束！',
+                mss: timesend - timesnow
+              });
+              var mss = this.state.mss;
+              var timer = window.setInterval(
+                () => {
+                  this.setState({
+                    message: '预约活动已经开始，距离结束还有'+this.timechanger(mss-1000),
+                    active: 0
+                  });
+                  mss -= 1000;
+                },1000);
+              if(mss <= 0 ){
+                clearInterval(timer);
+                this.setState({
+                message: '活动已经结束！',
+                active: 1,
+                areaState: [1, 1, 1, 1]
+              });
+              }
+            }
+            }
+            else {
+              notification.open({
+              message: '提示',
+              description: res.message,
               active: 1,
               areaState: [1, 1, 1, 1]
-            });
+              });
             }
-          }
-        }
+          }.bind(this)
+        });
       }.bind(this)
     });
     $.ajax({
@@ -232,15 +244,18 @@ class Box extends Component {
         var data = [];
         for(let i = 0; i<this.state.areaData.length;i++)
         {
-          if(this.state.areaData[i].configValue === '0')//open
+          if((this.state.areaData[i].configValue === '0') && (this.state.active == 0))//open
             data.push(0);
-          else if(this.state.areaData[i].configValue === '1')//close
+          else if((this.state.areaData[i].configValue === '0') && (this.state.active == 1))
+            data.push(1);
+          else if((this.state.areaData[i].configValue === '1') && (this.state.active == 0))//close
+            data.push(1);
+          else if((this.state.areaData[i].configValue === '1') && (this.state.active == 1))
             data.push(1);
         }
         this.setState({
           areaState: data
         });
-        console.log(this.state.areaState);
       }.bind(this)
     });
     $.ajax({
