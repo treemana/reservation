@@ -489,41 +489,31 @@ class Adbox extends Component {
       this.setState({
         visible: false,
       });
-    }
+    };
 
     this.handleVisibleChange = (visible) => {
       this.setState({ visible });
-    }
+    };
     this.locationChange = (value) => {
       console.log(value);
     };
     this.statusChange = (value) => {
       console.log(value);
     };
-  }
-  start = () => {
-    this.setState({ loading: true });
-    // ajax request after empty completing
-    setTimeout(() => {
+    this.onSelectChange = (selectedRowKeys,selectedRows) => {
+      var data = [];
+      for(let i = 0; i <selectedRows.length; i++)
+      {
+        data.push(selectedRows[i].id);
+      }
+      this.setState({ selectedRowKeys });
       this.setState({
-        selectedRowKeys: [],
-        loading: false,
+        someData: data
       });
-    }, 1000);
+      console.log(data);
+    };
   }
-
-  onSelectChange = (selectedRowKeys,selectedRows) => {
-    var data = [];
-    for(let i = 0; i <selectedRows.length; i++)
-    {
-      data.push(selectedRows[i].id);
-    }
-    this.setState({ selectedRowKeys });
-    this.setState({
-      someData: data
-    });
-    console.log(data);
-  }
+  
   componentDidMount () {
    
   }

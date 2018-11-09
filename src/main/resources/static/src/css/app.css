@@ -13,10 +13,13 @@
 	padding-bottom: 20px;
 }
 
-.header{
+/*.header{
 	padding-right: 0px;
 	padding-left: 0px;
 	text-align: right;
+}*/
+.headerMenu {
+	margin-right: 10%;
 }
 .ant-col-12{
 	padding-bottom: 30px;

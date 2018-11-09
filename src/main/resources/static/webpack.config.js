@@ -11,12 +11,12 @@ module.exports = {
         rules:[
         {
             test: /\.js$/, 
-            loaders: ['jsx-loader?harmony','babel-loader?presets[]=react,presets[]=es2015']
-
+            loaders: ['jsx-loader?harmony','babel-loader?presets[]=react,presets[]=es2015'],
+            exclude: /node_modules/
         },
         {
               test:/\.css$/,
-              use:['style-loader','css-loader']
+              loaders: ['style-loader','css-loader']
           },
           { 
             test: /\.(gif|jpg|png|woff|svg|eot|ttf)$/, 
@@ -26,5 +26,6 @@ module.exports = {
               loader: "file-loader?name=[path][hash:8][name].[ext]!extract-loader!html-loader" }
           ]
          
-    }
+    },
+    
 };

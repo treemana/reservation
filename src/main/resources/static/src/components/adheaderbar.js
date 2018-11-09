@@ -32,6 +32,7 @@ class Adheaderbar extends Component {
             <img src={School} className="school" />
           </div>
           <Menu
+            className="headerMenu"
             theme="dark"
             selectedKeys={[this.state.current]}
             mode="horizontal"

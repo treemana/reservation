@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/app.css';
-import { Card, Row, Col, BackTop, Icon, Avatar, Button, notification, Modal } from 'antd';
+import { Card, Row, Col, BackTop, Icon, Avatar, Button, notification, Modal, Input } from 'antd';
 import $ from 'jquery';
 import { config } from 'jquery.cookie';
 import req from '../url';
@@ -8,6 +8,7 @@ import b2 from '../images/2b.png';
 import b3 from '../images/3b.png';
 import n2 from '../images/2n.png';
 import n3 from '../images/3n.png';
+const Search = Input.Search;
 const { Meta } = Card;
 
 class Box extends Component {
@@ -22,7 +23,9 @@ class Box extends Component {
       areaState: [],
       areaNum: [],
       active: 0,
-      id: this.props.id
+      id: this.props.id,
+      showMyStatus: false,
+      before: 0
     }
     this.timechanger = (mss) => {
         var days = parseInt(mss / (1000 * 60 * 60 * 24));
@@ -40,7 +43,9 @@ class Box extends Component {
     this.orderBox = (key) => {
       var data = {
         location: key,
-        studentId: this.state.id
+        studentId: this.state.id,
+        visible: false,
+        confirmLoading: false
       };
       data = JSON.stringify(data);
       $.ajax({
@@ -65,13 +70,61 @@ class Box extends Component {
           else {
             notification.open({
                 message: '提示',
-                description: "您已进入预约队列或者预约成功，不可重复预约！"
+                description: res.message
+            });
+          }
+        }.bind(this)
+      });
+    };
+    this.myStatus = () => {
+      this.setState({
+        visible: true
+      });
+      $.ajax({
+        method: "GET",
+        url: req+'code',
+        contentType: 'application/json;charset=UTF-8',
+        headers: {
+          'token': $.cookie('token')
+        },
+         xhrFields: {withCredentials: true},
+        success: function(res) {
+          this.setState({
+            code: res
+          });
+        }.bind(this)
+      });
+    };
+    this.sendCode = (value) => {
+      $.ajax({
+        method: "GET",
+        url: req+'?status/studentId='+this.state.id+'&vrifyCode='+value,
+        contentType: 'application/json;charset=UTF-8',
+        headers: {
+          'token': $.cookie('token')
+        },
+         xhrFields: {withCredentials: true},
+        success: function(res) {
+          if(res.code === 0) {
+            this.setState({
+            showMyStatus: true
+          });
+          }
+          else {
+            notification.open({
+                message: '提示',
+                description: res.message
             });
           }
         }.bind(this)
       });
     }
-    
+    this.hide = () => {
+      this.setState({
+        visible: false,
+        showMyStatus: false
+      });
+    };
   }
 
   componentDidMount() {
@@ -118,11 +171,27 @@ class Box extends Component {
           
           if(timesnow < timestamp) {
             this.setState({
-              message: '活动未开始',
-              mss: timesnow-timestamp,
+              mss: timestamp-timesnow,
               active: 1,
               areaState: [1, 1, 1, 1]
             });
+            var mss = this.state.mss;
+            var timer = window.setInterval(
+              () => {
+                this.setState({
+                  message: '预约活动还未开始，距离开始还有'+this.timechanger(mss-1000),
+                  active: 0
+                });
+                mss -= 1000;
+              },1000);
+            if(mss <= 0 ){
+              clearInterval(timer);
+              this.setState({
+              message: '活动已经结束！',
+              active: 1,
+              areaState: [1, 1, 1, 1]
+            });
+            }
           }
           else if(timesnow > timestamp) {
             this.setState({
@@ -194,20 +263,14 @@ class Box extends Component {
         });
       }.bind(this)
     });
-    // $.ajax({
-    //   method: 'GET',
-    //   url: req+"getCode",
-    //   headers: {
-    //     'token': $.cookie('token')
-    //   },
-    //   success: function(res) {
-    //     console.log(res);
-    //   }.bind(this)
-    // });
   }
   render() {
+    const { visible, confirmLoading } = this.state;
     return (
       <Card title={this.state.message} bordered={true} className="areacard">
+      <Row style={{textAlign: "right"}} >
+        <p><Button type="primary" onClick={this.myStatus}>查看当前状态</Button></p>
+      </Row>
       <Row gutter={30}>
           <Col span={12}>
             <Card
@@ -249,6 +312,28 @@ class Box extends Component {
             <p><Button type="primary" block disabled={Boolean(this.state.active)} onClick={() => this.orderBox(null)}>随机预约</Button></p>
           </Col>
       </Row>
+      <Modal 
+          title="当前状态"
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.hide}
+          footer= {false}
+        >
+        <div style= {{display: this.state.showMyStatus?'none':'inline'}}>
+        <p><img alt='获取验证码失败' onClick={this.myStatus} src={'data:image/jpeg;base64,'+this.state.code} /></p>
+          <Search
+              style={{width: '100%'}}
+              placeholder='请输入验证码'
+              enterButton='确定'
+              onSearch={this.sendCode}
+            />
+        </div>
+        <div style= {{display: this.state.showMyStatus?'inline':'none'}}>
+          <p><span>排在前面的人还有：</span>{this.state.before}</p>
+
+        </div>
+        </Modal>
       </Card>
       
     );
