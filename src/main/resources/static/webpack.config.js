@@ -20,13 +20,10 @@ module.exports = {
           },
         {
               test: /\.less$/,
-              loader: ExtractTextPlugin.extract(
-              'css?sourceMap&!' +
-              'postcss!' +
-              'less-loader?{"sourceMap":true,"modifyVars":{"@primary-color":"#008080"}}'
-        ),
+              loader: 'css?sourceMap&!postcss!less-loader?{"sourceMap":true,"modifyVars":{"@primary-color":"#008080"}}'
+        },
 
-            },
+           
           { 
             test: /\.(gif|jpg|png|woff|svg|eot|ttf)$/, 
             loader: 'url-loader?name=images/[hash:8].[name].[ext]'
