@@ -87,26 +87,29 @@
 
 ### 1.2.2. 获取验证码
 
-- GET /getCode
+- GET /code
 
-```html
-<img alt="验证码" onclick = "this.src='/defaultKaptcha?d='+new Date()*1" src="/code" />
+- return :
+
+```json
+{
+  "data" : "base64"
+}
 ```
 
 ### 1.2.3. 验证验证码
 
 - GET /vrifycode/{vrifyCode}
 - vrifyCode : 验证码数值
-- cookie : 验证码回传的Jsession
 
-- 成功返回：
+- 成功return：
 ```json
 {
     "code" : 0,
     "data" : "请求成功"
 }
 ```
-- 失败返回：
+- 失败return：
 ```json
 {
     "code" : 1,

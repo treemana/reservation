@@ -1,8 +1,10 @@
 package cn.edu.nefu.library.web;
 
+import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.JsonUtil;
+import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.service.UserService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -55,38 +57,54 @@ public class LoginApi {
 
 
     @RequestMapping(value = "/code", method = RequestMethod.GET)
-    public String getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception{
+    public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         byte[] captchaChallengeAsJpeg = null;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
-        try {
-            //生产验证码字符串并保存到session中
-            String createText = defaultKaptcha.createText();
-            httpServletRequest.getSession().setAttribute("vrifyCode", createText);
-            //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
-            BufferedImage challenge = defaultKaptcha.createImage(createText);
-            ImageIO.write(challenge, "jpg", jpegOutputStream);
-        } catch (IllegalArgumentException e) {
-            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
+
+        User currentUser = TokenUtil.getUserByToken(httpServletRequest);
+        if (null != currentUser) {
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+            try {
+                //生产验证码字符串并保存到session中
+                String createText = defaultKaptcha.createText();
+                System.out.println(createText);
+                httpServletRequest.getSession().setAttribute("vrifyCode", createText);
+
+                //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
+                BufferedImage challenge = defaultKaptcha.createImage(createText);
+                ImageIO.write(challenge, "jpg", jpegOutputStream);
+            } catch (IllegalArgumentException e) {
+                httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
+            }
+
+            //定义response输出类型为image/jpeg类型，使用base64输出流输出图片的byte数组
+            captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+            BASE64Encoder encoder = new BASE64Encoder();
+            return new RestData(encoder.encode(captchaChallengeAsJpeg));
         }
-
-        //定义response输出类型为image/jpeg类型，使用base64输出流输出图片的byte数组
-        captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(captchaChallengeAsJpeg);
-
     }
 
+
     @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
-    public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode,HttpServletRequest httpServletRequest){
+    public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
 
-        String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
-        System.out.println(captchaId);
-        if (captchaId.equals(vrifyCode)) {
-            return new RestData("请求成功");
+
+        User currentUser = TokenUtil.getUserByToken(httpServletRequest);
+        if (null != currentUser) {
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            return new RestData(1,"验证码错误");
+            String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
 
+            if (captchaId.equals(vrifyCode)) {
+                return new RestData("请求成功");
+            } else {
+                return new RestData(1, "验证码错误");
+            }
         }
+
     }
 }
