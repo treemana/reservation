@@ -23,7 +23,7 @@ public class TokenUtil {
     private static UserMapper userMapper;
 
     @Autowired
-    public void setManagerMapper(UserMapper userMapper) {
+    public void TokenUtil(UserMapper userMapper) {
         TokenUtil.userMapper = userMapper;
     }
 

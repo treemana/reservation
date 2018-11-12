@@ -1,9 +1,11 @@
 package cn.edu.nefu.library.web;
 
 import cn.edu.nefu.library.common.ErrorMessage;
+import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
+import cn.edu.nefu.library.common.util.VerifyUtil;
 import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
@@ -47,6 +49,7 @@ public class StudentApi {
 
     @RequestMapping(value = "/time", method = RequestMethod.GET)
     public RestData getStartTime(HttpServletRequest request) {
+
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
             Map<String, Object> data = reservationService.getStartTime();
@@ -59,6 +62,15 @@ public class StudentApi {
     @RequestMapping(value = "/box-order", method = RequestMethod.POST)
     public RestData postBoxOrder(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("POST postBoxOrder : " + JsonUtil.getJsonString(bookCaseVo));
+
+        try {
+            VerifyUtil.verify(request.getHeader("token"));
+        } catch (LibException e) {
+           return new RestData(1, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
