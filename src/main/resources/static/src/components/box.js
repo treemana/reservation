@@ -89,7 +89,7 @@ class Box extends Component {
          xhrFields: {withCredentials: true},
         success: function(res) {
           this.setState({
-            code: res
+            code: res.data
           });
         }.bind(this)
       });
