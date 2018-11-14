@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.web;
 
 import cn.edu.nefu.library.common.ErrorMessage;
@@ -12,11 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
@@ -58,7 +60,7 @@ public class LoginApi {
 
     @RequestMapping(value = "/code", method = RequestMethod.GET)
     public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
-        byte[] captchaChallengeAsJpeg = null;
+        byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
 
         User currentUser = TokenUtil.getUserByToken(httpServletRequest);

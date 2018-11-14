@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.web;
 
 import cn.edu.nefu.library.common.ErrorMessage;
@@ -6,7 +10,6 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.common.util.VerifyUtil;
-import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.core.model.vo.UserVo;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.Map;
 
 /**
@@ -35,15 +39,13 @@ public class StudentApi {
 
     private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
-    private final RedisDao redisDao;
     private final UserService userService;
 
 
     @Autowired
-    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, RedisDao redisDao, UserService userService) {
+    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, UserService userService) {
         this.reservationService = reservationService;
         this.bookCaseService = bookCaseService;
-        this.redisDao = redisDao;
         this.userService = userService;
     }
 
@@ -66,19 +68,19 @@ public class StudentApi {
         try {
             VerifyUtil.verify(request.getHeader("token"));
         } catch (LibException e) {
-           return new RestData(1, e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
+            return new RestData(1, e.getMessage());
+        } catch (ParseException e) {
+            logger.error(e.getLocalizedMessage());
         }
 
 
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
 
-            if(bookCaseService.postBoxOrder(bookCaseVo)) {
+            if (bookCaseService.postBoxOrder(bookCaseVo)) {
                 return new RestData(true);
-            }else {
-                return new RestData(1,"排队失败，请重试");
+            } else {
+                return new RestData(1, "排队失败，请重试");
             }
         } else {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
@@ -86,19 +88,19 @@ public class StudentApi {
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
-    public RestData getStatus(UserVo userVo, HttpServletRequest request){
+    public RestData getStatus(UserVo userVo, HttpServletRequest request) {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
             String captchaId = (String) request.getSession().getAttribute("vrifyCode");
-            if(captchaId.equals(userVo.getVrifyCode())) {
-                if(userService.getStatus(userVo) != -1) {
+            if (captchaId.equals(userVo.getVrifyCode())) {
+                if (userService.getStatus(userVo) != -1) {
                     return new RestData(userService.getStatus(userVo));
                 } else {
-                    return  new RestData(1, "用户已分配");
+                    return new RestData(1, "用户已分配");
                 }
-            }else {
+            } else {
                 return new RestData(1, "验证码出错！");
             }
         } else {

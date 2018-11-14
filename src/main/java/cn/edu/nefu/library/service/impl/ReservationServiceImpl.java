@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.service.impl;
 
 import cn.edu.nefu.library.common.LibException;
@@ -5,19 +9,21 @@ import cn.edu.nefu.library.core.mapper.BookCaseMapper;
 import cn.edu.nefu.library.core.mapper.ConfigMapper;
 import cn.edu.nefu.library.core.mapper.RedisDao;
 import cn.edu.nefu.library.core.model.Config;
-import cn.edu.nefu.library.core.model.vo.GradeVO;
-import cn.edu.nefu.library.core.model.vo.TimeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVo;
+import cn.edu.nefu.library.core.model.vo.TimeVo;
 import cn.edu.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : pc CMY
@@ -42,37 +48,37 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Boolean putReservationArea(List<Integer> list) throws LibException {
         int count = 0;
-        for(int i=1;i<=4;i++ ){
+        for (int i = 1; i <= 4; i++) {
             Config config = new Config();
             config.setSystemId(i);
-            if(list.contains(i)){
+            if (list.contains(i)) {
                 config.setConfigValue("0");
                 count++;
-            }else{
+            } else {
                 config.setConfigValue("1");
             }
             configMapper.updateOpenArea(config);
         }
-        if(count == list.size()){
+        if (count == list.size()) {
             return true;
-        }else{
+        } else {
             throw new LibException("修改失败");
         }
 
     }
 
     @Override
-    public List<Map<String,String>> getReservationArea() throws LibException {
+    public List<Map<String, String>> getReservationArea() throws LibException {
 
         List<Config> configs = configMapper.selectOpenAera();
         if (null == configs) {
             throw new LibException("预约区域为空");
         } else {
 
-            List<Map<String,String>> rtv = new ArrayList<>(4);
-            for (Config config : configs ) {
-                Map<String ,String> map = new HashMap<>(3);
-                if(config.getConfigKey().contains("area_")){
+            List<Map<String, String>> rtv = new ArrayList<>(4);
+            for (Config config : configs) {
+                Map<String, String> map = new HashMap<>(3);
+                if (config.getConfigKey().contains("area_")) {
                     map.put("systemId", config.getSystemId().toString());
                     map.put("configKey", config.getConfigKey());
                     map.put("configValue", config.getConfigValue());
@@ -85,8 +91,9 @@ public class ReservationServiceImpl implements ReservationService {
 
         }
     }
+
     @Override
-    public boolean postGrade(GradeVO gradeVO) throws LibException {
+    public boolean postGrade(GradeVo gradeVO) throws LibException {
         boolean rtv = false;
         Config config = new Config();
         config.setConfigKey("startGrade");
@@ -97,12 +104,13 @@ public class ReservationServiceImpl implements ReservationService {
         int endGrade = configMapper.updateGrade(config);
         if (0 == startGrade || 0 == endGrade) {
             throw new LibException("更新开放年级失败");
-        }else{
+        } else {
             logger.info("更新成功");
             rtv = true;
         }
         return rtv;
     }
+
     @Override
     public Map<String, String> getReservationTime() throws LibException {
         Map<String, String> rtv = new HashMap<>(2);
@@ -111,10 +119,10 @@ public class ReservationServiceImpl implements ReservationService {
             throw new LibException("查询失败");
         } else {
             for (Config config : configs) {
-                if (config.getConfigKey().equals("startTime")) {
+                if ("startTime".equals(config.getConfigKey())) {
                     rtv.put("startTime", config.getConfigValue());
                 }
-                if (config.getConfigKey().equals("endTime")) {
+                if ("endTime".equals(config.getConfigKey())) {
                     rtv.put("endTime", config.getConfigValue());
                 }
             }
@@ -124,7 +132,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean putReservationTime(TimeVO timeVO) {
+    public boolean putReservationTime(TimeVo timeVO) {
 
         int count = 0;
         Config config = new Config();
@@ -133,12 +141,12 @@ public class ReservationServiceImpl implements ReservationService {
         Config config1 = new Config();
         config1.setConfigKey("endTime");
         config1.setConfigValue(timeVO.getEndTime());
-        for(int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             int num = bookCaseMapper.selectBagNum(i);
             count += num;
             redisDao.set("location_" + i, String.valueOf(num));
         }
-        redisDao.set("popCount","0");
+        redisDao.set("popCount", "0");
         redisDao.set("total", String.valueOf(count));
         redisDao.remove("finish");
         return 0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1);
@@ -149,7 +157,6 @@ public class ReservationServiceImpl implements ReservationService {
     public Map<String, Object> getStartTime() {
 
         Config config = configMapper.selectStartTime();
-        String StartTime = config.getConfigValue();
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
         String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -172,6 +179,4 @@ public class ReservationServiceImpl implements ReservationService {
         rtv.put("endGrade", c.getConfigValue());
         return rtv;
     }
-
-
 }

@@ -1,14 +1,17 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.web;
 
 import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.TokenUtil;
-import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
-import cn.edu.nefu.library.core.model.vo.ShipVO;
-import cn.edu.nefu.library.core.model.vo.TimeVO;
+import cn.edu.nefu.library.core.model.vo.ShipVo;
+import cn.edu.nefu.library.core.model.vo.TimeVo;
 import cn.edu.nefu.library.service.BookCaseService;
 import cn.edu.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
@@ -33,7 +36,6 @@ public class TeacherApi {
 
     private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
-
 
 
     @Autowired
@@ -62,7 +64,7 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/open-time", method = RequestMethod.PUT)
-    public RestData putReservationTime(@RequestBody TimeVO timeVO, HttpServletRequest request) {
+    public RestData putReservationTime(@RequestBody TimeVo timeVO, HttpServletRequest request) {
         logger.info("put reservationTime" + timeVO.getEndTime() + timeVO.getStartTime());
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
@@ -70,10 +72,10 @@ public class TeacherApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             boolean bool = reservationService.putReservationTime(timeVO);
-            if(bool) {
+            if (bool) {
                 return new RestData(true);
-            }else {
-                return new RestData(1,"修改失败");
+            } else {
+                return new RestData(1, "修改失败");
             }
 
 
@@ -92,16 +94,16 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/ship", method = RequestMethod.PUT)
-    public RestData putShip(@RequestBody ShipVO shipVO,HttpServletRequest request){
+    public RestData putShip(@RequestBody ShipVo shipVO, HttpServletRequest request) {
         logger.info("put Ship");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            try{
+            try {
                 return new RestData(bookCaseService.putShip(shipVO));
-            } catch ( LibException e){
+            } catch (LibException e) {
                 return new RestData(1, e.getMessage());
             }
         }

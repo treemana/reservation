@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.mapper.provider;
 
 import cn.edu.nefu.library.core.model.Config;
@@ -9,8 +13,8 @@ import org.apache.ibatis.jdbc.SQL;
  * @since : Java 8
  */
 public class ConfigProvider {
-    public String selectOpenAera(){
-        return new SQL(){
+    public String selectOpenAera() {
+        return new SQL() {
             {
                 SELECT("config_system_id as systemId, config_key as configKey,config_value as configValue");
                 FROM("config");
@@ -18,27 +22,17 @@ public class ConfigProvider {
         }.toString();
     }
 
-    public String selectOpenTime(){
-        return new SQL(){
+    public String selectOpenTime() {
+        return new SQL() {
             {
                 SELECT("config_system_id as systemId ,config_key as configKey,config_value as configValue");
                 FROM("config");
             }
         }.toString();
     }
-public String updateOpenTime( Config config) {
-    return new SQL() {
-        {
-            UPDATE("config");
-            SET("config_value=#{configValue}");
-            WHERE("config_key=#{configKey}");
 
-        }
-    }.toString();
-}
-
-    public String updateGrade(Config config) {
-        return new SQL(){
+    public String updateOpenTime(Config config) {
+        return new SQL() {
             {
                 UPDATE("config");
                 SET("config_value=#{configValue}");
@@ -47,8 +41,18 @@ public String updateOpenTime( Config config) {
         }.toString();
     }
 
-    public String updateOpenAera(Config config){
-        return new SQL(){
+    public String updateGrade(Config config) {
+        return new SQL() {
+            {
+                UPDATE("config");
+                SET("config_value=#{configValue}");
+                WHERE("config_key=#{configKey}");
+            }
+        }.toString();
+    }
+
+    public String updateOpenAera(Config config) {
+        return new SQL() {
             {
                 UPDATE("config");
                 SET("config_value=#{configValue}");
@@ -56,10 +60,10 @@ public String updateOpenTime( Config config) {
 
             }
         }.toString();
-}
+    }
 
-    public String selectStartTime(){
-        return new SQL(){
+    public String selectStartTime() {
+        return new SQL() {
             {
                 SELECT("config_key as configKey,config_value as configValue ");
                 FROM("config");

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.service.kaptcha;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -16,7 +20,7 @@ import java.util.Properties;
 public class KaptchaConfig {
 
     @Bean
-    public DefaultKaptcha getDefaultKaptcha(){
+    public DefaultKaptcha getDefaultKaptcha() {
         com.google.code.kaptcha.impl.DefaultKaptcha defaultKaptcha = new com.google.code.kaptcha.impl.DefaultKaptcha();
         Properties properties = new Properties();
         properties.setProperty("kaptcha.border", "yes");
@@ -33,5 +37,4 @@ public class KaptchaConfig {
 
         return defaultKaptcha;
     }
-
 }

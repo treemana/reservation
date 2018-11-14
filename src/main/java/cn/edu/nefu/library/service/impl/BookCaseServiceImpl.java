@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.service.impl;
 
 import cn.edu.nefu.library.common.LibException;
@@ -10,15 +14,13 @@ import cn.edu.nefu.library.core.mapper.UserMapper;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
-import cn.edu.nefu.library.core.model.vo.ShipVO;
+import cn.edu.nefu.library.core.model.vo.ShipVo;
 import cn.edu.nefu.library.service.BookCaseService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -34,7 +36,6 @@ public class BookCaseServiceImpl implements BookCaseService {
     private final BookCaseMapper bookCaseMapper;
 
     private final UserMapper userMapper;
-
 
     private final RedisDao redisDao;
 
@@ -71,7 +72,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public boolean putShip(ShipVO shipVO) throws LibException {
+    public boolean putShip(ShipVo shipVO) throws LibException {
         if (null == shipVO.getStudentId()) {
             shipVO.setStatus(0);
         } else {
@@ -81,7 +82,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (null == bookCase) {
                 throw new LibException("此书包柜不存在");
             }
-            if(null != user){
+            if (null != user) {
                 shipVO.setUserId(user.getSystemId());
             }
         }
@@ -297,7 +298,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             logger.info("====当前处理{}", studentId);
             int l = Integer.parseInt(redisDao.get("l_" + studentId).split(",")[0]);
             // 如果当前区域没有柜子
-            if (redisDao.get("location_" + l).equals("0")) {
+            if ("0".equals(redisDao.get("location_" + l))) {
                 // 取当前区域中的最大值
                 l = maxLocation();
             }

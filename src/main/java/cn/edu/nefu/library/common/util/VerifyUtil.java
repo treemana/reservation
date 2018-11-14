@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.common.util;
 
 import cn.edu.nefu.library.common.LibException;
@@ -8,6 +12,7 @@ import cn.edu.nefu.library.core.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,7 +28,7 @@ import java.util.List;
 @Component
 public class VerifyUtil {
 
-    private static  UserMapper userMapper;
+    private static UserMapper userMapper;
     private static ConfigMapper configMapper;
 
     @Autowired
@@ -32,7 +37,7 @@ public class VerifyUtil {
         VerifyUtil.configMapper = configMapper;
     }
 
-    public static boolean verify(String token) throws LibException,Exception{
+    public static boolean verify(String token) throws LibException, ParseException {
         List<Config> configList = configMapper.selectOpenAera();
         User user = new User();
         user.setToken(token);
@@ -42,7 +47,7 @@ public class VerifyUtil {
         int startGrade = 0;
         int endGrade = 0;
 
-        int userGrade = Integer.parseInt(users.get(0).getStudentId().substring(0,4));
+        int userGrade = Integer.parseInt(users.get(0).getStudentId().substring(0, 4));
         System.out.println(userGrade);
 
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
@@ -50,14 +55,14 @@ public class VerifyUtil {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (Config config : configList) {
-            if(config.getConfigKey().equals("startTime")) {
-               startTime = config.getConfigValue();
-            } else if(config.getConfigKey().equals("endTime")) {
-               endTime = config.getConfigValue();
-            } else if(config.getConfigKey().equals("startGrade")) {
-               startGrade =Integer.parseInt(config.getConfigValue());
-            } else if(config.getConfigKey().equals("endGrade")) {
-               endGrade =Integer.parseInt(config.getConfigValue());
+            if ("startTime".equals(config.getConfigKey())) {
+                startTime = config.getConfigValue();
+            } else if ("endTime".equals(config.getConfigKey())) {
+                endTime = config.getConfigValue();
+            } else if ("startGrade".equals(config.getConfigKey())) {
+                startGrade = Integer.parseInt(config.getConfigValue());
+            } else if ("endGrade".equals(config.getConfigKey())) {
+                endGrade = Integer.parseInt(config.getConfigValue());
             }
         }
 
@@ -75,7 +80,7 @@ public class VerifyUtil {
             long now = nowDate.getTime();
             long start = startDate.getTime();
             long end = endDate.getTime();
-            if(now < start || now >end) {
+            if (now < start || now > end) {
                 throw new LibException("未到开放时间");
             }
         }

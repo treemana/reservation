@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
@@ -6,12 +10,7 @@ import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
-import cn.edu.nefu.library.core.model.vo.ShipVO;
-import cn.edu.nefu.library.core.model.vo.ShipVO;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.apache.ibatis.annotations.UpdateProvider;
-import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
+import cn.edu.nefu.library.core.model.vo.ShipVo;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ public interface BookCaseService {
     /**
      * 设置预留的书包柜
      *
-     * @param bookCase 书包柜编号
+     * @param data 书包柜编号
      * @return 是否预留成功
      * @throws LibException 是否预留成功
      */
@@ -47,7 +46,7 @@ public interface BookCaseService {
      * @param shipVO 书包柜的编号贺学号
      * @return 是否修改成功
      */
-    boolean putShip(ShipVO shipVO) throws LibException;
+    boolean putShip(ShipVo shipVO) throws LibException;
 
     /**
      * 清空/删除关系

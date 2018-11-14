@@ -1,5 +1,8 @@
-package cn.edu.nefu.library.common.util;
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
 
+package cn.edu.nefu.library.common.util;
 
 import cn.edu.nefu.library.common.Page;
 
@@ -12,8 +15,7 @@ public class PageUtil {
 
     public static String getLimit(int page, int pageSize) {
         int start = (page - 1) * pageSize;
-        int size = pageSize;
-        return start + "," + size;
+        return start + "," + pageSize;
     }
 
     public static Page checkPage(Page page) {

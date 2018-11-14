@@ -1,8 +1,12 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.service;
 
 import cn.edu.nefu.library.common.LibException;
-import cn.edu.nefu.library.core.model.vo.GradeVO;
-import cn.edu.nefu.library.core.model.vo.TimeVO;
+import cn.edu.nefu.library.core.model.vo.GradeVo;
+import cn.edu.nefu.library.core.model.vo.TimeVo;
 
 import java.util.List;
 import java.util.Map;
@@ -16,16 +20,18 @@ import java.util.Map;
 public interface ReservationService {
     /**
      * 查询预约的区域
+     *
      * @return
      */
-    List<Map<String,String>> getReservationArea() throws LibException;
+    List<Map<String, String>> getReservationArea() throws LibException;
 
     /**
      * 修改开始结束年级
+     *
      * @param gradeVO
      * @throws LibException
      */
-    boolean postGrade(GradeVO gradeVO) throws LibException;
+    boolean postGrade(GradeVo gradeVO) throws LibException;
 
     /**
      * 修改
@@ -35,6 +41,7 @@ public interface ReservationService {
      */
     /**
      * 修改预约区域
+     *
      * @param list
      * @return
      * @throws LibException
@@ -43,19 +50,22 @@ public interface ReservationService {
 
     /**
      * 查询预约时间
+     *
      * @return map
      */
-    Map<String, String>  getReservationTime() throws LibException;
+    Map<String, String> getReservationTime() throws LibException;
 
     /**
      * 修改预约时间
+     *
      * @return 是否修改着成功
      * @throws LibException 异常
      */
-    boolean putReservationTime(TimeVO timeVO);
+    boolean putReservationTime(TimeVo timeVO);
 
     /**
      * 查询开放时间
+     *
      * @return
      */
     Map<String, Object> getStartTime();

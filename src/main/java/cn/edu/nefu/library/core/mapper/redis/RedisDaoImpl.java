@@ -1,9 +1,12 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
 
 package cn.edu.nefu.library.core.mapper.redis;
 
 import cn.edu.nefu.library.core.mapper.RedisDao;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,11 +21,9 @@ import java.util.List;
 @Repository
 public class RedisDaoImpl implements RedisDao {
 
-
     private final StringRedisTemplate stringRedisTemplate;
-    private Logger logger;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     public RedisDaoImpl(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
@@ -103,7 +104,6 @@ public class RedisDaoImpl implements RedisDao {
             logger.info("dec" + e.getMessage());
             return 0;
         }
-
     }
 
     @Override
@@ -141,7 +141,7 @@ public class RedisDaoImpl implements RedisDao {
     @Override
     public boolean add(String key, String value) {
         try {
-            stringRedisTemplate.opsForSet().add(key,value);
+            stringRedisTemplate.opsForSet().add(key, value);
             return true;
         } catch (Exception e) {
             logger.info("add" + e.getMessage());
@@ -164,6 +164,4 @@ public class RedisDaoImpl implements RedisDao {
             return false;
         }
     }
-
-
 }

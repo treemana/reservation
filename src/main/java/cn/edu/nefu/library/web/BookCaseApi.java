@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.web;
 
 import cn.edu.nefu.library.common.ErrorMessage;
@@ -5,9 +9,7 @@ import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
 import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
-import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
-import cn.edu.nefu.library.core.model.vo.BookCaseVo;
 import cn.edu.nefu.library.service.BookCaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

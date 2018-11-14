@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.mapper;
 
 
@@ -13,15 +17,17 @@ public interface RedisDao {
 
     /**
      * 获取队列内容
-     * @param key 键
+     *
+     * @param key   键
      * @param start 开始
-     * @param end 结束 0 到 -1 代表所有值
+     * @param end   结束 0 到 -1 代表所有值
      * @return
      */
     List<String> getList(String key, long start, long end);
 
     /**
      * 获取队列长度
+     *
      * @param key 键
      * @return
      */
@@ -29,13 +35,15 @@ public interface RedisDao {
 
     /**
      * 把单值加入队列
-     * @param key 关键词
+     *
+     * @param key   关键词
      * @param value 内容
      */
     boolean pushValue(String key, String value);
 
     /**
      * 把list加入队列
+     *
      * @param key
      * @param list
      */
@@ -43,20 +51,23 @@ public interface RedisDao {
 
     /**
      * 单值出队
+     *
      * @param key 键
      */
     String popValue(String key);
 
     /**
      * 根据value值，移除list中的数据
-     * @param key 键
+     *
+     * @param key   键
      * @param value 移除的内容
      */
     boolean removeListValue(String key, String value);
 
     /**
      * 递减
-     * @param key 键
+     *
+     * @param key    键
      * @param number 减多少
      * @return
      */
@@ -64,6 +75,7 @@ public interface RedisDao {
 
     /**
      * 普通缓存放入
+     *
      * @param key
      * @param value
      * @return
@@ -72,6 +84,7 @@ public interface RedisDao {
 
     /**
      * 普通缓存取出
+     *
      * @param key
      * @return
      */
@@ -79,7 +92,8 @@ public interface RedisDao {
 
     /**
      * 递增
-     * @param key 键
+     *
+     * @param key    键
      * @param number 增值
      * @return 结果
      */
@@ -87,6 +101,7 @@ public interface RedisDao {
 
     /**
      * 添加记录到SET中
+     *
      * @param key
      * @param value
      * @return
@@ -95,6 +110,7 @@ public interface RedisDao {
 
     /**
      * 查询set中是否包含value
+     *
      * @param key
      * @param value
      * @return
@@ -103,6 +119,7 @@ public interface RedisDao {
 
     /**
      * 移除数据库中key值
+     *
      * @param key
      * @return
      */
