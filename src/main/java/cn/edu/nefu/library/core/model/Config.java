@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.model;
 
 /**
@@ -9,15 +13,17 @@ public class Config {
     /**
      * 配置的表的id
      */
-    Integer systemId;
+    private Integer systemId;
+
     /**
      * key
      */
-    String configKey;
+    private String configKey;
+
     /**
      * value
      */
-    String configValue;
+    private String configValue;
 
     public Integer getSystemId() {
         return systemId;

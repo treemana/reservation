@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.service.impl;
 
 import cn.edu.nefu.library.common.LibException;
@@ -26,7 +30,6 @@ import java.util.Map;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -70,7 +73,7 @@ public class UserServiceImpl implements UserService {
                 }
                 user.setToken(TokenUtil.getToken());
                 if (0 < userMapper.updateTokenBySystemId(user)) {
-                    rtv = new HashMap<>();
+                    rtv = new HashMap<>(3);
                     user = users.get(0);
                     rtv.put("systemId", user.getSystemId());
                     rtv.put("token", user.getToken());
@@ -102,7 +105,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteBlackListByStudentId(User user) throws LibException {
+    public boolean deleteBlackListByStudentId(User user) {
 
 
         logger.info("delete BalckList,studentId： " + user.getStudentId());

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.mapper;
 
 import cn.edu.nefu.library.common.Page;
@@ -5,10 +9,7 @@ import cn.edu.nefu.library.core.mapper.provider.BookCaseProvider;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
-import cn.edu.nefu.library.core.model.vo.ShipVO;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+import cn.edu.nefu.library.core.model.vo.ShipVo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -79,6 +80,8 @@ public interface BookCaseMapper {
     /**
      * 根据书包柜编号更新使用者ID
      *
+     * @param bcNumber
+     * @param studentId
      * @return
      */
     @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_number=#{bcNumber}")
@@ -89,6 +92,7 @@ public interface BookCaseMapper {
      * 根据条件查询书包柜详情
      *
      * @param bookCaseVo 书包柜编号
+     * @param page
      * @return 操作是否成功 1 成功 0 失败
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectDetailByCondition")
@@ -110,7 +114,7 @@ public interface BookCaseMapper {
      * @return user
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectUserIdByStudentId")
-    User selectUserIdByStudentId(ShipVO shipVO);
+    User selectUserIdByStudentId(ShipVo shipVO);
 
     /**
      * 修改关系，书包柜与单个学生的关系
@@ -119,7 +123,7 @@ public interface BookCaseMapper {
      * @return int
      */
     @UpdateProvider(type = BookCaseProvider.class, method = "updateSingleShip")
-    int updateSingleShip(ShipVO shipVO);
+    int updateSingleShip(ShipVo shipVO);
 
     /**
      * 查询是否存在这个number的书包柜
@@ -128,6 +132,6 @@ public interface BookCaseMapper {
      * @return bookcase
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectByNumber")
-    BookCase selectByNumber(ShipVO shipVO);
+    BookCase selectByNumber(ShipVo shipVO);
 
 }

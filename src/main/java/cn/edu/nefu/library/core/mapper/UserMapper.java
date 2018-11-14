@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.mapper;
 
 import cn.edu.nefu.library.core.mapper.provider.UserProvider;
@@ -19,6 +23,7 @@ public interface UserMapper {
 
     /**
      * 根据条件筛选
+     *
      * @param user
      * @return
      */
@@ -27,6 +32,7 @@ public interface UserMapper {
 
     /**
      * 设置token
+     *
      * @param user
      * @return
      */
@@ -35,6 +41,7 @@ public interface UserMapper {
 
     /**
      * 查询用户类别
+     *
      * @return
      */
     @SelectProvider(type = UserProvider.class, method = "selectByType")
@@ -43,20 +50,26 @@ public interface UserMapper {
 
     /**
      * 删除黑名单t
+     *
      * @param user
      * @return
      */
-    @UpdateProvider(type=UserProvider.class, method = "deleteBlackListByStudentId")
+    @UpdateProvider(type = UserProvider.class, method = "deleteBlackListByStudentId")
     int deleteBlackListByStudentId(User user);
 
     /**
      * 添加黑名单
+     *
      * @param user
      * @return
      */
     @Update("UPDATE user SET user_type=2 WHERE user_username=#{studentId}")
     int updateTypeByStudentId(User user);
 
+    /**
+     * @param bookCase
+     * @return
+     */
     @Select("SELECT user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
             "user_type AS type, user_token AS token from user where user_system_id=#{userId}")
     User selectByUserId(BookCase bookCase);

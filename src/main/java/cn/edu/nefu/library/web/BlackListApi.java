@@ -1,13 +1,17 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.web;
 
 import cn.edu.nefu.library.common.ErrorMessage;
 import cn.edu.nefu.library.common.LibException;
 import cn.edu.nefu.library.common.RestData;
+import cn.edu.nefu.library.common.util.JsonUtil;
 import cn.edu.nefu.library.common.util.TokenUtil;
 import cn.edu.nefu.library.core.model.User;
 import cn.edu.nefu.library.service.UserService;
 import org.slf4j.Logger;
-import cn.edu.nefu.library.common.util.JsonUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,33 +46,34 @@ public class BlackListApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
         try {
-                List<Map<String, Object>> blackList = userService.getBlackList();
-                return new RestData(blackList);
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
-            }
+            List<Map<String, Object>> blackList = userService.getBlackList();
+            return new RestData(blackList);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
 
 
     }
 
     @RequestMapping(value = "/list/{studentId}", method = RequestMethod.DELETE)
-    public RestData deleteBlackList(@PathVariable String studentId, HttpServletRequest request){
-        logger.info("delete blacklist studentId = "+studentId);
+    public RestData deleteBlackList(@PathVariable String studentId, HttpServletRequest request) {
+        logger.info("delete blacklist studentId = " + studentId);
         User user = new User();
         user.setStudentId(studentId);
 
         User token = TokenUtil.getUserByToken(request);
-        if(null == token){
+        if (null == token) {
             logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
 
-        try{
+        try {
             return new RestData(userService.deleteBlackListByStudentId(user));
-        }catch (LibException e){
+        } catch (LibException e) {
             return new RestData(1, e.getMessage());
         }
     }
+
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user, HttpServletRequest request) {
         logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
@@ -78,7 +83,7 @@ public class BlackListApi {
         } else {
             try {
                 Map<String, Object> data = userService.postAddBlackList(user);
-                return new RestData(null);
+                return new RestData(data);
             } catch (LibException e) {
                 return new RestData(1, e.getMessage());
             }

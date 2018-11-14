@@ -1,13 +1,16 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.mapper.provider;
 
 import cn.edu.nefu.library.common.Page;
 import cn.edu.nefu.library.common.util.PageUtil;
 import cn.edu.nefu.library.core.model.BookCase;
 import cn.edu.nefu.library.core.model.User;
-import cn.edu.nefu.library.core.model.vo.ShipVO;
-import jdk.nashorn.internal.objects.annotations.Where;
-import org.apache.ibatis.annotations.Param;
 import cn.edu.nefu.library.core.model.vo.BookCaseVo;
+import cn.edu.nefu.library.core.model.vo.ShipVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
@@ -192,7 +195,7 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String selectUserIdByStudentId(ShipVO shipVO) {
+    public String selectUserIdByStudentId(ShipVo shipVO) {
         return new SQL() {
             {
                 SELECT("user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
@@ -203,7 +206,7 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String updateSingleShip(ShipVO shipVO) {
+    public String updateSingleShip(ShipVo shipVO) {
         return new SQL() {
             {
                 UPDATE("bookcase");
@@ -215,7 +218,7 @@ public class BookCaseProvider {
     }
 
 
-    public String selectByNumber(ShipVO shipVO) {
+    public String selectByNumber(ShipVo shipVO) {
         return new SQL() {
             {
                 SELECT("bc_system_id AS systemId, bc_location AS location," +

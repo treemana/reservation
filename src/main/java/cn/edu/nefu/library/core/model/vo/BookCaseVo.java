@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.model.vo;
 
 /**
@@ -7,7 +11,7 @@ package cn.edu.nefu.library.core.model.vo;
  */
 public class BookCaseVo {
 
-     private Integer systemId;
+    private Integer systemId;
 
     /**
      * 页码
@@ -17,7 +21,7 @@ public class BookCaseVo {
     /**
      * 编号范围
      */
-    private String Id;
+    private String id;
 
     /**
      * 左范围
@@ -66,11 +70,11 @@ public class BookCaseVo {
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getL() {

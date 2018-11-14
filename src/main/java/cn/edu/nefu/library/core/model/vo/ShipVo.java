@@ -1,25 +1,33 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.model.vo;
+
 /**
  * @author : pc
  * @date : 2018/11/04
  * @since : Java 8
  */
-public class ShipVO {
+public class ShipVo {
+
     /**
      * 书包柜的编号
      */
     private String number;
+
     /**
      * 学生学号，为 null 则释放关系, 为学号则建立关系
      */
     private String studentId;
+
     /**
      * 学号为空设置为0，不为空设置为1
      */
     private Integer status;
+
     /**
      * 学号所对应的userId
-
      */
     private Integer userId;
 

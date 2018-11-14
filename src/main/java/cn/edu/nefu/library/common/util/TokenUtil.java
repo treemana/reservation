@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
  */
 
 package cn.edu.nefu.library.common.util;
@@ -28,7 +28,7 @@ public class TokenUtil {
     }
 
     public static User getUserByToken(HttpServletRequest request) {
-       User user = null;
+        User user = null;
         String token = request.getHeader("token");
         if (null != token) {
             User userCondition = new User();

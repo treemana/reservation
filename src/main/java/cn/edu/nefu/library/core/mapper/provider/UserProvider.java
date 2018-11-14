@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.mapper.provider;
 
 import cn.edu.nefu.library.core.model.User;
@@ -35,8 +39,9 @@ public class UserProvider {
             }
         }.toString();
     }
-    public String selectByType(){
-        return new SQL(){
+
+    public String selectByType() {
+        return new SQL() {
             {
                 SELECT("user_username AS studentId, user_password AS studentName");
                 FROM("user");
@@ -46,8 +51,9 @@ public class UserProvider {
         }.toString();
 
     }
-    public String deleteBlackListByStudentId(User user){
-        return new SQL(){
+
+    public String deleteBlackListByStudentId(User user) {
+        return new SQL() {
             {
                 UPDATE("user");
                 SET("user_type=0");

@@ -1,10 +1,15 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.model.vo;
+
 /**
  * @author : pc
  * @date : 2018/10/30
  * @since : Java 8
  */
-public class TimeVO {
+public class TimeVo {
     /**
      * 预约开始时间
      */

@@ -1,15 +1,21 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.edu.nefu.library.core.model.vo;
 
 /**
- * author:CMY
+ * @author CMY
  * @date 20181031
  * since java 8
  */
-public class GradeVO {
+public class GradeVo {
+
     /**
      * 开始年级
      */
     private String startGrade;
+
     /**
      * 结束年级
      */

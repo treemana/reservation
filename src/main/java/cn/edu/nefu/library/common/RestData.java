@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
  */
 
 package cn.edu.nefu.library.common;
