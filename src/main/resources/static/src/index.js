@@ -15,23 +15,25 @@ import Stuhelp from './pages/stuhelp';
 import Dev from './pages/dev';
 import Addev from './pages/addev';
 import Studev from './pages/studev';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 
 ReactDOM.render(
 	  <HashRouter className="search">
       	<Switch>
   	   	  <Route exact path="/" component={App} ></Route>
-  	   	  <Route path="/stubox/:id" component={Stubox} ></Route>
-          <Route path="/stumine/:id" component={Stumine} ></Route>
-          <Route path="/boxset/:id" component={Boxset} ></Route>
-          <Route path="/areaset/:id" component={Areaset} ></Route>
-          <Route path="/timeset/:id" component={Timeset} ></Route>
-          <Route path="/idset/:id" component={Idset} ></Route>
+  	   	  <Route path="/stubox/:id" component={$.cookie('token')?Stubox:App} ></Route>
+          <Route path="/stumine/:id" component={$.cookie('token')?Stumine:App} ></Route>
+          <Route path="/boxset/:id" component={$.cookie('token')?Boxset:App} ></Route>
+          <Route path="/areaset/:id" component={$.cookie('token')?Areaset:App} ></Route>
+          <Route path="/timeset/:id" component={$.cookie('token')?Timeset:App} ></Route>
+          <Route path="/idset/:id" component={$.cookie('token')?Idset:App} ></Route>
           <Route path="/help" component={Help} ></Route>
-          <Route path="/stuhelp/:id" component={Stuhelp} ></Route>
-          <Route path="/adhelp/:id" component={Adhelp} ></Route>
+          <Route path="/stuhelp/:id" component={$.cookie('token')?Stuhelp:Help} ></Route>
+          <Route path="/adhelp/:id" component={$.cookie('token')?Adhelp:Help} ></Route>
           <Route path="/dev" component={Dev} ></Route>
-          <Route path="/studev/:id" component={Studev} ></Route>
-          <Route path="/addev/:id" component={Addev} ></Route>
+          <Route path="/studev/:id" component={$.cookie('token')?Studev:Dev} ></Route>
+          <Route path="/addev/:id" component={$.cookie('token')?Addev:Dev} ></Route>
   	    </Switch>
   	  </HashRouter>, 
 	document.getElementById('root')
