@@ -309,7 +309,8 @@
 
 #### 1.4.2.1. 查询
 
-- GET /detail?location=2N&status=0&id=10-11&studentId=2016111
+- GET /detail?location=2&status=0&id=10-11&studentId=2016224283&page=1
+-默认page=1, status=0 查询开放柜子 || status=1 查询被占用柜子 || status=2 查询预留柜子
 
 - return :
   - perPage 每页显示条数

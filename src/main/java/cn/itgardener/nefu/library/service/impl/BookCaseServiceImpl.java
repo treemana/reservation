@@ -194,19 +194,20 @@ public class BookCaseServiceImpl implements BookCaseService {
 
         List<Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
-            Map<String, Object> map = new LinkedHashMap<>(4);
+            Map<String, Object> map = new HashMap<>(4);
             map.put("location", data.getLocation());
             map.put("id", data.getNumber());
             map.put("status", data.getStatus());
             Integer userId = data.getUserId();
             if (null != userId) {
-                map.put("studentId", userMapper.selectByUserId(data).getStudentId());
+                User user = userMapper.selectByUserId(data);
+                map.put("studentId", user.getStudentId());
             } else {
                 map.put("studentId", "");
             }
             rtv.add(map);
         }
-        Map<String, Object> map = new LinkedHashMap();
+        Map<String, Object> map = new HashMap(2);
         map.put("ships", rtv);
         map.put("pages", page);
         return new RestData(map);
