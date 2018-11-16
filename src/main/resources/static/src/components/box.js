@@ -182,20 +182,17 @@ class Box extends Component {
                 () => {
                   this.setState({
                     message: '预约活动还未开始，距离开始还有'+this.timechanger(mss-1000),
-                    active: 0
+                    active: 1
                   });
                   mss -= 1000;
+                  if(mss <= 0 ){
+                    clearInterval(timer);
+                    window.location.reload();
+                  }
                 },1000);
-              if(mss <= 0 ){
-                clearInterval(timer);
-                this.setState({
-                message: '活动已经结束！',
-                active: 1,
-                areaState: [1, 1, 1, 1]
-              });
-              }
+              
             }
-            else if(timesnow > timestamp) {
+            else if((timesnow > timestamp) && (timesnow < timesend)) {
               this.setState({
                 mss: timesend - timesnow
               });
@@ -207,15 +204,18 @@ class Box extends Component {
                     active: 0
                   });
                   mss -= 1000;
+                  if(mss <= 0 ){
+                    clearInterval(timer);
+                    window.location.reload();
+                  }
                 },1000);
-              if(mss <= 0 ){
-                clearInterval(timer);
-                this.setState({
-                message: '活动已经结束！',
-                active: 1,
-                areaState: [1, 1, 1, 1]
-              });
-              }
+            }
+            else if((timesnow > timestamp) && (timesnow > timesend)) {
+                  this.setState({
+                    message: '活动已经结束！',
+                    active: 1
+                  });
+                  mss -= 1000;
             }
             }
             else {

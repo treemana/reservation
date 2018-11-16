@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import '../css/app.css';
 import logo from '../images/logo.png';
 import Adheaderbar from '../components/adheaderbar';
@@ -15,6 +17,10 @@ class Adhelp extends Component {
             id: this.props.match.params.id,
             current: '2'
         };
+        if(!$.cookie('token')) {
+          window.location.href='/';
+        }
+
     }
   render() {
     return (

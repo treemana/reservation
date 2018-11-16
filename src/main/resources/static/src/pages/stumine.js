@@ -19,7 +19,10 @@ class Stumine extends Component {
       id: this.props.match.params.id,
       location: "无",
       number: "无"
-    };   
+    }; 
+    if(!$.cookie('token')) {
+      window.location.href='/';
+    }    
   }
 
   componentDidMount() {

@@ -40,7 +40,7 @@ class Headerbar extends Component {
           </div>
             <Menu.Item key="1" onClick={$.cookie("token", "", {expires: -1})}><Link to="/">{this.props.id?'登出':'登录'}</Link></Menu.Item>
             <Menu.Item key="2"><Link to="/help">帮助</Link></Menu.Item>
-            <Menu.Item key="3"><Link to="/dev">开发人员</Link></Menu.Item>
+            <Menu.Item key="3"><Link to="/dev">开发相关</Link></Menu.Item>
           </Menu>
         </Layout>
     );

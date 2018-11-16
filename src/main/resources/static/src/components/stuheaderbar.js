@@ -39,7 +39,7 @@ class Stuheaderbar extends Component {
           </div>
             <Menu.Item key="1"><Link to="/">{this.props.id?'登出':'登录'}</Link></Menu.Item>
             <Menu.Item key="2"><Link to={"/stuhelp/"+this.state.id}>帮助</Link></Menu.Item>
-            <Menu.Item key="3"><Link to={"/studev/"+this.state.id}>开发人员</Link></Menu.Item>
+            <Menu.Item key="3"><Link to={"/studev/"+this.state.id}>开发相关</Link></Menu.Item>
           </Menu>
         </Layout>
     );
