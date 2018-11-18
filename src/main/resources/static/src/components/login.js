@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { Form, Icon, Input, Button, notification } from 'antd';
 import $ from 'jquery';
 import req from '../url';
-import { connect } from 'react-redux';
 import { config } from 'jquery.cookie';
 const FormItem = Form.Item;
 

@@ -15,17 +15,19 @@ class Box extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      message: "活动关闭中",
+      message: "活动状态加载中",
       endTime: ' ',
       startTime: ' ',
       nowTime: ' ', 
       areaState: [],
       areaNum: [],
-      active: 0,
+      active: 1,
       id: this.props.id,
       showMyStatus: false,
-      before: 0
+      before: 0,
+      haveBox: 0
     }
+
     this.timechanger = (mss) => {
         var days = parseInt(mss / (1000 * 60 * 60 * 24));
         var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -63,7 +65,8 @@ class Box extends Component {
             });
             this.setState({
               active: 1,
-              areaState: [1, 1, 1, 1]
+              areaState: [1, 1, 1, 1],
+              haveBox: 1
             });
           } 
           else {
@@ -127,7 +130,24 @@ class Box extends Component {
   }
 
   componentDidMount() {
-    $.ajax({
+    $.ajax({//是否拥有书包柜 1有  0无
+      method: 'GET',
+      url: req+'info/'+this.state.id,
+      headers: {
+        'token': $.cookie('token')
+      },
+      success: function(res) {
+        if(res.code === 0)
+        {
+          this.setState({
+            haveBox: 1,
+            active:1,
+            areaState: [1, 1, 1, 1]
+          });
+        }
+      }.bind(this)
+    });
+    $.ajax({//开放时间
       method: 'GET',
       url: req+"open-time",
       headers: {
@@ -148,7 +168,7 @@ class Box extends Component {
           areaState: [1, 1, 1, 1]
           });
         }
-        $.ajax({
+        $.ajax({//当前时间
           method: 'GET',
           url: req+"time",
           headers: {
@@ -182,7 +202,8 @@ class Box extends Component {
                 () => {
                   this.setState({
                     message: '预约活动还未开始，距离开始还有'+this.timechanger(mss-1000),
-                    active: 1
+                    active: 1,
+                    areaState: [1, 1, 1, 1]
                   });
                   mss -= 1000;
                   if(mss <= 0 ){
@@ -197,12 +218,22 @@ class Box extends Component {
                 mss: timesend - timesnow
               });
               var mss = this.state.mss;
-              var timer = window.setInterval(
+              var timer = window.setInterval(//倒计时
                 () => {
-                  this.setState({
-                    message: '预约活动已经开始，距离结束还有'+this.timechanger(mss-1000),
-                    active: 0
-                  });
+                  if(this.state.haveBox == 1)//如果有柜子
+                  {
+                    this.setState({//关
+                      message: '预约活动已经开始，距离结束还有'+this.timechanger(mss-1000),
+                      active:1,
+                      areaState:[1, 1, 1, 1]
+                    });
+                  }
+                  else {
+                    this.setState({
+                      message: '预约活动已经开始，距离结束还有'+this.timechanger(mss-1000),
+                      active: 0
+                    });
+                  }
                   mss -= 1000;
                   if(mss <= 0 ){
                     clearInterval(timer);
@@ -213,7 +244,8 @@ class Box extends Component {
             else if((timesnow > timestamp) && (timesnow > timesend)) {
                   this.setState({
                     message: '活动已经结束！',
-                    active: 1
+                    active: 1,
+                    areaState: [1, 1, 1, 1]
                   });
                   mss -= 1000;
             }
@@ -230,7 +262,7 @@ class Box extends Component {
         });
       }.bind(this)
     });
-    $.ajax({
+    $.ajax({//开放区域
       method: 'GET',
       url: req+"open-area",
       headers: {
