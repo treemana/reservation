@@ -2,7 +2,7 @@
  * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
  */
 
-package cn.itgardener.nefu.library.web;
+package cn.itgardener.nefu.library.web.api;
 
 import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
