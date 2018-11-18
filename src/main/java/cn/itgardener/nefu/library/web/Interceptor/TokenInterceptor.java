@@ -27,7 +27,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws LibException {
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
         logger.info("get TokenInterceptor");
         User user = TokenUtil.getUserByToken(request);
         boolean result = path.contains("login");
