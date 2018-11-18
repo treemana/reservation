@@ -124,4 +124,10 @@ public interface RedisDao {
      * @return
      */
     boolean remove(String key);
+
+    /**
+     * 同步MySQL和Redis
+     * @return
+     */
+    boolean updateRedis();
 }

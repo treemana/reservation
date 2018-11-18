@@ -90,6 +90,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (0 == i) {
             throw new LibException("修改失败");
         } else {
+            redisDao.updateRedis(); // 同步MySQL数据库
             return true;
         }
 
@@ -111,6 +112,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 }
             }
             if (0 == success) {
+                redisDao.updateRedis();
                 return new RestData(0, "操作成功!");
             } else {
                 return new RestData(1, "操作失败,请重试!");
@@ -137,6 +139,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 }
             }
             if (0 == success) {
+                redisDao.updateRedis();
                 return new RestData(0, "操作成功!");
             } else {
                 return new RestData(1, "操作失败,请重试!");

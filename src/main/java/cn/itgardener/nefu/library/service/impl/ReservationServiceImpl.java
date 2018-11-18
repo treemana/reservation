@@ -118,10 +118,8 @@ public class ReservationServiceImpl implements ReservationService {
         if (null == configs) {
             throw new LibException("查询失败");
         } else {
+            rtv.put("startTime" , redisDao.get("openTime"));
             for (Config config : configs) {
-                if ("startTime".equals(config.getConfigKey())) {
-                    rtv.put("startTime", config.getConfigValue());
-                }
                 if ("endTime".equals(config.getConfigKey())) {
                     rtv.put("endTime", config.getConfigValue());
                 }
@@ -134,21 +132,14 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public boolean putReservationTime(TimeVo timeVO) {
 
-        int count = 0;
+
         Config config = new Config();
         config.setConfigKey("startTime");
         config.setConfigValue(timeVO.getStartTime());
         Config config1 = new Config();
         config1.setConfigKey("endTime");
         config1.setConfigValue(timeVO.getEndTime());
-        for (int i = 1; i <= 4; i++) {
-            int num = bookCaseMapper.selectBagNum(i);
-            count += num;
-            redisDao.set("location_" + i, String.valueOf(num));
-        }
-        redisDao.set("popCount", "0");
-        redisDao.set("total", String.valueOf(count));
-        redisDao.remove("finish");
+        redisDao.updateRedis();
         return 0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1);
 
     }
@@ -156,12 +147,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Map<String, Object> getStartTime() {
 
-        Config config = configMapper.selectStartTime();
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
         String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         Map<String, Object> rtv = new HashMap<>(2);
-        rtv.put("startTime", config.getConfigValue());
+        rtv.put("startTime", redisDao.get("openTime"));
         rtv.put("nowTime", nowTime);
         return rtv;
 

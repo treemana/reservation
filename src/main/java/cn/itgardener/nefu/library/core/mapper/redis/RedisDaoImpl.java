@@ -4,7 +4,10 @@
 
 package cn.itgardener.nefu.library.core.mapper.redis;
 
+import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
+import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.model.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,9 +26,13 @@ public class RedisDaoImpl implements RedisDao {
 
     private final StringRedisTemplate stringRedisTemplate;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final BookCaseMapper bookCaseMapper;
+    private final ConfigMapper configMapper;
 
-    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate) {
+    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate, BookCaseMapper bookCaseMapper, ConfigMapper configMapper) {
         this.stringRedisTemplate = stringRedisTemplate;
+        this.bookCaseMapper = bookCaseMapper;
+        this.configMapper = configMapper;
     }
 
 
@@ -161,6 +168,27 @@ public class RedisDaoImpl implements RedisDao {
             return true;
         } catch (Exception e) {
             logger.info("remove" + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateRedis() {
+        try {
+            int count =0;
+            for (int i = 1; i <= 4; i++) {
+                int num = bookCaseMapper.selectBagNum(i);
+                count += num;
+                this.set("location_" + i, String.valueOf(num));
+            }
+            this.set("popCount", "0");
+            this.set("total", String.valueOf(count));
+            this.remove("finish");
+            Config config = configMapper.selectStartTime();
+            this.set("openTime", config.getConfigValue());
+            return true;
+        }catch (Exception e) {
+            logger.info("updateRedis" + e);
             return false;
         }
     }

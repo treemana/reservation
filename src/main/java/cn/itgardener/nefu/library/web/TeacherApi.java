@@ -37,7 +37,6 @@ public class TeacherApi {
     private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
 
-
     @Autowired
     public TeacherApi(ReservationService reservationService, BookCaseService bookCaseService) {
         this.reservationService = reservationService;
