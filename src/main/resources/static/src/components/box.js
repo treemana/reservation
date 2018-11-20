@@ -85,11 +85,11 @@ class Box extends Component {
       $.ajax({
         method: "GET",
         url: req+'code',
-        contentType: 'application/json;charset=UTF-8',
         headers: {
           'token': $.cookie('token')
         },
          xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
         success: function(res) {
           this.setState({
             code: res.data
