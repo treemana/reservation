@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import '../css/app.css';
 import logo from '../images/logo.png';
 import Adheaderbar from '../components/adheaderbar';
@@ -13,7 +15,10 @@ class Areaset extends Component {
     super(props,context);
     this.state = {
       id: this.props.match.params.id
-    };   
+    };
+    if(!$.cookie('token')) {
+          window.location.href='/';
+        }
   }
   render() {
     return (

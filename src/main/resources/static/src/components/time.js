@@ -5,6 +5,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import req from '../url';
 const { Meta } = Card;
 const { RangePicker } = DatePicker;
@@ -14,7 +15,11 @@ moment.locale('zh-cn');
 class Time extends Component {
   constructor (props) {
     super(props);
-    this.state = { open: false };
+    this.state = { 
+      open: false,
+      startTime: "点击设置",
+      endTime: "点击设置"
+    };
     this.handleOpenChange = (open) => {
       this.setState({ open });
     };
@@ -27,46 +32,53 @@ class Time extends Component {
     };
     this.onOk = (value) => {
        console.log(this.state); 
-       // $.ajax({
-       //    type: 'PUT',
-       //    url: req+'open-time',
-       //    data: {
-       //        startTime: this.state.startTime,
-       //        endTime: this.state.endTime
-       //    },
-       //    dataType: "json",
-       //    success: function(res) {
-       //      if(res.code == 0)
-       //      {
-       //        notification.open({
-       //          messstudentId: '提示',
-       //          description: '修改成功！'
-       //        });
-       //      }
-       //      else {
-       //        notification.open({
-       //          messstudentId: '提示',
-       //          description: '修改失败！'
-       //        });
-       //      }
-       //    }
-       // });
+       $.ajax({
+          type: 'PUT',
+          url: req+'open-time',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            'token': $.cookie('token')
+          },
+          data: JSON.stringify({
+              startTime: this.state.startTime,
+              endTime: this.state.endTime
+          }),
+          success: function(res) {
+            if(res.code == 0)
+            {
+              notification.open({
+                message: '提示',
+                description: '修改成功！'
+              });
+            }
+            else {
+              notification.open({
+                message: '提示',
+                description: '修改失败！'
+              });
+            }
+          }.bind(this)
+       });
     };
   }
   componentDidMount() {
-    this.setState({
-      startTime: "2018-11-10 11:07:57",
-      endTime: "2018-11-18 21:08:53"
-    });
-    // $.get(req+'open-time',null,function(res) {
-    //   if(res.code == 0) {
-    //     var data = res.data;
-    //     this.setState({
-    //       startTime: data.startTime,
-    //       endTime: data.endTime
-    //     });
-    //   }
-    // }.bind(this));
+    $.ajax({
+          type: 'GET',
+          url: req+'open-time',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            'token': $.cookie('token')
+          },
+          success: function(res) {
+            if(res.code == 0) {
+              var data = res.data;
+              this.setState({
+                startTime: data.startTime,
+                endTime: data.endTime
+              });
+            }
+          }.bind(this)
+       });
   }
   render() {
     return (

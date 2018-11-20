@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import '../css/app.css';
 import School from '../images/school.gif';
 import { Layout, Menu } from 'antd';
@@ -26,21 +28,21 @@ class Headerbar extends Component {
   
     render() {
     return (
-        <Header className="header">
-          <div className="logo" >
-            <img src={School} className="school" />
-          </div>
+        <Layout className="header">
           <Menu
             theme="dark"
             selectedKeys={[this.state.current]}
             mode="horizontal"
-            style={{ lineHeight: '64px' }}
+            style={{textAlign:"right"}}
           >
-            <Menu.Item key="1"><Link to="/">{this.props.id?'登出':'登录'}</Link></Menu.Item>
+          <div className="logo" >
+            <img src={School} className="school" />
+          </div>
+            <Menu.Item key="1" onClick={$.cookie("token", "", {expires: -1})}><Link to="/">{this.props.id?'登出':'登录'}</Link></Menu.Item>
             <Menu.Item key="2"><Link to="/help">帮助</Link></Menu.Item>
-            <Menu.Item key="3"><Link to="/dev">开发人员</Link></Menu.Item>
+            <Menu.Item key="3"><Link to="/dev">开发相关</Link></Menu.Item>
           </Menu>
-        </Header>
+        </Layout>
     );
   }
 }

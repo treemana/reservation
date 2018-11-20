@@ -61,7 +61,7 @@
 
 - Java 8
 - MySQL 5.7
-- SpringBoot 2.0.6
+- SpringBoot 2.1.0
 - Mybatis 1.3.2
 - redis 5.0.0
 - nginx 1.15.5

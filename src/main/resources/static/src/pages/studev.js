@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import '../css/app.css';
 import logo from '../images/logo.png';
 import Stuheaderbar from '../components/stuheaderbar';
@@ -15,6 +17,9 @@ class Studev extends Component {
             current: '3',
             id: this.props.match.params.id
         };
+        if(!$.cookie('token')) {
+          window.location.href='/';
+        }  
     }
   render() {
     return (

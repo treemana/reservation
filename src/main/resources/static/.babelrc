@@ -5,6 +5,12 @@
     "env",
     "stage-1"
   ],
+  "plugins": [ 
+    ["import", { 
+        libraryName: "antd", 
+        style: "css" 
+    }], 
+    ],
   "env": {
     "start": {
       "presets": [

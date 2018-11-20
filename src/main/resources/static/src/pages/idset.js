@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import { Layout } from 'antd';
 import '../css/app.css';
 import logo from '../images/logo.png';
@@ -13,7 +15,10 @@ class Stubox extends Component {
     super(props,context);
     this.state = {
       id: this.props.match.params.id
-    };   
+    };
+    if(!$.cookie('token')) {
+      window.location.href='/';
+    }   
   }
   render() {
     return (

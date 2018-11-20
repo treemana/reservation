@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import $ from 'jquery';
+import { config } from 'jquery.cookie';
 import '../css/app.css';
 import logo from '../images/logo.png';
 import Stuheaderbar from '../components/stuheaderbar';
@@ -14,21 +16,42 @@ class Stumine extends Component {
     super(props,context);
     this.state={
       current: 'my',
-      id: this.props.match.params.id
-    };   
+      id: this.props.match.params.id,
+      location: "无",
+      number: "无"
+    }; 
+    if(!$.cookie('token')) {
+      window.location.href='/';
+    }    
   }
 
   componentDidMount() {
-    this.setState({location: 1, number: 123});
-       // $.get(req+'info/'+this.state.id, null, function (ret) {
-
-       //  this.setState({data:ret.data});
-       //  var data = [];
-       //      data[0]=this.state.friendsex[1].value;
-       //      data[1]=this.state.friendsex[0].value;
-        
-       // }.bind(this));
-   console.log(this.state.id);
+    $.ajax({
+      method: 'GET',
+      url: req+'info/'+this.state.id,
+      headers: {
+        'token': $.cookie('token')
+      },
+      success: function(res) {
+        if(res.code === 0)
+        {
+          var data = res.data;
+          var str = '';
+          if(data.location == 1)
+            str = "二楼北";
+          else if(data.location == 2)
+            str = "二楼南";
+          else if(data.location == 3)
+            str = "三楼北";
+          else if(data.location == 4)
+            str = "三楼南";
+          this.setState({
+            location: str,
+            number: data.number
+          });
+        }
+      }.bind(this)
+    });
   }
   render() {
     return (
