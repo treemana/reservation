@@ -104,6 +104,19 @@ public class BookCaseServiceImpl implements BookCaseService {
             return new RestData(1, "无预留柜子编号!");
         } else {
             for (int count = 0; count < data.size(); count++) {
+                ShipVo shipVo = new ShipVo();
+                shipVo.setNumber(data.get(count).toString());
+                BookCase bookCase = bookCaseMapper.selectByNumber(shipVo);
+                if (null != bookCase) {
+                    if (null != bookCase.getUserId()){
+                        return new RestData(1, "柜子存在已被占用的情况!");
+                    }
+                } else {
+                    return new RestData(1, "柜子编号有误!");
+                }
+            }
+
+            for (int count = 0; count < data.size(); count++) {
                 BookCase bookCase = new BookCase();
                 bookCase.setNumber(data.get(count));
                 if (0 >= bookCaseMapper.setByNumber(bookCase)) {
