@@ -134,4 +134,13 @@ public interface BookCaseMapper {
     @SelectProvider(type = BookCaseProvider.class, method = "selectByNumber")
     BookCase selectByNumber(ShipVo shipVO);
 
+    /**
+     * 根据studnetId查找bookcase
+     *
+     * @param studentId
+     * @return BookCase 实例
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByUserId")
+    List<BookCase> selectBookCaseByUserId(@Param("userId") int userId);
+
 }

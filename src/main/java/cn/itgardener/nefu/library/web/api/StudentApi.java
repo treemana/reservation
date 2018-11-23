@@ -26,7 +26,7 @@ import java.text.ParseException;
 import java.util.Map;
 
 /**
- * @author : chenchenT
+ * @author : chenchenT CMY
  * @date : 2018/11/03
  * @since : Java 8
  */
@@ -106,5 +106,16 @@ public class StudentApi {
         } else {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         }
+    }
+
+    @RequestMapping(value = "/areastatus/{studentId}", method = RequestMethod.GET)
+    public RestData getAreaStatus(@PathVariable String studentId) {
+        logger.info("GET areastatus");
+        try {
+            return new RestData(reservationService.getAreaStatus(studentId));
+        } catch (LibException e) {
+            e.printStackTrace();
+        }
+        return new RestData(1, "获取区域预约状态失败");
     }
 }

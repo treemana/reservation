@@ -76,4 +76,11 @@ public interface ReservationService {
      * @return {"startGrade":2016,"endGrade":2018}
      */
     Map<String, Object> getOpenGrade();
+
+    /**
+     * 获取各个区域的预约状态
+     *
+     * @return [0, 1, 1, 0] 0表示可以预约，1表示不可预约
+     */
+    List<Integer> getAreaStatus(String studentId) throws LibException;
 }

@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.core.mapper.provider;
 
 import cn.itgardener.nefu.library.core.model.User;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
@@ -59,6 +60,17 @@ public class UserProvider {
                 SET("user_type=0");
                 WHERE("user_username=#{studentId}");
 
+            }
+        }.toString();
+    }
+
+    public String selectByStudentId(@Param("studentId") String studentId) {
+        return new SQL() {
+            {
+                SELECT("user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+                        "user_type AS type, user_token AS token");
+                FROM("user");
+                WHERE("user_username=#{studentId}");
             }
         }.toString();
     }

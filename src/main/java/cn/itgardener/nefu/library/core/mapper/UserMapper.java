@@ -74,4 +74,12 @@ public interface UserMapper {
             "user_type AS type, user_token AS token from user where user_system_id=#{userId}")
     User selectByUserId(BookCase bookCase);
 
+    /**
+     * 根据studentId查出user
+     *
+     * @param studentId
+     * @return List<User>
+     */
+    @SelectProvider(type = UserProvider.class, method = "selectByStudentId")
+    List<User> selectByStudentId(@Param("studentId") String studentId);
 }

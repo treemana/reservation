@@ -229,6 +229,16 @@ public class BookCaseProvider {
         }.toString();
     }
 
+    public String selectBookCaseByUserId(@Param("userId") int userId) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                WHERE("bc_user_id=#{userId}");
+            }
+        }.toString();
+    }
 }
 
 

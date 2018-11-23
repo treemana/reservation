@@ -8,7 +8,10 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.mapper.UserMapper;
+import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.GradeVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 import cn.itgardener.nefu.library.service.ReservationService;
@@ -17,13 +20,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author : pc CMY
@@ -37,12 +39,14 @@ public class ReservationServiceImpl implements ReservationService {
     private final ConfigMapper configMapper;
     private final BookCaseMapper bookCaseMapper;
     private final RedisDao redisDao;
+    private final UserMapper userMapper;
 
     @Autowired
-    public ReservationServiceImpl(ConfigMapper configMapper, BookCaseMapper bookCaseMapper, RedisDao redisDao) {
+    public ReservationServiceImpl(ConfigMapper configMapper, BookCaseMapper bookCaseMapper, RedisDao redisDao, UserMapper userMapper) {
         this.configMapper = configMapper;
         this.bookCaseMapper = bookCaseMapper;
         this.redisDao = redisDao;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -118,7 +122,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (null == configs) {
             throw new LibException("查询失败");
         } else {
-            rtv.put("startTime" , redisDao.get("openTime"));
+            rtv.put("startTime", redisDao.get("openTime"));
             for (Config config : configs) {
                 if ("endTime".equals(config.getConfigKey())) {
                     rtv.put("endTime", config.getConfigValue());
@@ -167,6 +171,90 @@ public class ReservationServiceImpl implements ReservationService {
         config.setConfigKey("endGrade");
         c = configMapper.selectOpenGrade(config);
         rtv.put("endGrade", c.getConfigValue());
+        return rtv;
+    }
+
+    @Override
+    public List<Integer> getAreaStatus(String studentId) throws LibException {
+        List<Integer> rtv = new ArrayList<>(4);
+        List<Config> opentime = configMapper.selectOpenTime();
+        String starttime = null, endtime = null;
+        Date startdate = null, enddate = null, nowdate = null;
+        for (Config config : opentime) {
+            if (config.getConfigKey().equals("startTime"))
+                starttime = config.getConfigValue();
+            if (config.getConfigKey().equals("endTime"))
+                endtime = config.getConfigValue();
+        }
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
+        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            startdate = sdf.parse(starttime);
+            enddate = sdf.parse(endtime);
+            nowdate = sdf.parse(nowTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //判断时间
+        if (nowdate.getTime() < startdate.getTime() || nowdate.getTime() > enddate.getTime()) {
+            for (int i = 0; i < 4; i++) {
+                rtv.add(1);
+            }
+            logger.info("不在开放时间内");
+            return rtv;
+        }
+        List<User> users = userMapper.selectByStudentId(studentId);
+        User user;
+        if (null != users && 1 == users.size())
+            user = users.get(0);
+        else {
+            throw new LibException("getAreaStatus selectByStudentId查询失败");
+        }
+        List<BookCase> bookCases = bookCaseMapper.selectBookCaseByUserId(user.getSystemId());
+        //判断是否已经分配了柜子
+        if (null != bookCases && 1 <= bookCases.size()) {
+            for (int i = 0; i < 4; i++) {
+                rtv.add(1);
+            }
+            logger.info("已经分配了柜子");
+            return rtv;
+        }
+
+        List<String> list = redisDao.getList("userQueue", 0, -1);
+        //判斷排队队列中是否有该studentId
+        if (list.contains(studentId)) {
+            for (int i = 0; i < 4; i++) {
+                rtv.add(1);
+            }
+            logger.info("已在队列中");
+            return rtv;
+        }
+        //联合判断 区域是否开放和柜子是否剩余
+        String[] locationstatus = new String[4];
+        List<Config> configs = configMapper.selectOpenAera();
+        for (Config config : configs) {
+            if (config.getConfigKey().equals("area_two_n")) {
+                locationstatus[0] = config.getConfigValue();
+            } else if (config.getConfigKey().equals("area_two_s")) {
+                locationstatus[1] = config.getConfigValue();
+            } else if (config.getConfigKey().equals("area_three_n")) {
+                locationstatus[2] = config.getConfigValue();
+            } else if (config.getConfigKey().equals("area_three_s")) {
+                locationstatus[3] = config.getConfigValue();
+            }
+        }
+        String[] locationnum = new String[4];
+        for (int i = 0; i < 4; i++) {
+            int t = i + 1;
+            locationnum[i] = redisDao.get("location_" + t);
+            if (Integer.parseInt(locationnum[i]) > 0 && locationstatus[i].equals("0")) {
+                rtv.add(0);
+            } else {
+                logger.info("locatioin" + t + "区域未开放或该区域无剩余柜子");
+                rtv.add(1);
+            }
+        }
         return rtv;
     }
 }
