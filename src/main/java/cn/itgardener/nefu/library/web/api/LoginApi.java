@@ -65,6 +65,7 @@ public class LoginApi {
         try {
             //生产验证码字符串并保存到session中
             String createText = defaultKaptcha.createText();
+            logger.info(createText);
             httpServletRequest.getSession().setAttribute("vrifyCode", createText);
 
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
@@ -85,19 +86,12 @@ public class LoginApi {
     @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
     public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
 
+        String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
 
-        User currentUser = TokenUtil.getUserByToken(httpServletRequest);
-        if (null != currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        if (captchaId.equals(vrifyCode)) {
+            return new RestData("请求成功");
         } else {
-            String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
-
-            if (captchaId.equals(vrifyCode)) {
-                return new RestData("请求成功");
-            } else {
-                return new RestData(1, "验证码错误");
-            }
+            return new RestData(1, "验证码错误");
         }
 
     }
