@@ -32,7 +32,7 @@ public class ScheduledTask {
     }
 
     /**
-     * fixedRate = 5000表示当前方法开始执行5000ms后,Spring scheduling会再次调用该方法
+     * fixedDelay = 1000表示当前方法开始执行1000ms后,Spring scheduling会再次调用该方法
      */
     @Scheduled(fixedDelay = 1000)
     public void doPopList() {

@@ -264,11 +264,33 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     }
 
+    int maxLocation() {
+        int maxValue = Integer.parseInt(redisDao.get("location_1"));
+        int maxL = 1;
+
+        for (int i = 2; i <= 4; i++) {
+            int nowValue = Integer.parseInt(redisDao.get("location_" + i));
+            if (nowValue > maxValue) {
+                maxValue = nowValue;
+                maxL = i;
+            }
+        }
+
+        return maxL;
+    }
+
     @Override
     public Boolean postBoxOrder(BookCaseVo bookCaseVo) {
         Boolean rtv = false;
         String key = bookCaseVo.getStudentId();
-        String location = bookCaseVo.getLocation().toString();
+        String location = "";
+
+        if(bookCaseVo.getLocation() != null) {
+            location = bookCaseVo.getLocation().toString();
+        }else {
+            location = maxLocation() + "";
+        }
+
         long count = redisDao.getListSize("userQueue");
         redisDao.set("l_" + key, location + "," + count);
         int total = Integer.parseInt(redisDao.get("total"));
@@ -290,21 +312,6 @@ public class BookCaseServiceImpl implements BookCaseService {
         }
         return rtv;
 
-    }
-
-    int maxLocation() {
-        int maxValue = Integer.parseInt(redisDao.get("location_1"));
-        int maxL = 1;
-
-        for (int i = 2; i <= 4; i++) {
-            int nowValue = Integer.parseInt(redisDao.get("location" + i));
-            if (nowValue > maxValue) {
-                maxValue = nowValue;
-                maxL = i;
-            }
-        }
-
-        return maxL;
     }
 
     @Override
@@ -329,7 +336,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 redisDao.dec("location_" + l, 1);
                 redisDao.add("finish", studentId);
             } else {
-                logger.info(studentId + "已经分配柜子，存在刷柜子嫌疑");
+                logger.info(studentId + "已经分配柜子,无需再分配");
             }
         }
     }

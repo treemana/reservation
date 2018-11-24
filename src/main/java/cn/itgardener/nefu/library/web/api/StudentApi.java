@@ -73,17 +73,10 @@ public class StudentApi {
             logger.error(e.getLocalizedMessage());
         }
 
-
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-
-            if (bookCaseService.postBoxOrder(bookCaseVo)) {
-                return new RestData(true);
-            } else {
-                return new RestData(1, "排队失败，请重试");
-            }
+        if (bookCaseService.postBoxOrder(bookCaseVo)) {
+            return new RestData(true);
         } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(1, "排队失败，请重试");
         }
     }
 
