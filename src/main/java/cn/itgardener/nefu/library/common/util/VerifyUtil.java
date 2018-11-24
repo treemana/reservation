@@ -48,7 +48,6 @@ public class VerifyUtil {
         int endGrade = 0;
 
         int userGrade = Integer.parseInt(users.get(0).getStudentId().substring(0, 4));
-        System.out.println(userGrade);
 
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
         String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

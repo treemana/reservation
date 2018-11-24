@@ -307,7 +307,7 @@
 ```
 #### 1.4.1.5. 区域预约状态
 
-- GET /areastatus/{studentId}
+- GET /area-status/{studentId}
 
   - 0表示可以预约，1表示不可预约
 

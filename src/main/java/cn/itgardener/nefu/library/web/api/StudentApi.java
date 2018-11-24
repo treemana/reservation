@@ -108,9 +108,9 @@ public class StudentApi {
         }
     }
 
-    @RequestMapping(value = "/areastatus/{studentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/area-status/{studentId}", method = RequestMethod.GET)
     public RestData getAreaStatus(@PathVariable String studentId) {
-        logger.info("GET areastatus");
+        logger.info("GET area-status");
         try {
             return new RestData(reservationService.getAreaStatus(studentId));
         } catch (LibException e) {
