@@ -12,11 +12,11 @@ import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.service.UserService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +65,6 @@ public class LoginApi {
         try {
             //生产验证码字符串并保存到session中
             String createText = defaultKaptcha.createText();
-            System.out.println(createText);
             httpServletRequest.getSession().setAttribute("vrifyCode", createText);
 
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
@@ -78,8 +77,8 @@ public class LoginApi {
 
         //定义response输出类型为image/jpeg类型，使用base64输出流输出图片的byte数组
         captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
-        BASE64Encoder encoder = new BASE64Encoder();
-        return new RestData(encoder.encode(captchaChallengeAsJpeg));
+        String apache = new String(Base64.encodeBase64(captchaChallengeAsJpeg));
+        return new RestData(apache);
     }
 
 
