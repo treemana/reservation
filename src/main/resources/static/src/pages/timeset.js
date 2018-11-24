@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import $ from 'jquery';
-import { config } from 'jquery.cookie';
 import '../css/app.css';
-import logo from '../images/logo.png';
 import Adheaderbar from '../components/adheaderbar';
 import Adsiderbar from '../components/adsiderbar';
 import Time from '../components/time';

@@ -48,6 +48,7 @@ class Stuid extends Component {
                 messstudentId: '提示',
                 description: '删除成功！'
               });
+              setTimeout(()=>{window.location.reload();},2500);
             }
             else {
               notification.open({
@@ -73,6 +74,7 @@ class Stuid extends Component {
                 messstudentId: '提示',
                 description: '添加成功！'
               });
+              setTimeout(()=>{window.location.reload();},2500);
             }
             else {
               notification.open({

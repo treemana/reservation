@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import '../css/app.css';
 import $ from 'jquery';
-import { config } from 'jquery.cookie';
 import req from '../url';
-import { Card, Row, Col, BackTop, Icon, Avatar, Button, Table, Layout, Popconfirm, Popover, Modal, Divider, Cascader, InputNumber, notification, Input} from 'antd';
-const { Content } = Layout;
-const { Meta } = Card;
+import { Card, Button, Table, Layout, Popconfirm, Modal, Divider, Cascader, InputNumber, notification, Input} from 'antd';
 const Search = Input.Search;
 class Adbox extends Component {
   constructor (props) {

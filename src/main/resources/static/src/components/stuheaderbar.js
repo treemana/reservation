@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import '../css/app.css';
 import School from '../images/school.gif';
 import { Layout, Menu } from 'antd';
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
 
 
 class Stuheaderbar extends Component {

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/app.css';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-const { Header, Content, Sider, Footer } = Layout;
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+import { Layout, Menu, Icon } from 'antd';
+const { Sider } = Layout;
 
 class Adsiderbar extends Component {
   constructor(props) {

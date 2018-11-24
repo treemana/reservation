@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
-import { config } from 'jquery.cookie';
 import '../css/app.css';
 import School from '../images/school.gif';
 import { Layout, Menu } from 'antd';
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
 
 
 class Headerbar extends Component {

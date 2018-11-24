@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import $ from 'jquery';
-import { config } from 'jquery.cookie';
 import '../css/app.css';
-import logo from '../images/logo.png';
 import Stuheaderbar from '../components/stuheaderbar';
 import Siderbar from '../components/siderbar';
 import Mine from '../components/mine';
@@ -37,13 +35,13 @@ class Stumine extends Component {
         {
           var data = res.data;
           var str = '';
-          if(data.location == 1)
+          if(data.location === 1)
             str = "二楼北";
-          else if(data.location == 2)
+          else if(data.location === 2)
             str = "二楼南";
-          else if(data.location == 3)
+          else if(data.location === 3)
             str = "三楼北";
-          else if(data.location == 4)
+          else if(data.location === 4)
             str = "三楼南";
           this.setState({
             location: str,

@@ -31,13 +31,11 @@ class Area extends Component {
       });
     };
     this.handleClick = () => {
-      console.log(this.state);
       var areaindex = [];
       for(let i = 0; i<this.state.checkedList.length;i++)
       {
         areaindex.push(this.plainOptions.indexOf(this.state.checkedList[i])+1);
       }
-      console.log(areaindex);
       $.ajax({
           type: 'PUT',
           url: req+'open-area',
@@ -50,14 +48,15 @@ class Area extends Component {
             if(res.code == 0)
             {
               notification.open({
-                messstudentId: '提示',
+                message: '提示',
                 description: '修改成功！'
               });
+          setTimeout(()=>{window.location.reload();},2500);
             }
             else {
               notification.open({
-                messstudentId: '提示',
-                description: '修改失败！'
+                message: '提示',
+                description: res.message
               });
             }
           }.bind(this)
@@ -78,7 +77,7 @@ class Area extends Component {
               var list = [];
               for(let i = 0;i<data.length;i++)
               {
-                if(data[i].configValue == 1)
+                if(data[i].configValue == 0)
                   list.push(this.plainOptions[data[i].systemId-1]);
               }
               this.setState({checkedList: list});

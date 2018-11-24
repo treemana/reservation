@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import $ from 'jquery';
-import { config } from 'jquery.cookie';
 import '../css/app.css';
-import logo from '../images/logo.png';
 import Stuheaderbar from '../components/stuheaderbar';
 import Siderbar from '../components/siderbar';
 import Box from '../components/box';
