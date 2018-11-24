@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
-import { Layout } from 'antd';
+import {Component} from 'react';
+import {Layout} from 'antd';
 import $ from 'jquery';
-import { config } from 'jquery.cookie';
 import '../css/app.css';
-import logo from '../images/logo.png';
 import Stuheaderbar from '../components/stuheaderbar';
 import Siderbar from '../components/siderbar';
 import Box from '../components/box';
 import Footertext from '../components/footertext';
+
 const { Content } = Layout;
 
 class Stubox extends Component {
@@ -24,16 +23,32 @@ class Stubox extends Component {
   }
   render() {
     return (
-      <Layout className="stupart">
-        < Stuheaderbar className="headerbar" current = '-1' id={this.state.id}/>
-        < Siderbar className="siderbar" current="order" id={this.state.id}/>
-        <Content style={{ padding: '0 50px' }}>
+        < Layout;
+      className = "stupart" >
+          < Stuheaderbar;
+      className = "headerbar";
+      current = '-1';
+      id = {this.state.id};
+      />
+      < Siderbar;
+      className = "siderbar";
+      current = "order";
+      id = {this.state.id};
+      />
+      < Content;
+      style = {;
+      {
+          '0 50px'
+      }
+  }>
       		<br />
-        	<Box id={this.state.id}/>
+      < Box;
+      id = {this.state.id};
+      />
         </Content>
         < Footertext />
-      </Layout>
-    );
+      < /Layout>;
+  )
   }
 }
 
