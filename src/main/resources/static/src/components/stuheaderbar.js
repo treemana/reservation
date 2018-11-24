@@ -1,8 +1,8 @@
-import {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import '../css/app.css';
 import School from '../images/school.gif';
-import {Layout, Menu} from 'antd';
+import { Layout, Menu } from 'antd';
 
 
 class Stuheaderbar extends Component {
@@ -14,8 +14,8 @@ class Stuheaderbar extends Component {
     };
     }
   componentWillReceiveProps(nextProps) {
-      const {current} = this.state;
-      const newdata = nextProps.current.toString();
+    const { current } = this.state
+    const newdata = nextProps.current.toString()
     if (current.toString() !== newdata) {
       this.setState({
         current: nextProps.current
@@ -25,41 +25,23 @@ class Stuheaderbar extends Component {
   
     render() {
     return (
-        < Layout;
-        className = "header" >
-            < Menu;
-        theme = "dark";
-        selectedKeys = {[this.state.current]};
-        mode = "horizontal";
-        style = {;
-        {
-            "right"
-        }
-    }
+        <Layout className="header">
+          <Menu
+            theme="dark"
+            selectedKeys={[this.state.current]}
+            mode="horizontal"
+            style={{textAlign:"right"}}
           >
-    <
-        div;
-        className = "logo" >
-            < img;
-        src = {School};
-        className = "school" / >
+          <div className="logo" >
+            <img src={School} className="school" />
           </div>
-            < Menu.Item;
-        key = "1" > < Link;
-        to = "/" > {this.props.id ? '登出' : '登录'} < /Link></;
-        Menu.Item >
-        < Menu.Item;
-        key = "2" > < Link;
-        to = {"/stuhelp/"+this.state.id} > 帮助 < /Link></;
-        Menu.Item >
-        < Menu.Item;
-        key = "3" > < Link;
-        to = {"/studev/"+this.state.id} > 开发相关 < /Link></;
-        Menu.Item >
+            <Menu.Item key="1"><Link to="/">{this.props.id?'登出':'登录'}</Link></Menu.Item>
+            <Menu.Item key="2"><Link to={"/stuhelp/"+this.state.id}>帮助</Link></Menu.Item>
+            <Menu.Item key="3"><Link to={"/studev/"+this.state.id}>开发相关</Link></Menu.Item>
           </Menu>
-        < /Layout>;
-    )
-    }
+        </Layout>
+    );
+  }
 }
 
 export default Stuheaderbar;

@@ -1,21 +1,8 @@
-import {Component} from 'react';
+import React, { Component } from 'react';
 import '../css/app.css';
 import $ from 'jquery';
 import req from '../url';
-import {
-    Button,
-    Card,
-    Cascader,
-    Divider,
-    Input,
-    InputNumber,
-    Layout,
-    Modal,
-    notification,
-    Popconfirm,
-    Table
-} from 'antd';
-
+import { Card, Button, Table, Layout, Popconfirm, Modal, Divider, Cascader, InputNumber, notification, Input} from 'antd';
 const Search = Input.Search;
 class Adbox extends Component {
   constructor (props) {
@@ -83,45 +70,21 @@ class Adbox extends Component {
       key: 'action',
       render: (text, record) => (
         <span>
-          < Popconfirm title = "确定保留该书包柜?" onConfirm = {();
-  =>
-      this.handleSave(record.id)
-  }
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 保留 < /a>
+        <Popconfirm title="确定保留该书包柜?" onConfirm={() => this.handleSave(record.id)} okText="确定" cancelText="取消">
+          <a href="javascript:;">保留</a>
         </Popconfirm>
-          < Divider;
-      type = "vertical" / >
-          < Popconfirm;
-      title = "确定释放该书包柜?";
-      onConfirm = {();
-  =>
-      this.handleRelease(record.id)
-  }
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 释放 < /a>
+        <Divider type="vertical" />
+        <Popconfirm title="确定释放该书包柜?" onConfirm={() => this.handleRelease(record.id)} okText="确定" cancelText="取消">
+          <a href="javascript:;">释放</a>
         </Popconfirm>
-          < Divider;
-      type = "vertical" / >
-          < Popconfirm;
-      title = "确定分配该书包柜?";
-      onConfirm = {();
-  =>
-      this.handleOrder(record.id)
-  }
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 分配 < /a>
+        <Divider type="vertical" />
+        <Popconfirm title="确定分配该书包柜?" onConfirm={() => this.handleOrder(record.id)} okText="确定" cancelText="取消">
+          <a href="javascript:;">分配</a>
         </Popconfirm>
-          < /span>;
+        </span>
       )
-  }]
-      this.search = () => {
+    }];
+    this.search = () => {
       var data = '';
       if((this.state.location != 0) && ((this.state.status != 3) || ((this.state.startId != 0) && (this.state.endId != 0)) || (this.state.studentId != 0)))
       {
@@ -359,7 +322,7 @@ class Adbox extends Component {
           }.bind(this)
       });
 
-    };
+    }
     this.releaseAll = () => {
       $.ajax({
           type: 'DELETE',
@@ -385,7 +348,7 @@ class Adbox extends Component {
             }
           }.bind(this)
       });
-    };
+    }
     this.saveSelect = () => {
       $.ajax({
           type: 'POST',
@@ -411,7 +374,7 @@ class Adbox extends Component {
             }
           }.bind(this)
       });
-    };
+    }
     this.handleSave = (key) => {
       console.log(key);
       var data = [];
@@ -440,7 +403,7 @@ class Adbox extends Component {
             }
           }.bind(this)
       });
-    };
+    }
     this.orderBox = (value) => {
       $.ajax({
           type: 'PUT',
@@ -472,7 +435,7 @@ class Adbox extends Component {
             }
           }.bind(this)
       });
-    };
+    }
     this.handleOrder = (key) => {
       this.setState({
         visible: true,
@@ -488,7 +451,7 @@ class Adbox extends Component {
     this.setState({
       visible: false,
     });
-  };
+  }
     this.handleRelease = (key) => {
       var data = {
         number: key,
@@ -518,7 +481,7 @@ class Adbox extends Component {
             }
           }.bind(this)
       });
-    };
+    }
     this.hide = () => {
       this.setState({
         visible: false,
@@ -564,154 +527,62 @@ class Adbox extends Component {
       pageSize: this.state.pageSize,
       total: this.state.totalSize,
       onChange: this.pageChange
-    };
+    }
     return (
-        < Layout;
-      style = {;
-      {
-          '24px 30px 24px'
-      }
-  }>
-  <
-      Card;
-      style = {;
-      {
-          16
-      }
-  }>
+      <Layout style={{ padding: '24px 30px 24px' }}>
+        <Card style={{ marginBottom: 16 }}>
         <p>
-      < span > 筛选;：<
-      /span>
-      < span > 区域;：<
-      /span>
-      < Cascader;
-      style = {;
-      {
-          "110px"
-      }
-  }
-      defaultValue = {[this.state.location]};
-      allowClear = {false};
-      options = {this.locationOpt};
-      onChange = {(value);
-  =>
-      this.setState({location: value})
-  }
-      /><Divider type="vertical" / >
-      < span > 状态;：<
-      /span>
-      < Cascader;
-      defaultValue = {[this.state.status]};
-      allowClear = {false};
-      options = {this.statusOpt};
-      onChange = {(value);
-  =>
-      this.setState({status: value})
-  }
-      /><Divider type="vertical" / >
-      < span > 编号;：<
-      /span>
-      < InputNumber;
-      onChange = {(value);
-  =>
-      this.setState({startId: value})
-  }
-      /> 至 <InputNumber onChange={(value)=>this.setState({endId:value})} / > < Divider;
-      type = "vertical" / >
-          < span > 学号;：<
-      /span>
-      < InputNumber;
-      style = {;
-      {
-          "140px"
-      }
-  }
-      onChange = {(value);
-  =>
-      this.setState({studentId: value})
-  }
-      />
-      < Button;
-      type = "primary";
-      style = {;
-      {
-          '20px'
-      }
-  }
-      onClick = {this.search} > 查询 < /Button>
+          <span> 筛选：</span>
+          <span> 区域：</span>
+          <Cascader style={{width: "110px"}} defaultValue={[this.state.location]} allowClear={false} options={this.locationOpt} onChange={(value) => this.setState({location: value})} /><Divider type="vertical" />
+          <span> 状态：</span>
+          <Cascader defaultValue={[this.state.status]} allowClear={false} options={this.statusOpt} onChange={(value) => this.setState({status: value})} /><Divider type="vertical" />
+          <span> 编号：</span>
+          <InputNumber onChange={(value)=>this.setState({startId: value})}/> 至 <InputNumber onChange={(value)=>this.setState({endId:value})} /><Divider type="vertical" />
+          <span> 学号：</span>
+          <InputNumber style={{width: "140px"}} onChange={(value)=>this.setState({studentId: value})}/>
+          <Button type="primary" style={{marginLeft: '20px'}} onClick={this.search}>查询</Button>
           </p>
           <p>
-          < span > 批量操作;：<
-      /span>
-      < Popconfirm;
-      title = "确定释放所选书柜?";
-      onConfirm = {this.releaseSelect};
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 释放所选书柜 < /a>
+          <span> 批量操作：</span>
+          <Popconfirm title="确定释放所选书柜?" onConfirm={this.releaseSelect} okText="确定" cancelText="取消">
+            <a href="javascript:;">释放所选书柜</a>
           </Popconfirm>
-          < Divider;
-      type = "vertical" / >
-          < Popconfirm;
-      title = "确定保留所选书柜?";
-      onConfirm = {this.saveSelect};
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 保留所选书柜 < /a>
+          <Divider type="vertical" />
+          <Popconfirm title="确定保留所选书柜?" onConfirm={this.saveSelect} okText="确定" cancelText="取消">
+            <a href="javascript:;">保留所选书柜</a>
           </Popconfirm>
-          < Divider;
-      type = "vertical" / >
-          < Popconfirm;
-      title = "确定释放所有书柜?";
-      onConfirm = {this.releaseAll};
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 释放所有书柜 < /a>
+          <Divider type="vertical" />
+          <Popconfirm title="确定释放所有书柜?" onConfirm={this.releaseAll} okText="确定" cancelText="取消">
+            <a href="javascript:;">释放所有书柜</a>
           </Popconfirm>
           </p>
-          < span;
-      style = {;
-      {
-          8
-      }
-  }>
+          <span style={{ marginLeft: 8 }}>
             {hasSelected ? `已选中 ${selectedRowKeys.length} 项` : ''}
           </span>
-
-      < Table;
-      rowSelection = {rowSelection};
-      columns = {this.columns};
-      dataSource = {this.state.data};
-      pagination = {pagination};
-      />
-
-      < Modal;
-      mask = {false};
-      title = "把该书包柜分配给：";
-      visible = {visible};
-      onOk = {this.handleOk};
-      confirmLoading = {confirmLoading};
-      onCancel = {this.handleCancel};
+          
+        <Table rowSelection={rowSelection} columns={this.columns} dataSource={this.state.data} pagination = {pagination} />
+        
+        <Modal 
+          mask={false}
+          title="把该书包柜分配给："
+          visible={visible}
+          onOk={this.handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={this.handleCancel}
           footer= {false}
           
         >
-              < Search;
-      style = {;
-      {
-          "100%"
-      }
-  }
-      placeholder = "请输入学生学号";
-      enterButton = "确定";
-      onSearch = {this.orderBox};
+          <Search
+              style={{width: "100%"}}
+              placeholder="请输入学生学号"
+              enterButton="确定"
+              onSearch={this.orderBox}
             />
         </Modal>
         </Card>
-            < /Layout>;
-  )
+      </Layout>
+    );
   }
 }
 

@@ -1,5 +1,5 @@
-import {Component} from 'react';
-import {Layout} from 'antd';
+import React, { Component } from 'react';
+import { Layout } from 'antd';
 import $ from 'jquery';
 import '../css/app.css';
 import Stuheaderbar from '../components/stuheaderbar';
@@ -7,7 +7,6 @@ import Siderbar from '../components/siderbar';
 import Mine from '../components/mine';
 import Footertext from '../components/footertext';
 import req from '../url';
-
 const { Content } = Layout;
 
 class Stumine extends Component {
@@ -36,13 +35,13 @@ class Stumine extends Component {
         {
           var data = res.data;
           var str = '';
-            if (data.location === 1)
+          if(data.location === 1)
             str = "二楼北";
-            else if (data.location === 2)
+          else if(data.location === 2)
             str = "二楼南";
-            else if (data.location === 3)
+          else if(data.location === 3)
             str = "三楼北";
-            else if (data.location === 4)
+          else if(data.location === 4)
             str = "三楼南";
           this.setState({
             location: str,
@@ -54,33 +53,16 @@ class Stumine extends Component {
   }
   render() {
     return (
-        < Layout;
-      className = "stupart" >
-          < Stuheaderbar;
-      className = "headerbar";
-      current = '-1';
-      id = {this.state.id};
-      />
-      < Siderbar;
-      className = "siderbar";
-      current = "my";
-      id = {this.state.id};
-      />
-      < Content;
-      style = {;
-      {
-          '0 50px'
-      }
-  }>
+      <Layout className="stupart">
+        < Stuheaderbar className="headerbar" current = '-1' id={this.state.id}/>
+        < Siderbar className="siderbar" current="my" id={this.state.id}/>
+        <Content style={{ padding: '0 50px' }}>
       		<br />
-      < Mine;
-      location = {this.state.location};
-      number = {this.state.number};
-      />
+        	<Mine location={this.state.location} number={this.state.number}/>
         </Content>
         < Footertext />
-      < /Layout>;
-  )
+      </Layout>
+    );
   }
 }
 

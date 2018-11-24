@@ -1,27 +1,10 @@
-import {Component} from 'react';
+import React, { Component } from 'react';
 import $ from 'jquery';
-import {config} from 'jquery.cookie';
+import { config } from 'jquery.cookie';
 import req from '../url';
 import Grade from './grade';
 import '../css/app.css';
-import {
-    Avatar,
-    BackTop,
-    Button,
-    Card,
-    Col,
-    Divider,
-    Icon,
-    Input,
-    InputNumber,
-    Layout,
-    notification,
-    Popconfirm,
-    Row,
-    Table,
-    Tag
-} from 'antd';
-
+import { Card, Row, Col, BackTop, Icon, Avatar, Button, InputNumber, Layout, Table, Divider, Tag, notification, Input, Popconfirm } from 'antd';
 const { Meta } = Card;
 const Search = Input.Search;
 
@@ -44,18 +27,12 @@ class Stuid extends Component {
       title: '操作',
       key: 'action',
       render: (text, record) => (
-          < Popconfirm title = "确定要删除吗?" onConfirm = {();
-  =>
-      this.handleDelete(record.studentId)
-  }
-      okText = "确定";
-      cancelText = "取消" >
-          < a;
-      href = "javascript:;" > 删除 < /a>
-          < /Popconfirm>;
+              <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record.studentId)} okText="确定" cancelText="取消">
+                <a href="javascript:;">删除</a>
+              </Popconfirm>
       )
-  }]
-      this.handleDelete = (key) => {
+    }];
+    this.handleDelete = (key) => {
       $.ajax({
           type: 'DELETE',
           url: req+'list/'+key,
@@ -71,9 +48,7 @@ class Stuid extends Component {
                 messstudentId: '提示',
                 description: '删除成功！'
               });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2500);
+              setTimeout(()=>{window.location.reload();},2500);
             }
             else {
               notification.open({
@@ -83,7 +58,7 @@ class Stuid extends Component {
             }
           }.bind(this)
        });
-      };
+    }
     this.handleAdd = (value) => {
       $.ajax({
           type: 'POST',
@@ -99,9 +74,7 @@ class Stuid extends Component {
                 messstudentId: '提示',
                 description: '添加成功！'
               });
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2500);
+              setTimeout(()=>{window.location.reload();},2500);
             }
             else {
               notification.open({
@@ -135,51 +108,22 @@ class Stuid extends Component {
   }
 	render () {
 		return (
-            < Layout;
-        style = {;
-        {
-            '24px 24px 24px'
-        }
-    }>
+		<Layout style={{ padding: '24px 24px 24px' }}>
 		    <Grade />
-        < Card;
-        title = "黑名单";
-        bordered = {true};
-        className = "areacard";
-        style = {;
-        {
-            '0 0 24px'
-        }
-    }>
+		    <Card title="黑名单" bordered={true} className="areacard" style={{ padding: '0 0 24px' }}>
 		      <div>
-        < Search;
-        style = {;
-        {
-            "300px"
-        }
-    }
-        placeholder = "请输入学生学号";
-        enterButton = "添加到黑名单";
-        onSearch = {value;
-    =>
-        this.handleAdd(value)
-    }
+           <Search
+              style={{width: "300px"}}
+              placeholder="请输入学生学号"
+              enterButton="添加到黑名单"
+              onSearch={value => this.handleAdd(value)}
             />
-            < Table;
-        columns = {this.columns};
-        dataSource = {this.state.data};
-        pagination = {;
-        {
-            'none'
-        }
-    }
-        />
+			    <Table columns={this.columns} dataSource={this.state.data} pagination={{position: 'none'}} />
 			  </div>
 		    </Card>
-        < /Layout>    ;
-
-    )
-    }
+		 </Layout>    
+		);
+	}
 }
 
 export default Stuid;
