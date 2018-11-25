@@ -9,6 +9,7 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
+import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.service.UserService;
 import org.slf4j.Logger;
@@ -40,6 +41,9 @@ public class BlackListApi {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public RestData getBlackList(HttpServletRequest request) {
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         logger.info("get BlackList");
         User token = TokenUtil.getUserByToken(request);
         if (null == token) {
@@ -57,10 +61,12 @@ public class BlackListApi {
 
     @RequestMapping(value = "/list/{studentId}", method = RequestMethod.DELETE)
     public RestData deleteBlackList(@PathVariable String studentId, HttpServletRequest request) {
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         logger.info("delete blacklist studentId = " + studentId);
         User user = new User();
         user.setStudentId(studentId);
-
         User token = TokenUtil.getUserByToken(request);
         if (null == token) {
             logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
@@ -77,6 +83,9 @@ public class BlackListApi {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user, HttpServletRequest request) {
         logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         User token = TokenUtil.getUserByToken(request);
         if (null == token) {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);

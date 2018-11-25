@@ -47,7 +47,7 @@ public class TeacherApi {
     @RequestMapping(value = "/open-time", method = RequestMethod.GET)
     public RestData getReservationTime(HttpServletRequest request) {
         logger.info("get reservationTime");
-       if(!VerifyUtil.verifyType(request)){
+        if (!VerifyUtil.verifyType(request)) {
             return new RestData(1,"您没有访问权限");
         }
         User currentUser = TokenUtil.getUserByToken(request);
@@ -69,6 +69,9 @@ public class TeacherApi {
     @RequestMapping(value = "/open-time", method = RequestMethod.PUT)
     public RestData putReservationTime(@RequestBody TimeVo timeVO, HttpServletRequest request) {
         logger.info("put reservationTime" + timeVO.getEndTime() + timeVO.getStartTime());
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
@@ -86,7 +89,9 @@ public class TeacherApi {
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
-
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
             return bookCaseService.selectDetailByCondition(bookCaseVo);
@@ -98,6 +103,9 @@ public class TeacherApi {
     @RequestMapping(value = "/ship", method = RequestMethod.PUT)
     public RestData putShip(@RequestBody ShipVo shipVO, HttpServletRequest request) {
         logger.info("put Ship");
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
@@ -113,7 +121,9 @@ public class TeacherApi {
 
     @RequestMapping(value = "/ship", method = RequestMethod.DELETE)
     public RestData deleteShip(@RequestBody List<Integer> data, HttpServletRequest request) {
-
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
             return bookCaseService.deleteShip(data);
@@ -124,7 +134,9 @@ public class TeacherApi {
 
     @RequestMapping(value = "/preorder", method = RequestMethod.POST)
     public RestData setKeep(@RequestBody List<Integer> data, HttpServletRequest request) {
-
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, "您没有访问权限");
+        }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
             return bookCaseService.setKeepByNumber(data);
