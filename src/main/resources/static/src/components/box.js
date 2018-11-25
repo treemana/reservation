@@ -68,7 +68,7 @@ class Box extends Component {
     this.getStatus = () => {//获取按钮状态
       $.ajax({
         method: "GET",
-        url: req+"areastatus/"+this.state.id,
+        url: req+"area-status/"+this.state.id,
         contentType: 'application/json;charset=UTF-8',
         headers: {
           'token': $.cookie('token')
@@ -153,11 +153,25 @@ class Box extends Component {
     this.sendCode = (value) => {
       $.ajax({
         method: "GET",
-        url: req+'?status/studentId='+this.state.id+'&vrifyCode='+value,
-        contentType: 'application/json;charset=UTF-8',
+        url: req+'vrifycode/'+value,
         headers: {
           'token': $.cookie('token')
         },
+         xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
+        success: function(res) {
+          if(res.code === 0) {
+            this.setState({
+            showMyStatus: true
+          });
+            $.ajax({
+        method: "GET",
+        url: req+'status/studentId='+this.state.id+'&vrifyCode='+value,
+        headers: {
+          'token': $.cookie('token')
+        },
+         xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
         success: function(res) {
           if(res.code === 0) {
             this.setState({
@@ -172,6 +186,16 @@ class Box extends Component {
           }
         }.bind(this)
       });
+          }
+          else {
+            notification.open({
+                message: '提示',
+                description: res.message
+            });
+          }
+        }.bind(this)
+      });
+      
     }
     this.hide = () => {
       this.setState({
