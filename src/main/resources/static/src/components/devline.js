@@ -35,7 +35,7 @@ class Devline extends Component {
 		      	  <Col span={3}>
 		      	  賀賀(开发代号)</Col>
 		      	  <Col span={21}>
-		      	  ：东北林业大学，计算机科学与技术专业,2016-06班，负责UI设计及前端页面开发</Col>
+		      	  ：东北林业大学，计算机科学与技术专业，2016-06班，负责UI设计及前端页面开发</Col>
 		      	  </Row>
 		      	  <Row>
 		      	  <Col span={3}>
