@@ -176,16 +176,26 @@ public class RedisDaoImpl implements RedisDao {
     public boolean updateRedis() {
         try {
             int count =0;
+
             for (int i = 1; i <= 4; i++) {
+
+                if(configMapper.selectOpenAera().get(i-1).getConfigValue().equals("1")) {
+                    this.set("location_" + i, "0");
+                    continue;
+                }
+
                 int num = bookCaseMapper.selectBagNum(i);
                 count += num;
                 this.set("location_" + i, String.valueOf(num));
             }
+
             this.set("popCount", "0");
             this.set("total", String.valueOf(count));
             this.remove("finish");
-            Config config = configMapper.selectStartTime();
-            this.set("openTime", config.getConfigValue());
+            Config configOpenTime = configMapper.selectStartTime();
+            Config configEndTime = configMapper.selectEndTime();
+            this.set("openTime", configOpenTime.getConfigValue());
+            this.set("ednTime",configEndTime.getConfigValue());
             return true;
         }catch (Exception e) {
             logger.info("updateRedis" + e);

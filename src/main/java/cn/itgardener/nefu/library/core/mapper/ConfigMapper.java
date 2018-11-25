@@ -90,4 +90,11 @@ public interface ConfigMapper {
      */
     @SelectProvider(type = ConfigProvider.class, method = "selectOpenGrade")
     Config selectOpenGrade(Config config);
+
+    /**
+     * 查询结束时间
+     * @return Config
+     */
+    @SelectProvider(type = ConfigProvider.class, method = "selectEndTime")
+    Config selectEndTime();
 }

@@ -72,6 +72,16 @@ public class ConfigProvider {
         }.toString();
     }
 
+    public String selectEndTime() {
+        return new SQL() {
+            {
+                SELECT("config_key as configKey,config_value as configValue ");
+                FROM("config");
+                WHERE("config_key='endTime'");
+            }
+        }.toString();
+    }
+
     public String selectOpenGrade(Config config) {
         return new SQL() {
             {
