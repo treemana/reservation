@@ -72,7 +72,7 @@ public class TeacherApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try{
-                VerifyUtil.VerifyTime();
+                VerifyUtil.verifyTime();
 
             } catch (Exception e){
                 return new RestData(1,e.getMessage());

@@ -4,11 +4,9 @@
 
 package cn.itgardener.nefu.library.web.api;
 
-import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
-import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.service.UserService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -57,7 +55,6 @@ public class LoginApi {
         }
     }
 
-
     @RequestMapping(value = "/code", method = RequestMethod.GET)
     public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         byte[] captchaChallengeAsJpeg;
@@ -82,7 +79,6 @@ public class LoginApi {
         return new RestData(apache);
     }
 
-
     @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
     public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
 
@@ -93,6 +89,5 @@ public class LoginApi {
         } else {
             return new RestData(1, "验证码错误");
         }
-
     }
 }

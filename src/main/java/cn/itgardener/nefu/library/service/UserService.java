@@ -23,7 +23,7 @@ public interface UserService {
      *
      * @param user 用户实体
      * @return 结果集
-     * @throws LibException
+     * @throws LibException 异常信息
      */
     Map<String, Object> postLogin(User user) throws LibException;
 
@@ -31,16 +31,16 @@ public interface UserService {
      * 查询黑名单
      *
      * @return 黑名单
-     * @throws LibException
+     * @throws LibException 异常信息
      */
     List<Map<String, Object>> getBlackList() throws LibException;
 
     /**
      * 添加黑名单
      *
-     * @param user
+     * @param user 用户实体
      * @return
-     * @throws LibException
+     * @throws LibException 异常信息
      */
     Map<String, Object> postAddBlackList(User user) throws LibException;
 
@@ -58,7 +58,6 @@ public interface UserService {
      *
      * @param userVo
      * @return 前面还有多少人
-     * @throws LibException 异常信息
      */
     int getStatus(UserVo userVo);
 }

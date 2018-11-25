@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,14 +34,14 @@ public class JsonUtil {
     }
 
     public static Map<String, Object> getMapFromJson(String jsonString) {
-        Map<String, Object> map;
-        try {
-            map = objectMapper.readValue(jsonString, Map.class);
-        } catch (IOException e) {
-            map = null;
-            logger.error(e.getLocalizedMessage());
+
+        Map<String, Object> rtv = getObjFromJson(jsonString, Map.class);
+
+        if (null == rtv) {
+            rtv = new HashMap<>(0);
         }
-        return map;
+
+        return rtv;
     }
 
     public static <T> T getObjFromJson(String jsonString, Class<T> valueType) {
