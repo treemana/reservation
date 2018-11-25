@@ -8,6 +8,7 @@ import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
+import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
@@ -70,14 +71,13 @@ public class TeacherApi {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            boolean bool = reservationService.putReservationTime(timeVO);
-            if (bool) {
-                return new RestData(true);
-            } else {
-                return new RestData(1, "修改失败");
+            try{
+                VerifyUtil.VerifyTime();
+
+            } catch (Exception e){
+                return new RestData(1,e.getMessage());
             }
-
-
+            return  reservationService.putReservationTime(timeVO);
         }
     }
 

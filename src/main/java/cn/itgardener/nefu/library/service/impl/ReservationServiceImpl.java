@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.service.impl;
 
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
@@ -135,9 +136,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean putReservationTime(TimeVo timeVO) {
-
-
+    public RestData putReservationTime(TimeVo timeVO){
         Config config = new Config();
         config.setConfigKey("startTime");
         config.setConfigValue(timeVO.getStartTime());
@@ -145,7 +144,12 @@ public class ReservationServiceImpl implements ReservationService {
         config1.setConfigKey("endTime");
         config1.setConfigValue(timeVO.getEndTime());
         redisDao.updateRedis();
-        return 0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1);
+        if(0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1)){
+            return new RestData(0,"修改成功");
+        } else{
+            return new RestData(1,"修改失败");
+        }
+
 
     }
 
@@ -226,4 +230,5 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return rtv;
     }
+
 }

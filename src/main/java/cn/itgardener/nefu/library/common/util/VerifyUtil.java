@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.common.util;
 
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.Config;
@@ -87,6 +88,38 @@ public class VerifyUtil {
         return true;
 
     }
+    public static boolean VerifyTime() throws LibException, ParseException{
+        Date currentTime = new Date();
+        List<Config> configs = configMapper.selectOpenTime();
+        Long startTime = new Long(0);
+        Long endTime = new Long(0);
+        for ( Config config2: configs) {
+            if("startTime" == config2.getConfigKey()){
+                try{
+                    startTime = dateToStamp(config2.getConfigKey());
 
+                } catch (ParseException e){
+                    throw new LibException("时间转化出现异常");
+                }
+            }
+            if("endTime" == config2.getConfigKey()){
+                try{
+                    endTime = dateToStamp(config2.getConfigKey());
+                } catch (ParseException e){
+                    throw new LibException("时间转化出现异常");
+                }
+            }
+        }
+        if(startTime < currentTime.getTime() && endTime > currentTime.getTime()){
+            throw new LibException("当前时间段无法修改");
+        }
+        return true;
+    }
+    public static long dateToStamp(String s) throws ParseException{
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime();
+        return ts;
+    }
 }
 

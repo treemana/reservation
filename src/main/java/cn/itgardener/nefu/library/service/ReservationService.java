@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.core.model.vo.GradeVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 
@@ -61,7 +62,7 @@ public interface ReservationService {
      * @return 是否修改着成功
      * @throws LibException 异常
      */
-    boolean putReservationTime(TimeVo timeVO);
+    RestData putReservationTime(TimeVo timeVO);
 
     /**
      * 查询开放时间

@@ -9,6 +9,7 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
+import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.GradeVo;
 import cn.itgardener.nefu.library.service.ReservationService;
@@ -68,16 +69,13 @@ public class ReservationAreaApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
-
+                VerifyUtil.VerifyTime();
                 return new RestData(reservationService.putReservationArea(list));
-            } catch (LibException e) {
+            } catch (Exception e) {
                 return new RestData(1, e.getMessage());
             }
         }
-
-
     }
-
     @RequestMapping(value = "open-grades", method = RequestMethod.PUT)
     public RestData postGrade(@RequestBody GradeVo gradeVO, HttpServletRequest request) {
         logger.info("get postGrade" + JsonUtil.getJsonString(gradeVO));
@@ -87,13 +85,14 @@ public class ReservationAreaApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
+                VerifyUtil.VerifyTime();
                 boolean result = reservationService.postGrade(gradeVO);
                 if (result) {
                     return new RestData(true);
                 } else {
                     return new RestData(1, "postGrade is failure");
                 }
-            } catch (LibException e) {
+            } catch (Exception e) {
                 logger.info(e.getMessage());
                 return new RestData(1, e.getMessage());
             }

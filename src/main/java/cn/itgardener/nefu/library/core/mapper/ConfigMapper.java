@@ -29,15 +29,6 @@ public interface ConfigMapper {
      */
     @SelectProvider(type = ConfigProvider.class, method = "selectOpenAera")
     List<Config> selectOpenAera();
-
-    /**
-     * 修改开放区域
-     *
-     * @return 修改的个数
-     */
-    @UpdateProvider(type = ConfigProvider.class, method = "updateOpenAera")
-    int updateOpenAera(List list);
-
     /**
      * 查询预约时间
      *
