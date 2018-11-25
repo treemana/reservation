@@ -62,9 +62,6 @@ public class ReservationAreaApi {
 
     @RequestMapping(value = "/open-area", method = RequestMethod.PUT)
     public RestData putReservationArea(@RequestBody List<Integer> list, HttpServletRequest request) {
-        if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
-        }
         logger.info("put reservationArea" + list.toString());
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
