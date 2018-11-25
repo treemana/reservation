@@ -97,14 +97,14 @@ public class VerifyUtil {
         for (Config config2 : configs) {
             if ("startTime".equals(config2.getConfigKey())) {
                 try {
-                    startTime = dateToStamp(config2.getConfigKey());
+                    startTime = dateToStamp(config2.getConfigValue());
                 } catch (ParseException e) {
                     throw new LibException("时间转化出现异常");
                 }
             }
             if ("endTime".equals(config2.getConfigKey())) {
                 try {
-                    endTime = dateToStamp(config2.getConfigKey());
+                    endTime = dateToStamp(config2.getConfigValue());
                 } catch (ParseException e) {
                     throw new LibException("时间转化出现异常");
                 }
