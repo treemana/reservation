@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.service.impl;
 
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
@@ -177,40 +178,23 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Integer> getAreaStatus(String studentId) throws LibException {
         List<Integer> rtv = new ArrayList<>(4);
-        List<Config> opentime = configMapper.selectOpenTime();
-        String starttime = null, endtime = null;
-        Date startdate = null, enddate = null, nowdate = null;
-        for (Config config : opentime) {
-            if (config.getConfigKey().equals("startTime"))
-                starttime = config.getConfigValue();
-            if (config.getConfigKey().equals("endTime"))
-                endtime = config.getConfigValue();
-        }
-        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
-        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        User user = new User();
+        user.setStudentId(studentId);
+        user = userMapper.selectByCondition(user).get(0);
+        String token = user.getToken();
         try {
-            startdate = sdf.parse(starttime);
-            enddate = sdf.parse(endtime);
-            nowdate = sdf.parse(nowTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        //判断时间
-        if (nowdate.getTime() < startdate.getTime() || nowdate.getTime() > enddate.getTime()) {
+            VerifyUtil.verify(token);
+
+        }catch (LibException e) {
+            logger.info(String.valueOf(e));
             for (int i = 0; i < 4; i++) {
                 rtv.add(1);
             }
-            logger.info("不在开放时间内");
             return rtv;
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        List<User> users = userMapper.selectByStudentId(studentId);
-        User user;
-        if (null != users && 1 == users.size())
-            user = users.get(0);
-        else {
-            throw new LibException("getAreaStatus selectByStudentId查询失败");
-        }
+
         List<BookCase> bookCases = bookCaseMapper.selectBookCaseByUserId(user.getSystemId());
         //判断是否已经分配了柜子
         if (null != bookCases && 1 <= bookCases.size()) {
@@ -231,27 +215,12 @@ public class ReservationServiceImpl implements ReservationService {
             return rtv;
         }
         //联合判断 区域是否开放和柜子是否剩余
-        String[] locationstatus = new String[4];
-        List<Config> configs = configMapper.selectOpenAera();
-        for (Config config : configs) {
-            if (config.getConfigKey().equals("area_two_n")) {
-                locationstatus[0] = config.getConfigValue();
-            } else if (config.getConfigKey().equals("area_two_s")) {
-                locationstatus[1] = config.getConfigValue();
-            } else if (config.getConfigKey().equals("area_three_n")) {
-                locationstatus[2] = config.getConfigValue();
-            } else if (config.getConfigKey().equals("area_three_s")) {
-                locationstatus[3] = config.getConfigValue();
-            }
-        }
         String[] locationnum = new String[4];
-        for (int i = 0; i < 4; i++) {
-            int t = i + 1;
-            locationnum[i] = redisDao.get("location_" + t);
-            if (Integer.parseInt(locationnum[i]) > 0 && locationstatus[i].equals("0")) {
+        for (int i = 1; i <= 4; i++) {
+            if( Integer.parseInt(redisDao.get("location_" + i)) > 0) {
                 rtv.add(0);
             } else {
-                logger.info("locatioin" + t + "区域未开放或该区域无剩余柜子");
+                logger.info("locatioin" + i + "区域未开放或该区域无剩余柜子");
                 rtv.add(1);
             }
         }
