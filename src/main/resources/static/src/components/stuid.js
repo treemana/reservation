@@ -41,7 +41,7 @@ class Stuid extends Component {
             'token': $.cookie('token')
           },
           success: function(res) {
-            if(res.code == 0) {
+            if(res.code === 0) {
               const data = [...this.state.data];
               this.setState({ data: data.filter(item => item.studentId !== key) });
               notification.open({
@@ -53,7 +53,7 @@ class Stuid extends Component {
             else {
               notification.open({
                 messstudentId: '提示',
-                description: '删除失败！'
+                description: res.message
               });
             }
           }.bind(this)

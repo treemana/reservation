@@ -43,7 +43,7 @@ class Time extends Component {
               endTime: this.state.endTime
           }),
           success: function(res) {
-            if(res.code == 0)
+            if(res.code === 0)
             {
               notification.open({
                 message: '提示',
@@ -53,7 +53,7 @@ class Time extends Component {
             else {
               notification.open({
                 message: '提示',
-                description: '修改失败！'
+                description: res.message
               });
             }
           }.bind(this)
