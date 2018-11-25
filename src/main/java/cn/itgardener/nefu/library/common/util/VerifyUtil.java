@@ -90,10 +90,12 @@ public class VerifyUtil {
     }
 
     public static boolean verifyTime() throws LibException {
-        Date currentTime = new Date();
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
+        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<Config> configs = configMapper.selectOpenTime();
         long startTime = 0L;
         long endTime = 0L;
+        Long currentTime = 0l;
         for (Config config2 : configs) {
             if ("startTime".equals(config2.getConfigKey())) {
                 try {
@@ -110,7 +112,13 @@ public class VerifyUtil {
                 }
             }
         }
-        if (startTime < currentTime.getTime() && endTime > currentTime.getTime()) {
+        try {
+            currentTime = dateToStamp(nowTime);
+        } catch (ParseException e) {
+            throw new LibException("时间转化出现异常");
+        }
+
+        if (startTime < currentTime && endTime > currentTime) {
             throw new LibException("当前时间段无法修改");
         }
         return true;

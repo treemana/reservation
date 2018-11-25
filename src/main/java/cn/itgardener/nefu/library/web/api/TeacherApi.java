@@ -75,12 +75,6 @@ public class TeacherApi {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
-            try{
-                VerifyUtil.verifyTime();
-
-            } catch (Exception e){
-                return new RestData(1,e.getMessage());
-            }
             return  reservationService.putReservationTime(timeVO);
         }
     }
