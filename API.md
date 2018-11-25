@@ -68,7 +68,7 @@
 
 ```json
 {
-    "studentId" : "2016210157",
+    "studentId" : "2016210111",
     "studentName" : "张三"
 }
 ```
@@ -128,7 +128,8 @@
 ```json
 {
     "location" : 1,
-    "studentId" : "2016210157"
+    "studentId" : "2016210111",
+    "vrifyCode" : "12ab"
 }
 ```
 

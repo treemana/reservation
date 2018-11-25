@@ -53,6 +53,11 @@ public class BookCaseVo {
      */
     private Integer location;
 
+    /**
+     * 验证码
+     */
+    private String vrifyCode;
+
     public Integer getSystemId() {
         return systemId;
     }
@@ -123,5 +128,13 @@ public class BookCaseVo {
 
     public void setLocation(Integer location) {
         this.location = location;
+    }
+
+    public String getVrifyCode() {
+        return vrifyCode;
+    }
+
+    public void setVrifyCode(String vrifyCode) {
+        this.vrifyCode = vrifyCode;
     }
 }

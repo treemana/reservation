@@ -65,19 +65,26 @@ public class StudentApi {
     public RestData postBoxOrder(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("POST postBoxOrder : " + JsonUtil.getJsonString(bookCaseVo));
 
-        try {
-            VerifyUtil.verify(request.getHeader("token"));
-        } catch (LibException e) {
-            return new RestData(1, e.getMessage());
-        } catch (ParseException e) {
-            logger.error(e.getLocalizedMessage());
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        if (captchaId.equals(bookCaseVo.getVrifyCode())) {
+            try {
+                VerifyUtil.verify(request.getHeader("token"));
+            } catch (LibException e) {
+                return new RestData(1, e.getMessage());
+            } catch (ParseException e) {
+                logger.error(e.getLocalizedMessage());
+            }
+
+            if (bookCaseService.postBoxOrder(bookCaseVo)) {
+                return new RestData(true);
+            } else {
+                return new RestData(1, "排队失败，请重试");
+            }
+        }else {
+            return new RestData(1, "验证码出错！");
         }
 
-        if (bookCaseService.postBoxOrder(bookCaseVo)) {
-            return new RestData(true);
-        } else {
-            return new RestData(1, "排队失败，请重试");
-        }
+
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
