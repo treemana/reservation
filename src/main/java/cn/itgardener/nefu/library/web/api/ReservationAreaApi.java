@@ -42,7 +42,7 @@ public class ReservationAreaApi {
 
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
     public RestData getReservationArea(HttpServletRequest request) {
-        logger.info("get reservationArea");
+        logger.info("GET getReservationArea");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
@@ -62,7 +62,7 @@ public class ReservationAreaApi {
 
     @RequestMapping(value = "/open-area", method = RequestMethod.PUT)
     public RestData putReservationArea(@RequestBody List<Integer> list, HttpServletRequest request) {
-        logger.info("put reservationArea" + list.toString());
+        logger.info("PUT putReservationArea: " + list.toString());
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
@@ -81,7 +81,7 @@ public class ReservationAreaApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, "您没有访问权限");
         }
-        logger.info("get postGrade" + JsonUtil.getJsonString(gradeVO));
+        logger.info("PUT postGrade" + JsonUtil.getJsonString(gradeVO));
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);

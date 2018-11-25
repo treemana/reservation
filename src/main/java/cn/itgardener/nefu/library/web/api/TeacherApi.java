@@ -7,6 +7,7 @@ package cn.itgardener.nefu.library.web.api;
 import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
+import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
@@ -46,10 +47,7 @@ public class TeacherApi {
 
     @RequestMapping(value = "/open-time", method = RequestMethod.GET)
     public RestData getReservationTime(HttpServletRequest request) {
-        logger.info("get reservationTime");
-        if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1,"您没有访问权限");
-        }
+        logger.info("GET getReservationTime");
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
@@ -68,7 +66,7 @@ public class TeacherApi {
 
     @RequestMapping(value = "/open-time", method = RequestMethod.PUT)
     public RestData putReservationTime(@RequestBody TimeVo timeVO, HttpServletRequest request) {
-        logger.info("put reservationTime" + timeVO.getEndTime() + timeVO.getStartTime());
+        logger.info("PUT putReservationTime" + JsonUtil.getJsonString(timeVO));
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, "您没有访问权限");
         }
@@ -89,6 +87,7 @@ public class TeacherApi {
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
+        logger.info("GET getDetail");
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, "您没有访问权限");
         }
@@ -102,7 +101,7 @@ public class TeacherApi {
 
     @RequestMapping(value = "/ship", method = RequestMethod.PUT)
     public RestData putShip(@RequestBody ShipVo shipVO, HttpServletRequest request) {
-        logger.info("put Ship");
+        logger.info("PUT putShip: " + JsonUtil.getJsonString(shipVO));
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, "您没有访问权限");
         }
