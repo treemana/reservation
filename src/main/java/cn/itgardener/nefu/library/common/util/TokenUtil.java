@@ -45,7 +45,7 @@ public class TokenUtil {
     }
 
     @Autowired
-    public static void setUserMapper(UserMapper userMapper) {
+    public void setUserMapper(UserMapper userMapper) {
         TokenUtil.userMapper = userMapper;
     }
 }

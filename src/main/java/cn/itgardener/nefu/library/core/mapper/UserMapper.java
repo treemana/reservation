@@ -82,4 +82,12 @@ public interface UserMapper {
      */
     @SelectProvider(type = UserProvider.class, method = "selectByStudentId")
     List<User> selectByStudentId(@Param("studentId") String studentId);
+
+    /**
+     * 根据token查找类型
+     * @param user token
+     * @return user
+     */
+    @SelectProvider(type = UserProvider.class, method = "selectByToken")
+    User selectByToken(User user);
 }

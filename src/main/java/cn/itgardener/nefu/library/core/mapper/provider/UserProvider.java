@@ -74,4 +74,16 @@ public class UserProvider {
             }
         }.toString();
     }
+    public String selectByToken(User user){
+        return new SQL(){
+            {
+                SELECT("user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+                        "user_type AS type, user_token AS token");
+                FROM("user");
+                WHERE("user_token=#{token}");
+            }
+        }.toString();
+
+    }
+
 }

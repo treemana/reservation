@@ -12,6 +12,7 @@ import cn.itgardener.nefu.library.core.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -115,6 +116,17 @@ public class VerifyUtil {
         return true;
     }
 
+    public static boolean verifyType(HttpServletRequest request){
+        String token = request.getHeader("token");
+        User user = new User();
+        user.setToken(token);
+        User user1 = userMapper.selectByToken(user);
+        if(1 != user1.getType()){
+            return false;
+        }
+        return true;
+
+    }
     public static long dateToStamp(String s) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);

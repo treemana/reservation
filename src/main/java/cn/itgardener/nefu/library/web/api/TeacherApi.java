@@ -47,6 +47,9 @@ public class TeacherApi {
     @RequestMapping(value = "/open-time", method = RequestMethod.GET)
     public RestData getReservationTime(HttpServletRequest request) {
         logger.info("get reservationTime");
+       if(!VerifyUtil.verifyType(request)){
+            return new RestData(1,"您没有访问权限");
+        }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
             logger.info(ErrorMessage.PLEASE_RELOGIN);
