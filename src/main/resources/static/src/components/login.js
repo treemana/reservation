@@ -16,7 +16,6 @@ class NormalLoginForm extends Component {
       this.props.form.validateFields((err, values) => {
         if (!err) {
           const data = JSON.stringify(values);
-          console.log(data);
           $.ajax({
             method: "POST",
             url: req+"login",

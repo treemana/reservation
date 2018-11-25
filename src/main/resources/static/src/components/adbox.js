@@ -167,7 +167,6 @@ class Adbox extends Component {
                 totalPage: res.data.pages.totalPage,
                 totalSize: res.data.pages.totalSize
               });
-              console.log(this.state);
             }
             else if(res.code != 0) {
               notification.open({
@@ -218,7 +217,6 @@ class Adbox extends Component {
                     break;
                 }
               }
-              console.log(res);
               this.setState({
                 data: data,
                 nowPage: res.data.pages.nowPage,
@@ -285,7 +283,6 @@ class Adbox extends Component {
                 totalPage: res.data.pages.totalPage,
                 totalSize: res.data.pages.totalSize
               });
-              console.log(this.state);
             }
             else if(res.code != 0) {
               notification.open({
@@ -376,7 +373,6 @@ class Adbox extends Component {
       });
     }
     this.handleSave = (key) => {
-      console.log(key);
       var data = [];
       data.push(key);
       $.ajax({
@@ -492,10 +488,8 @@ class Adbox extends Component {
       this.setState({ visible });
     };
     this.locationChange = (value) => {
-      console.log(value);
     };
     this.statusChange = (value) => {
-      console.log(value);
     };
     this.onSelectChange = (selectedRowKeys,selectedRows) => {
       var data = [];
@@ -507,7 +501,6 @@ class Adbox extends Component {
       this.setState({
         someData: data
       });
-      console.log(data);
     };
   }
   

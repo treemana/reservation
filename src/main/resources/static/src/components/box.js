@@ -100,28 +100,67 @@ class Box extends Component {
       });
     }
     this.orderBox = (key) => {//预约柜子
-      
-      var data = {
-        location: key,
-        studentId: this.state.id
-      };
-      data = JSON.stringify(data);
+      this.setState({
+        visible2: true,
+        boxArea: key
+      });
       $.ajax({
-        method: "POST",
-        url: req+"box-order",
-        contentType: 'application/json;charset=UTF-8',
+        method: "GET",
+        url: req+'code',
         headers: {
           'token': $.cookie('token')
         },
-        data: data, 
+         xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
         success: function(res) {
-          if( res.code == 0 && res.data == true) {
-            notification.open({
-              message: '提示',
-              description: '已进入预约队列，请点击“查看当前状态”查看！'
-            });
-            this.getStatus();
-          } 
+          this.setState({
+            code2: res.data
+          });
+        }.bind(this)
+      });
+    }
+    this.sendCode2 = (value) => {
+      var data = {
+        location: this.state.boxArea,
+        studentId: this.state.id,
+        vrifyCode: value
+      };
+      data = JSON.stringify(data);
+      $.ajax({
+        method: "GET",
+        url: req+'vrifycode/'+value,
+        headers: {
+          'token': $.cookie('token')
+        },
+         xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
+        success: function(res) {
+          if(res.code === 0) {
+          $.ajax({
+            method: "POST",
+            url: req+"box-order",
+            contentType: 'application/json;charset=UTF-8',
+            headers: {
+              'token': $.cookie('token')
+            },
+            data: data, 
+            success: function(res) {
+              if( res.code == 0 && res.data == true) {
+                notification.open({
+                  message: '提示',
+                  description: '已进入预约队列，请点击“查看当前状态”查看！'
+                });
+                this.getStatus();
+              } 
+              else {
+                notification.open({
+                    message: '提示',
+                    description: res.message
+                });
+              }
+            }.bind(this)
+          });
+          }
           else {
             notification.open({
                 message: '提示',
@@ -130,7 +169,8 @@ class Box extends Component {
           }
         }.bind(this)
       });
-    };
+    }
+  
     this.myStatus = () => {//查看我的状态
       this.setState({
         visible: true
@@ -201,6 +241,11 @@ class Box extends Component {
       this.setState({
         visible: false,
         showMyStatus: false
+      });
+    };
+    this.hide2 = () => {
+      this.setState({
+        visible2: false
       });
     };
   }
@@ -328,7 +373,7 @@ class Box extends Component {
     });
   }
   render() {
-    const { visible, confirmLoading } = this.state;
+    const { visible, confirmLoading, visible2 } = this.state;
     return (
       <Card title={this.state.message} bordered={true} className="areacard">
       <Row style={{textAlign: "right"}} >
@@ -375,6 +420,29 @@ class Box extends Component {
             <p><Button type="primary" block disabled={Boolean(this.state.allStatus)} onClick={() => this.orderBox(null)}>随机预约</Button></p>
           </Col>
       </Row>
+      <Modal 
+          title="请输入验证码"
+          visible={visible2}
+          onOk={this.handleOk2}
+          confirmLoading={confirmLoading}
+          onCancel={this.hide2}
+          footer= {false}
+        >
+        <div style= {{display: this.state.showMyStatus2?'none':'inline'}}>
+        <p><img alt='获取验证码失败' onClick={this.myStatus2} src={'data:image/jpeg;base64,'+this.state.code2} /></p>
+          <Search
+              style={{width: '100%'}}
+              placeholder='请输入验证码'
+              enterButton='确定'
+              onSearch={this.sendCode2}
+            />
+        </div>
+        <div style= {{display: this.state.showMyStatus?'inline':'none'}}>
+          <p><span>排在前面的人还有：</span>{this.state.before}</p>
+
+        </div>
+        </Modal>
+
       <Modal 
           title="当前状态"
           visible={visible}

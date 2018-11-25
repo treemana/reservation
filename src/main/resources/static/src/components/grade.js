@@ -14,7 +14,6 @@ class Grade extends Component {
      
     };
     this.handleClick = () => {
-       console.log(this.state); 
        $.ajax({
           type: 'PUT',
           url: req+'open-grades',
