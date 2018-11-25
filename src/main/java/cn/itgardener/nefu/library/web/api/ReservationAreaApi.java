@@ -69,7 +69,7 @@ public class ReservationAreaApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
-                VerifyUtil.VerifyTime();
+                VerifyUtil.verifyTime();
                 return new RestData(reservationService.putReservationArea(list));
             } catch (Exception e) {
                 return new RestData(1, e.getMessage());
@@ -85,7 +85,7 @@ public class ReservationAreaApi {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
         } else {
             try {
-                VerifyUtil.VerifyTime();
+                VerifyUtil.verifyTime();
                 boolean result = reservationService.postGrade(gradeVO);
                 if (result) {
                     return new RestData(true);
