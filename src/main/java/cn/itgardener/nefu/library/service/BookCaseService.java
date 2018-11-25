@@ -36,7 +36,6 @@ public interface BookCaseService {
      *
      * @param data 书包柜编号
      * @return 是否预留成功
-     * @throws LibException 是否预留成功
      */
     RestData setKeepByNumber(List<Integer> data);
 
@@ -45,6 +44,7 @@ public interface BookCaseService {
      *
      * @param shipVO 书包柜的编号贺学号
      * @return 是否修改成功
+     * @throws LibException 异常信息
      */
     boolean putShip(ShipVo shipVO) throws LibException;
 
@@ -60,7 +60,7 @@ public interface BookCaseService {
      * 获取书包柜数量
      *
      * @return 书包柜位置和数量的列表
-     * @throws LibException
+     * @throws LibException 异常信息
      */
     List<Map<String, Object>> getBagNum() throws LibException;
 

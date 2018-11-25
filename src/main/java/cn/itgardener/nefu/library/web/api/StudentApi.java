@@ -4,13 +4,10 @@
 
 package cn.itgardener.nefu.library.web.api;
 
-import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
-import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
-import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 import cn.itgardener.nefu.library.service.BookCaseService;
@@ -41,7 +38,6 @@ public class StudentApi {
     private final BookCaseService bookCaseService;
     private final UserService userService;
 
-
     @Autowired
     public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, UserService userService) {
         this.reservationService = reservationService;
@@ -52,13 +48,8 @@ public class StudentApi {
     @RequestMapping(value = "/time", method = RequestMethod.GET)
     public RestData getStartTime(HttpServletRequest request) {
 
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            Map<String, Object> data = reservationService.getStartTime();
-            return new RestData(data);
-        } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        }
+        Map<String, Object> data = reservationService.getStartTime();
+        return new RestData(data);
     }
 
     @RequestMapping(value = "/box-order", method = RequestMethod.POST)
@@ -80,37 +71,30 @@ public class StudentApi {
             } else {
                 return new RestData(1, "排队失败，请重试");
             }
-        }else {
+        } else {
             return new RestData(1, "验证码出错！");
         }
-
-
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public RestData getStatus(UserVo userVo, HttpServletRequest request) {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            String captchaId = (String) request.getSession().getAttribute("vrifyCode");
-            if (captchaId.equals(userVo.getVrifyCode())) {
-                if (userService.getStatus(userVo) != -1) {
-                    return new RestData(userService.getStatus(userVo));
-                } else {
-                    return new RestData(1, "用户已分配");
-                }
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        if (captchaId.equals(userVo.getVrifyCode())) {
+            if (userService.getStatus(userVo) != -1) {
+                return new RestData(userService.getStatus(userVo));
             } else {
-                return new RestData(1, "验证码出错！");
+                return new RestData(1, "用户已分配");
             }
         } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(1, "验证码出错！");
         }
     }
 
     @RequestMapping(value = "/area-status/{studentId}", method = RequestMethod.GET)
     public RestData getAreaStatus(@PathVariable String studentId) {
-        logger.info("GET area-status");
+        logger.info("GET getAreaStatus");
         try {
             return new RestData(reservationService.getAreaStatus(studentId));
         } catch (LibException e) {

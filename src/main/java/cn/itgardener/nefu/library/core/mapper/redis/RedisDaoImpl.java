@@ -175,11 +175,11 @@ public class RedisDaoImpl implements RedisDao {
     @Override
     public boolean updateRedis() {
         try {
-            int count =0;
+            int count = 0;
 
             for (int i = 1; i <= 4; i++) {
 
-                if(configMapper.selectOpenAera().get(i-1).getConfigValue().equals("1")) {
+                if ("1".equals(configMapper.selectOpenAera().get(i - 1).getConfigValue())) {
                     this.set("location_" + i, "0");
                     continue;
                 }
@@ -195,9 +195,9 @@ public class RedisDaoImpl implements RedisDao {
             Config configOpenTime = configMapper.selectStartTime();
             Config configEndTime = configMapper.selectEndTime();
             this.set("openTime", configOpenTime.getConfigValue());
-            this.set("ednTime",configEndTime.getConfigValue());
+            this.set("ednTime", configEndTime.getConfigValue());
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.info("updateRedis" + e);
             return false;
         }

@@ -22,11 +22,6 @@ public class TokenUtil {
 
     private static UserMapper userMapper;
 
-    @Autowired
-    public void TokenUtil(UserMapper userMapper) {
-        TokenUtil.userMapper = userMapper;
-    }
-
     public static User getUserByToken(HttpServletRequest request) {
         User user = null;
         String token = request.getHeader("token");
@@ -47,5 +42,10 @@ public class TokenUtil {
 
     public static String getToken() {
         return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    @Autowired
+    public static void setUserMapper(UserMapper userMapper) {
+        TokenUtil.userMapper = userMapper;
     }
 }

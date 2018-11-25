@@ -26,3 +26,4 @@
 /.nb-gradle/
 nefu_library.log*
 */node_modules/
+/.vscode/
