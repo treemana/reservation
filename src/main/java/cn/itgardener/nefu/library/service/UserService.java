@@ -39,10 +39,9 @@ public interface UserService {
      * 添加黑名单
      *
      * @param user 用户实体
-     * @return
-     * @throws LibException 异常信息
+     * @return 修改数据库的记录数
      */
-    Map<String, Object> postAddBlackList(User user) throws LibException;
+    int postAddBlackList(User user);
 
     /**
      * 删除黑名单

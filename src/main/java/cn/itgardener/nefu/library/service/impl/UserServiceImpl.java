@@ -106,12 +106,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteBlackListByStudentId(User user) {
-
-
         logger.info("delete BalckList,studentId： " + user.getStudentId());
         return 0 < userMapper.deleteBlackListByStudentId(user);
-
-
     }
 
     @Override
@@ -123,17 +119,10 @@ public class UserServiceImpl implements UserService {
         } else {
             return -1;
         }
-
-
     }
 
     @Override
-    public Map<String, Object> postAddBlackList(User user) throws LibException {
-        Map<String, Object> rtv = null;
-        int x = userMapper.updateTypeByStudentId(user);
-        if (x == 0) {
-            throw new LibException("用户名不存在");
-        }
-        return rtv;
+    public int postAddBlackList(User user) {
+        return userMapper.updateTypeByStudentId(user);
     }
 }

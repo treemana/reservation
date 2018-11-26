@@ -41,12 +41,10 @@ public class BlackListApi {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public RestData getBlackList(HttpServletRequest request) {
-        logger.info("GET getBlackList");
-
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+            return new RestData(1, "您没有访问权限");
         }
-
+        logger.info("get BlackList");
         User token = TokenUtil.getUserByToken(request);
         if (null == token) {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
@@ -57,6 +55,8 @@ public class BlackListApi {
         } catch (LibException e) {
             return new RestData(1, e.getMessage());
         }
+
+
     }
 
     @RequestMapping(value = "/list/{studentId}", method = RequestMethod.DELETE)
@@ -79,16 +79,13 @@ public class BlackListApi {
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user, HttpServletRequest request) {
-        logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
+        logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+            return new RestData(1, "您没有访问权限");
         }
-
-        try {
-            Map<String, Object> data = userService.postAddBlackList(user);
-            return new RestData(data);
-        } catch (LibException e) {
-            return new RestData(1, e.getMessage());
-        }
+        if (1 == userService.postAddBlackList(user))
+            return new RestData(null);
+        else
+            return new RestData(1, "添加黑名单失败");
     }
 }

@@ -25,7 +25,7 @@ public interface UserMapper {
      * 根据条件筛选
      *
      * @param user
-     * @return
+     * @return user的集合
      */
     @SelectProvider(type = UserProvider.class, method = "selectByCondition")
     List<User> selectByCondition(User user);
@@ -34,7 +34,7 @@ public interface UserMapper {
      * 设置token
      *
      * @param user
-     * @return
+     * @return 更新数量
      */
     @Update("UPDATE user SET user_token=#{token} WHERE user_system_id=#{systemId}")
     int updateTokenBySystemId(User user);
@@ -42,33 +42,32 @@ public interface UserMapper {
     /**
      * 查询用户类别
      *
-     * @return
+     * @return user集合
      */
     @SelectProvider(type = UserProvider.class, method = "selectByType")
     List<User> selectByType();
 
 
     /**
-     * 删除黑名单t
+     * 删除黑名单
      *
      * @param user
-     * @return
+     * @return 删除黑名单个数
      */
     @UpdateProvider(type = UserProvider.class, method = "deleteBlackListByStudentId")
     int deleteBlackListByStudentId(User user);
 
     /**
      * 添加黑名单
-     *
      * @param user
-     * @return
+     * @return 添加黑名单个数
      */
     @Update("UPDATE user SET user_type=2 WHERE user_username=#{studentId}")
     int updateTypeByStudentId(User user);
 
     /**
      * @param bookCase
-     * @return
+     * @return User
      */
     @Select("SELECT user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
             "user_type AS type, user_token AS token from user where user_system_id=#{userId}")
