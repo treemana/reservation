@@ -8,6 +8,9 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
+import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.mapper.UserMapper;
+import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 import cn.itgardener.nefu.library.service.BookCaseService;
@@ -37,12 +40,16 @@ public class StudentApi {
     private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
     private final UserService userService;
+    private final UserMapper userMapper;
+    private final RedisDao redisDao;
 
     @Autowired
-    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, UserService userService) {
+    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, UserService userService, UserMapper userMapper, RedisDao redisDao) {
         this.reservationService = reservationService;
         this.bookCaseService = bookCaseService;
         this.userService = userService;
+        this.userMapper = userMapper;
+        this.redisDao = redisDao;
     }
 
     @RequestMapping(value = "/time", method = RequestMethod.GET)
@@ -56,7 +63,9 @@ public class StudentApi {
     public RestData postBoxOrder(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("POST postBoxOrder : " + JsonUtil.getJsonString(bookCaseVo));
 
-        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
+        String captchaId = redisDao.getHash("code",user.getStudentId());
+
         if (captchaId.equals(bookCaseVo.getVrifyCode())) {
             try {
                 VerifyUtil.verify(request.getHeader("token"));

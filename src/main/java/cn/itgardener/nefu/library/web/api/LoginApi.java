@@ -7,6 +7,8 @@ package cn.itgardener.nefu.library.web.api;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
+import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.service.UserService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -37,11 +39,15 @@ public class LoginApi {
 
     private final UserService userService;
     private final DefaultKaptcha defaultKaptcha;
+    private final UserMapper userMapper;
+    private final RedisDao redisDao;
 
     @Autowired
-    public LoginApi(UserService userService, DefaultKaptcha defaultKaptcha) {
+    public LoginApi(UserService userService, DefaultKaptcha defaultKaptcha, UserMapper userMapper, RedisDao redisDao) {
         this.userService = userService;
         this.defaultKaptcha = defaultKaptcha;
+        this.userMapper = userMapper;
+        this.redisDao = redisDao;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -59,11 +65,14 @@ public class LoginApi {
     public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
+        User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
+        //System.out.println(user.getStudentId());
         try {
-            //生产验证码字符串并保存到session中
+            //生产验证码字符串并保存到redis中
             String createText = defaultKaptcha.createText();
             logger.info(createText);
-            httpServletRequest.getSession().setAttribute("vrifyCode", createText);
+            //httpServletRequest.getSession().setAttribute("vrifyCode", createText);
+            redisDao.pushHash("code",user.getStudentId(),createText);
 
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
@@ -82,8 +91,8 @@ public class LoginApi {
     @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
     public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
 
-        String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
-
+        User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
+        String captchaId = redisDao.getHash("code",user.getStudentId());
         if (captchaId.equals(vrifyCode)) {
             return new RestData("请求成功");
         } else {

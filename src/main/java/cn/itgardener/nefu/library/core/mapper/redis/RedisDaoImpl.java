@@ -202,4 +202,24 @@ public class RedisDaoImpl implements RedisDao {
             return false;
         }
     }
+
+    @Override
+    public void pushHash(String key, String filed, String value) {
+        try {
+            stringRedisTemplate.opsForHash().put(key,filed,value);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getHash(String key, String filed) {
+        try {
+            return (String) stringRedisTemplate.opsForHash().get(key, filed);
+        } catch (Exception e) {
+            logger.info("get" + e.getMessage());
+            return null;
+        }
+    }
+
 }

@@ -130,4 +130,9 @@ public interface RedisDao {
      * @return
      */
     boolean updateRedis();
+
+    void pushHash(String key, String filed, String value);
+
+    String getHash(String key, String filed);
+
 }
