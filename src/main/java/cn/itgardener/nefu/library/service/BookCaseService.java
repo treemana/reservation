@@ -60,9 +60,8 @@ public interface BookCaseService {
      * 获取书包柜数量
      *
      * @return 书包柜位置和数量的列表
-     * @throws LibException 异常信息
      */
-    List<Map<String, Object>> getBagNum() throws LibException;
+    List<Map<String, Object>> getBagNum();
 
     /**
      * 根据条件获取书包柜详情

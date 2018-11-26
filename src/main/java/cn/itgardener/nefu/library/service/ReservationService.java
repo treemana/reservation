@@ -79,7 +79,7 @@ public interface ReservationService {
      * 获取各个区域的预约状态
      *
      * @param studentId
-     * @return [0, 1, 1, 0] 0表示可以预约，1表示不可预约
+     * @return [0, 1, 1, 0] 0表示可以预约,1表示不可预约
      * @throws LibException 异常信息
      */
     List<Integer> getAreaStatus(String studentId) throws LibException;

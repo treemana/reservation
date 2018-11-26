@@ -78,7 +78,7 @@ public class StudentApi {
             if (bookCaseService.postBoxOrder(bookCaseVo)) {
                 return new RestData(true);
             } else {
-                return new RestData(1, "排队失败，请重试");
+                return new RestData(1, "排队失败,请重试");
             }
         } else {
             return new RestData(1, "验证码出错！");

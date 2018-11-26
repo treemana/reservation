@@ -21,7 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : chenchenT CMY
@@ -108,7 +111,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 shipVo.setNumber(data.get(count).toString());
                 BookCase bookCase = bookCaseMapper.selectByNumber(shipVo);
                 if (null != bookCase) {
-                    if (null != bookCase.getUserId()){
+                    if (null != bookCase.getUserId()) {
                         return new RestData(1, "柜子存在已被占用的情况!");
                     }
                 } else {
@@ -285,9 +288,9 @@ public class BookCaseServiceImpl implements BookCaseService {
         String key = bookCaseVo.getStudentId();
         String location = "";
 
-        if(bookCaseVo.getLocation() != null) {
+        if (bookCaseVo.getLocation() != null) {
             location = bookCaseVo.getLocation().toString();
-        }else {
+        } else {
             location = maxLocation() + "";
         }
 
@@ -297,7 +300,7 @@ public class BookCaseServiceImpl implements BookCaseService {
 
         /**
          * 1. 进来先查 location 是否还有柜子
-         * 2. 如果有，判断 c_ 大于一 入队 不大于一 total--
+         * 2. 如果有,判断 c_ 大于一 入队 不大于一 total--
          * 3. 如果没有柜子返回false
          */
 
@@ -317,7 +320,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public void boxQueue(String studentId) {
 
-        // 当前是否是第一次排队，如果不是不处理
+        // 当前是否是第一次排队,如果不是不处理
         if (redisDao.dec("c_" + studentId, 1) == 0) {
             logger.info("====当前处理{}", studentId);
             int l = Integer.parseInt(redisDao.get("l_" + studentId).split(",")[0]);

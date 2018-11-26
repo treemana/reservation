@@ -4,6 +4,7 @@
 
 package cn.itgardener.nefu.library.web.api;
 
+import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -62,7 +64,9 @@ public class LoginApi {
     }
 
     @RequestMapping(value = "/code", method = RequestMethod.GET)
-    public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+    public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        logger.info("GET getCode");
+
         byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
@@ -77,12 +81,17 @@ public class LoginApi {
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
-        } catch (IllegalArgumentException e) {
-            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
+        } catch (Exception e) {
+            try {
+                httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } catch (IOException e1) {
+                logger.warn(e1.getLocalizedMessage());
+
+            }
+            return new RestData(1, ErrorMessage.SYSTEM_ERROR);
         }
 
-        //定义response输出类型为image/jpeg类型，使用base64输出流输出图片的byte数组
+        //定义response输出类型为image/jpeg类型,使用base64输出流输出图片的byte数组
         captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
         String apache = new String(Base64.encodeBase64(captchaChallengeAsJpeg));
         return new RestData(apache);
@@ -90,6 +99,7 @@ public class LoginApi {
 
     @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
     public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
+        logger.info("GET vrifyCode : vrifyCode=" + vrifyCode);
 
         User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
         String captchaId = redisDao.getHash("code",user.getStudentId());

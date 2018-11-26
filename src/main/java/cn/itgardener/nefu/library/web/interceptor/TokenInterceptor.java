@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.itgardener.nefu.library.web.interceptor;
 
 import cn.itgardener.nefu.library.common.ErrorMessage;
@@ -27,7 +31,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURI();
-        logger.info("get TokenInterceptor");
+        logger.info("TokenInterceptor");
 
         boolean result = path.contains("login") || "OPTIONS".equals(request.getMethod());
 
@@ -36,7 +40,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
         } else {
             User user = TokenUtil.getUserByToken(request);
             if (null == user) {
-                logger.info("token验证失败，请重新登陆");
+                logger.info("TokenInterceptor failed, token=" + request.getHeader("token"));
                 try {
                     responseJson(response, new RestData(2, ErrorMessage.PLEASE_RELOGIN));
                 } catch (Exception e) {
@@ -44,7 +48,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
                 }
                 return false;
             } else {
-                logger.info("token验证成功");
+                logger.info("TokenInterceptor success, token=" + request.getHeader("token"));
                 return true;
             }
         }

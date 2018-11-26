@@ -57,7 +57,7 @@ public interface RedisDao {
     String popValue(String key);
 
     /**
-     * 根据value值，移除list中的数据
+     * 根据value值,移除list中的数据
      *
      * @param key   键
      * @param value 移除的内容

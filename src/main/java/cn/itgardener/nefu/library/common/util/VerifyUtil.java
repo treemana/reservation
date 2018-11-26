@@ -124,17 +124,14 @@ public class VerifyUtil {
         return true;
     }
 
-    public static boolean verifyType(HttpServletRequest request){
+    public static boolean verifyType(HttpServletRequest request) {
         String token = request.getHeader("token");
         User user = new User();
         user.setToken(token);
         User user1 = userMapper.selectByToken(user);
-        if(1 != user1.getType()){
-            return false;
-        }
-        return true;
-
+        return 1 == user1.getType();
     }
+
     public static long dateToStamp(String s) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);
