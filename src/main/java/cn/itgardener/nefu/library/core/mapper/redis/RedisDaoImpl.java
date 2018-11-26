@@ -195,7 +195,7 @@ public class RedisDaoImpl implements RedisDao {
             Config configOpenTime = configMapper.selectStartTime();
             Config configEndTime = configMapper.selectEndTime();
             this.set("openTime", configOpenTime.getConfigValue());
-            this.set("ednTime", configEndTime.getConfigValue());
+            this.set("endTime", configEndTime.getConfigValue());
             return true;
         } catch (Exception e) {
             logger.info("updateRedis" + e);
