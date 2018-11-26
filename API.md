@@ -104,13 +104,16 @@
 - vrifyCode : 验证码数值
 
 - 成功return：
+
 ```json
 {
     "code" : 0,
     "data" : "请求成功"
 }
 ```
+
 - 失败return：
+
 ```json
 {
     "code" : 1,
@@ -306,6 +309,7 @@
     "code" : 0
 }
 ```
+
 #### 1.4.1.5. 区域预约状态
 
 - GET /area-status/{studentId}
@@ -328,7 +332,8 @@
 #### 1.4.2.1. 查询
 
 - GET /detail?location=2&status=0&id=10-11&studentId=2016224283&page=1
--默认page=1, status=0 查询开放柜子 || status=1 查询被占用柜子 || status=2 查询预留柜子
+
+- 默认page=1, status=0 查询开放柜子 || status=1 查询被占用柜子 || status=2 查询预留柜子
 
 - return :
   - perPage 每页显示条数
@@ -441,7 +446,6 @@
 }
 ```
 
-
 #### 1.4.3.2. 添加黑名单
 
 - POST /list
@@ -494,6 +498,7 @@
     ]
 }
 ```
+
 #### 1.4.3.5. 获取开放年级
 
 - GET /open-grades
@@ -502,7 +507,7 @@
 
 ```json
 {
-     "code":  0,
+
      "data": {
           "startGrade" : "2015",
           "endGrade" : "2016"

@@ -206,7 +206,7 @@ class Box extends Component {
           });
             $.ajax({
         method: "GET",
-        url: req+'status/studentId='+this.state.id+'&vrifyCode='+value,
+        url: req+'status?studentId='+this.state.id+'&vrifyCode='+value,
         headers: {
           'token': $.cookie('token')
         },
