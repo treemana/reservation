@@ -41,10 +41,12 @@ public class BlackListApi {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public RestData getBlackList(HttpServletRequest request) {
+        logger.info("GET getBlackList");
+
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        logger.info("get BlackList");
+
         User token = TokenUtil.getUserByToken(request);
         if (null == token) {
             return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
@@ -55,23 +57,18 @@ public class BlackListApi {
         } catch (LibException e) {
             return new RestData(1, e.getMessage());
         }
-
-
     }
 
     @RequestMapping(value = "/list/{studentId}", method = RequestMethod.DELETE)
     public RestData deleteBlackList(@PathVariable String studentId, HttpServletRequest request) {
+        logger.info("DELETE deleteBlackList : studentId = " + studentId);
+
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        logger.info("delete blacklist studentId = " + studentId);
+
         User user = new User();
         user.setStudentId(studentId);
-        User token = TokenUtil.getUserByToken(request);
-        if (null == token) {
-            logger.info("delete failure " + ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        }
 
         try {
             return new RestData(userService.deleteBlackListByStudentId(user));
@@ -82,20 +79,16 @@ public class BlackListApi {
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user, HttpServletRequest request) {
-        logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
+        logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        User token = TokenUtil.getUserByToken(request);
-        if (null == token) {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                Map<String, Object> data = userService.postAddBlackList(user);
-                return new RestData(data);
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
-            }
+
+        try {
+            Map<String, Object> data = userService.postAddBlackList(user);
+            return new RestData(data);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
         }
     }
 }

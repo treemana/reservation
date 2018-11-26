@@ -41,65 +41,49 @@ public class ReservationAreaApi {
     }
 
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
-    public RestData getReservationArea(HttpServletRequest request) {
+    public RestData getReservationArea() {
         logger.info("GET getReservationArea");
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                List<Map<String, String>> reservationArea = reservationService.getReservationArea();
-                logger.info("get reservationArea successful");
-                return new RestData(reservationArea);
-            } catch (LibException e) {
-                logger.info(e.getMessage());
-                return new RestData(1, e.getMessage());
-            }
-        }
 
+        try {
+            List<Map<String, String>> reservationArea = reservationService.getReservationArea();
+            return new RestData(reservationArea);
+        } catch (LibException e) {
+            logger.info(e.getMessage());
+            return new RestData(1, e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/open-area", method = RequestMethod.PUT)
-    public RestData putReservationArea(@RequestBody List<Integer> list, HttpServletRequest request) {
+    public RestData putReservationArea(@RequestBody List<Integer> list) {
         logger.info("PUT putReservationArea: " + list.toString());
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                VerifyUtil.verifyTime();
-                return new RestData(reservationService.putReservationArea(list));
-            } catch (Exception e) {
-                return new RestData(1, e.getMessage());
-            }
+
+        try {
+            VerifyUtil.verifyTime();
+            return new RestData(reservationService.putReservationArea(list));
+        } catch (Exception e) {
+            return new RestData(1, e.getMessage());
         }
     }
+
     @RequestMapping(value = "open-grades", method = RequestMethod.PUT)
     public RestData postGrade(@RequestBody GradeVo gradeVO, HttpServletRequest request) {
-        if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
-        }
-        logger.info("PUT postGrade" + JsonUtil.getJsonString(gradeVO));
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                VerifyUtil.verifyTime();
-                boolean result = reservationService.postGrade(gradeVO);
-                if (result) {
-                    return new RestData(true);
-                } else {
-                    return new RestData(1, "postGrade is failure");
-                }
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-                return new RestData(1, e.getMessage());
-            }
+        logger.info("PUT postGrade : " + JsonUtil.getJsonString(gradeVO));
 
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+
+        try {
+            VerifyUtil.verifyTime();
+            boolean result = reservationService.postGrade(gradeVO);
+            if (result) {
+                return new RestData(true);
+            } else {
+                return new RestData(1, "postGrade is failure");
+            }
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new RestData(1, e.getMessage());
         }
     }
 
@@ -107,7 +91,7 @@ public class ReservationAreaApi {
     public RestData getGrade(HttpServletRequest request) {
         logger.info("getGrade is running");
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
@@ -122,7 +106,6 @@ public class ReservationAreaApi {
                 logger.info(e.getMessage());
                 return new RestData(1, e.getMessage());
             }
-
         }
     }
 }

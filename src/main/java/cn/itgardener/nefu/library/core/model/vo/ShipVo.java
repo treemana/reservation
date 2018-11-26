@@ -17,12 +17,12 @@ public class ShipVo {
     private String number;
 
     /**
-     * 学生学号，为 null 则释放关系, 为学号则建立关系
+     * 学生学号,为 null 则释放关系, 为学号则建立关系
      */
     private String studentId;
 
     /**
-     * 学号为空设置为0，不为空设置为1
+     * 学号为空设置为0,不为空设置为1
      */
     private Integer status;
 

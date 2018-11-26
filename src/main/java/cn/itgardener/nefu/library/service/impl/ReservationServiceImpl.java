@@ -23,11 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : pc CMY
@@ -70,7 +72,6 @@ public class ReservationServiceImpl implements ReservationService {
         } else {
             throw new LibException("修改失败");
         }
-
     }
 
     @Override
@@ -93,8 +94,6 @@ public class ReservationServiceImpl implements ReservationService {
 
             }
             return rtv;
-
-
         }
     }
 
@@ -136,7 +135,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public RestData putReservationTime(TimeVo timeVO){
+    public RestData putReservationTime(TimeVo timeVO) {
         Config config = new Config();
         config.setConfigKey("startTime");
         config.setConfigValue(timeVO.getStartTime());
@@ -144,11 +143,11 @@ public class ReservationServiceImpl implements ReservationService {
         config1.setConfigKey("endTime");
         config1.setConfigValue(timeVO.getEndTime());
 
-        if(0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1)){
+        if (0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1)) {
             redisDao.updateRedis();
-            return new RestData(0,"修改成功");
-        } else{
-            return new RestData(1,"修改失败");
+            return new RestData(0, "修改成功");
+        } else {
+            return new RestData(1, "修改失败");
         }
 
 
@@ -190,7 +189,7 @@ public class ReservationServiceImpl implements ReservationService {
         try {
             VerifyUtil.verify(token);
 
-        }catch (LibException e) {
+        } catch (LibException e) {
             logger.info(String.valueOf(e));
             for (int i = 0; i < 4; i++) {
                 rtv.add(1);
@@ -222,7 +221,7 @@ public class ReservationServiceImpl implements ReservationService {
         //联合判断 区域是否开放和柜子是否剩余
         String[] locationnum = new String[4];
         for (int i = 1; i <= 4; i++) {
-            if( Integer.parseInt(redisDao.get("location_" + i)) > 0) {
+            if (Integer.parseInt(redisDao.get("location_" + i)) > 0) {
                 rtv.add(0);
             } else {
                 logger.info("locatioin" + i + "区域未开放或该区域无剩余柜子");

@@ -68,7 +68,7 @@ public class TeacherApi {
     public RestData putReservationTime(@RequestBody TimeVo timeVO, HttpServletRequest request) {
         logger.info("PUT putReservationTime" + JsonUtil.getJsonString(timeVO));
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
@@ -83,7 +83,7 @@ public class TeacherApi {
     public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("GET getDetail");
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
@@ -97,7 +97,7 @@ public class TeacherApi {
     public RestData putShip(@RequestBody ShipVo shipVO, HttpServletRequest request) {
         logger.info("PUT putShip: " + JsonUtil.getJsonString(shipVO));
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null == currentUser) {
@@ -115,7 +115,7 @@ public class TeacherApi {
     @RequestMapping(value = "/ship", method = RequestMethod.DELETE)
     public RestData deleteShip(@RequestBody List<Integer> data, HttpServletRequest request) {
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {
@@ -128,7 +128,7 @@ public class TeacherApi {
     @RequestMapping(value = "/preorder", method = RequestMethod.POST)
     public RestData setKeep(@RequestBody List<Integer> data, HttpServletRequest request) {
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         User currentUser = TokenUtil.getUserByToken(request);
         if (null != currentUser) {

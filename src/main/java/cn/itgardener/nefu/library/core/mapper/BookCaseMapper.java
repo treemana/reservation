@@ -117,7 +117,7 @@ public interface BookCaseMapper {
     User selectUserIdByStudentId(ShipVo shipVO);
 
     /**
-     * 修改关系，书包柜与单个学生的关系
+     * 修改关系,书包柜与单个学生的关系
      *
      * @param shipVO 参数
      * @return int

@@ -4,11 +4,8 @@
 
 package cn.itgardener.nefu.library.web.api;
 
-import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
-import cn.itgardener.nefu.library.common.util.JsonUtil;
-import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.service.BookCaseService;
 import org.slf4j.Logger;
@@ -41,37 +38,24 @@ public class BookCaseApi {
 
     @RequestMapping(value = "/info/{studentId}", method = RequestMethod.GET)
     public RestData getLocation(@PathVariable(value = "studentId") String studentId, HttpServletRequest request) {
+        logger.info("GET getLocation : studentId=" + studentId);
+
         User user = new User();
         user.setStudentId(studentId);
-        logger.info("getLocation : " + JsonUtil.getJsonString(user));
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            try {
-                Map<String, Object> data = bookCaseService.getLocationByUserId(user);
-                return new RestData(data);
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
-            }
-        } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+
+        try {
+            Map<String, Object> data = bookCaseService.getLocationByUserId(user);
+            return new RestData(data);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
         }
     }
 
     @RequestMapping(value = "/num", method = RequestMethod.GET)
-    public RestData getNum(HttpServletRequest request) {
-        logger.info("getNum is running");
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
+    public RestData getNum() {
+        logger.info("GET getNum");
 
-            try {
-                List<Map<String, Object>> data = bookCaseService.getBagNum();
-                return new RestData(data);
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
-            }
-        }
+        List<Map<String, Object>> data = bookCaseService.getBagNum();
+        return new RestData(data);
     }
-
 }
