@@ -8,7 +8,7 @@ class Devline extends Component {
 		      <div style={{ textAlign: 'left' }}>
 		      	  <p>开发人员(字母序)</p>
 		      	  <Row>
-		      	  <Col span={3}>
+		      	  <Col span={3} style={{wordWrap:"break-word",wordBreak:"break-all"}}>
 		      	  Hunter(开发代号)</Col>
 		      	  <Col span={21}>
 		      	  ：东北林业大学，本硕老学长，负责服务端基础运维及项目对接</Col>
