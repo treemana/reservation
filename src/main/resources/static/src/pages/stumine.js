@@ -58,7 +58,7 @@ class Stumine extends Component {
         < Siderbar className="siderbar" current="my" id={this.state.id}/>
         <Content style={{ padding: '0 50px' }}>
       		<br />
-        	<Mine location={this.state.location} number={this.state.number}/>
+        	<Mine location={this.state.location} number={this.state.number} id={this.state.id}/>
         </Content>
         < Footertext />
       </Layout>

@@ -120,22 +120,24 @@ class Box extends Component {
       });
     }
     this.sendCode2 = (value) => {
-      var data = {
-        location: this.state.boxArea,
-        studentId: this.state.id,
-        vrifyCode: value
-      };
-      data = JSON.stringify(data);
       $.ajax({
         method: "GET",
-        url: req+'vrifycode/'+value,
+        url: req+"vrifycode/"+value,
         headers: {
           'token': $.cookie('token')
         },
-         xhrFields: {withCredentials: true},
         contentType: 'application/json;charset=UTF-8',
         success: function(res) {
+          var data = {
+            location: this.state.boxArea,
+            studentId: this.state.id,
+            vrifyCode: value
+          };
+          data = JSON.stringify(data);
           if(res.code === 0) {
+          this.setState({
+            visible2: false
+          });
           $.ajax({
             method: "POST",
             url: req+"box-order",
@@ -148,7 +150,7 @@ class Box extends Component {
               if( res.code == 0 && res.data == true) {
                 notification.open({
                   message: '提示',
-                  description: '已进入预约队列，请点击“查看当前状态”查看！'
+                  description: '已进入预约队列，请到“我的”查看！'
                 });
                 this.getStatus();
               } 
@@ -170,7 +172,26 @@ class Box extends Component {
         }.bind(this)
       });
     }
-  
+    this.refresh = () => {//刷新页面
+      this.setState({
+        visible: true
+      });
+      $.ajax({
+        method: "GET",
+        url: req+'code',
+        headers: {
+          'token': $.cookie('token')
+        },
+         xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
+        success: function(res) {
+          this.setState({
+            code: res.data
+          });
+        }.bind(this)
+      });
+
+    }
     this.myStatus = () => {//查看我的状态
       this.setState({
         visible: true
@@ -190,6 +211,22 @@ class Box extends Component {
         }.bind(this)
       });
     };
+    this.myStatus2 = () => {
+      $.ajax({
+        method: "GET",
+        url: req+'code',
+        headers: {
+          'token': $.cookie('token')
+        },
+         xhrFields: {withCredentials: true},
+        contentType: 'application/json;charset=UTF-8',
+        success: function(res) {
+          this.setState({
+            code2: res.data
+          });
+        }.bind(this)
+      });
+    };
     this.sendCode = (value) => {
       $.ajax({
         method: "GET",
@@ -202,30 +239,10 @@ class Box extends Component {
         success: function(res) {
           if(res.code === 0) {
             this.setState({
-            showMyStatus: true
+            visible: false
           });
-            $.ajax({
-        method: "GET",
-        url: req+'status?studentId='+this.state.id+'&vrifyCode='+value,
-        headers: {
-          'token': $.cookie('token')
-        },
-         xhrFields: {withCredentials: true},
-        contentType: 'application/json;charset=UTF-8',
-        success: function(res) {
-          if(res.code === 0) {
-            this.setState({
-            showMyStatus: true
-          });
-          }
-          else {
-            notification.open({
-                message: '提示',
-                description: res.message
-            });
-          }
-        }.bind(this)
-      });
+            this.getStatus();
+            this.getAreaBox();
           }
           else {
             notification.open({
@@ -251,6 +268,7 @@ class Box extends Component {
   }
 
   componentDidMount() {
+    this.getStatus();
     $.ajax({//开放时间
       method: 'GET',
       url: req+"open-time",
@@ -303,7 +321,6 @@ class Box extends Component {
                   this.setState({
                     message: '预约活动还未开始，距离开始还有'+this.timechanger(mss-1000)
                   });
-                  this.getStatus();
                   mss -= 1000;
                   if(mss <= 0 ){
                     clearInterval(timer);
@@ -321,9 +338,6 @@ class Box extends Component {
                     this.setState({
                       message: '预约活动已经开始，距离结束还有'+this.timechanger(mss-1000)
                     });
-
-                  this.getStatus();
-                  this.getAreaBox();
                   mss -= 1000;
                   if(mss <= 0 ){
                     clearInterval(timer);
@@ -351,33 +365,18 @@ class Box extends Component {
         });
       }.bind(this)
     });
-    $.ajax({
-      method: 'GET',
-      url: req+"num",
-      headers: {
-        'token': $.cookie('token')
-      },
-      success: function(res) {
-        this.setState({
-          areaTn: res.data
-        });
-        var data = [];
-        for(let i = 0; i<this.state.areaTn.length;i++)
-        {
-            data.push(this.state.areaTn[i].num);
-        }
-        this.setState({
-          areaNum: data
-        });
-      }.bind(this)
-    });
+    this.getAreaBox();
   }
   render() {
     const { visible, confirmLoading, visible2 } = this.state;
     return (
-      <Card title={this.state.message} bordered={true} className="areacard">
+      <Card bordered={true} className="areacard">
+      <Row>
+        <p>{this.state.message}</p>
+      </Row>
+      <div style={{ borderBottom: '1px solid #E9E9E9' }} /><br />
       <Row style={{textAlign: "right"}} >
-        <p><Button type="primary" onClick={this.myStatus}>查看当前状态</Button></p>
+        <p><Button type="primary" block onClick={this.refresh}>刷新页面</Button></p>
       </Row>
       <Row gutter={30}>
           <Col span={12}>
@@ -437,10 +436,6 @@ class Box extends Component {
               onSearch={this.sendCode2}
             />
         </div>
-        <div style= {{display: this.state.showMyStatus?'inline':'none'}}>
-          <p><span>排在前面的人还有：</span>{this.state.before}</p>
-
-        </div>
         </Modal>
 
       <Modal 
@@ -459,10 +454,6 @@ class Box extends Component {
               enterButton='确定'
               onSearch={this.sendCode}
             />
-        </div>
-        <div style= {{display: this.state.showMyStatus?'inline':'none'}}>
-          <p><span>排在前面的人还有：</span>{this.state.before}</p>
-
         </div>
         </Modal>
       </Card>
