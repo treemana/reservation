@@ -68,6 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
             configMapper.updateOpenArea(config);
         }
         if (count == list.size()) {
+            redisDao.updateRedis();
             return true;
         } else {
             throw new LibException("修改失败");
@@ -111,6 +112,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new LibException("更新开放年级失败");
         } else {
             logger.info("更新成功");
+            redisDao.updateRedis();
             rtv = true;
         }
         return rtv;

@@ -143,6 +143,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (0 >= bookCaseMapper.deleteAllShip()) {
                 return new RestData(1, "柜子已全部清空关系!");
             } else {
+                redisDao.updateRedis();
                 return new RestData(0, "操作成功!");
             }
         } else {
