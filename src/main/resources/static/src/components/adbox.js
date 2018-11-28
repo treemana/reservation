@@ -103,7 +103,7 @@ class Adbox extends Component {
       {
         data += 'status='+this.state.status;
       }
-      if((this.state.startId != 0) && (this.state.endId != 0)  && (this.state.studentId != 0))
+      if((this.state.startId != 0) && (this.state.endId != 0)  && (this.state.studentId != 0) && (this.state.studentId))
       {
         data += 'id='+this.state.startId+'-'+this.state.endId+'&';
       }
@@ -111,7 +111,7 @@ class Adbox extends Component {
       {
         data += 'id='+this.state.startId+'-'+this.state.endId;
       }
-      if((this.state.studentId != 0) && (this.state.studentId != 'undefined'))
+      if((this.state.studentId != 0) && (this.state.studentId))
       {
         data += 'studentId='+this.state.studentId;
       }
@@ -531,9 +531,9 @@ class Adbox extends Component {
           <span> 状态：</span>
           <Cascader defaultValue={[this.state.status]} allowClear={false} options={this.statusOpt} onChange={(value) => this.setState({status: value})} /><Divider type="vertical" />
           <span> 编号：</span>
-          <InputNumber onChange={(value)=>this.setState({startId: value})}/> 至 <InputNumber onChange={(value)=>this.setState({endId:value})} /><Divider type="vertical" />
+          <InputNumber onChange={(value)=>this.setState({startId: value?value:0})}/> 至 <InputNumber onChange={(value)=>this.setState({endId:value?value:0})} /><Divider type="vertical" />
           <span> 学号：</span>
-          <InputNumber style={{width: "140px"}} onChange={(value)=>this.setState({studentId: value})}/>
+          <InputNumber style={{width: "140px"}} onChange={(value)=>this.setState({studentId: value?value:0})}/>
           <Button type="primary" style={{marginLeft: '20px'}} onClick={this.search}>查询</Button>
           </p>
           <p>
