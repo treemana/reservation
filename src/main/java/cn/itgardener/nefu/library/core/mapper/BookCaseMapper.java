@@ -85,7 +85,7 @@ public interface BookCaseMapper {
      * @return
      */
     @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_number=#{bcNumber}")
-    int updateOwnerbyBcNumber(@Param("bcNumber") int bcNumber, @Param("studentId") int studentId);
+    int updateOwnerByBcNumber(@Param("bcNumber") int bcNumber, @Param("studentId") int studentId);
 
 
     /**
@@ -108,7 +108,7 @@ public interface BookCaseMapper {
     Page countByCondition(BookCaseVo bookCaseVo);
 
     /**
-     * 根据学号查询学生的systemid
+     * 根据学号查询学生的systemId
      *
      * @param shipVO 学号
      * @return user
@@ -135,9 +135,9 @@ public interface BookCaseMapper {
     BookCase selectByNumber(ShipVo shipVO);
 
     /**
-     * 根据studnetId查找bookcase
+     * 根据userId查找bookcase
      *
-     * @param studentId
+     * @param userId
      * @return BookCase 实例
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByUserId")

@@ -106,7 +106,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteBlackListByStudentId(User user) {
-        logger.info("delete BalckList,studentId： " + user.getStudentId());
         return 0 < userMapper.deleteBlackListByStudentId(user);
     }
 

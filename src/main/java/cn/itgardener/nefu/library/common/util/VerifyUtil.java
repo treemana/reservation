@@ -39,7 +39,7 @@ public class VerifyUtil {
     }
 
     public static boolean verify(String token) throws LibException, ParseException {
-        List<Config> configList = configMapper.selectOpenAera();
+        List<Config> configList = configMapper.selectOpenArea();
         User user = new User();
         user.setToken(token);
         List<User> users = userMapper.selectByCondition(user);
@@ -95,7 +95,7 @@ public class VerifyUtil {
         List<Config> configs = configMapper.selectOpenTime();
         long startTime = 0L;
         long endTime = 0L;
-        Long currentTime = 0l;
+        Long currentTime = 0L;
         for (Config config2 : configs) {
             if ("startTime".equals(config2.getConfigKey())) {
                 try {

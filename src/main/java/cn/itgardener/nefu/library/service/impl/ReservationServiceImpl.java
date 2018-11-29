@@ -65,7 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
             } else {
                 config.setConfigValue("1");
             }
-            configMapper.updateOpenArea(config);
+            configMapper.selectOpenAreaBySystemId(config);
         }
         if (count == list.size()) {
             redisDao.updateRedis();
@@ -78,7 +78,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Map<String, String>> getReservationArea() throws LibException {
 
-        List<Config> configs = configMapper.selectOpenAera();
+        List<Config> configs = configMapper.selectOpenArea();
         if (null == configs) {
             throw new LibException("预约区域为空");
         } else {
@@ -132,7 +132,6 @@ public class ReservationServiceImpl implements ReservationService {
                 }
             }
         }
-
         return rtv;
     }
 
@@ -151,8 +150,6 @@ public class ReservationServiceImpl implements ReservationService {
         } else {
             return new RestData(1, "修改失败");
         }
-
-
     }
 
     @Override

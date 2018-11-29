@@ -13,7 +13,8 @@ import org.apache.ibatis.jdbc.SQL;
  * @since : Java 8
  */
 public class ConfigProvider {
-    public String selectOpenAera() {
+
+    public String selectOpenArea() {
         return new SQL() {
             {
                 SELECT("config_system_id as systemId, config_key as configKey,config_value as configValue");
@@ -51,7 +52,7 @@ public class ConfigProvider {
         }.toString();
     }
 
-    public String updateOpenAera(Config config) {
+    public String selectOpenAreaBySystemId(Config config) {
         return new SQL() {
             {
                 UPDATE("config");
@@ -91,4 +92,5 @@ public class ConfigProvider {
             }
         }.toString();
     }
+
 }

@@ -100,8 +100,8 @@
 
 ### 1.2.3. 验证验证码
 
-- GET /vrifycode/{vrifyCode}
-- vrifyCode : 验证码数值
+- GET /verifycode/{verifyCode}
+- verifyCode : 验证码数值
 
 - 成功return：
 
@@ -132,7 +132,7 @@
 {
     "location" : 1,
     "studentId" : "2016210111",
-    "vrifyCode" : "12ab"
+    "verifyCode" : "12ab"
 }
 ```
 
@@ -147,7 +147,7 @@
 
 ### 1.3.2. 当前预约状态
 
-- GET /status?studentId=2016210111&vrifyCode=2nghs2
+- GET /status?studentId=2016210111&verifyCode=2nghs2
 
 - cookie : 验证码回传的Jsession
 
@@ -164,7 +164,7 @@
 
 - GET /info/{studentId}
 
-- rteurn :
+- return :
 
 ```json
 {
