@@ -93,7 +93,8 @@ public class StudentApi {
     public RestData getStatus(UserVo userVo, HttpServletRequest request) {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
-        String captchaId = (String) request.getSession().getAttribute("verifyCode");
+        User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
+        String captchaId = redisDao.getHash("code",user.getStudentId());
         if (captchaId.equals(userVo.getVerifyCode())) {
             if (userService.getStatus(userVo) != -1) {
                 return new RestData(userService.getStatus(userVo));
