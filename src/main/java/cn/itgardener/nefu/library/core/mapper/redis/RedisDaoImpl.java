@@ -179,7 +179,7 @@ public class RedisDaoImpl implements RedisDao {
 
             for (int i = 1; i <= 4; i++) {
 
-                if ("1".equals(configMapper.selectOpenAera().get(i - 1).getConfigValue())) {
+                if ("1".equals(configMapper.selectOpenArea().get(i - 1).getConfigValue())) {
                     this.set("location_" + i, "0");
                     continue;
                 }

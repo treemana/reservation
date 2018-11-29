@@ -324,6 +324,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         // 当前是否是第一次排队,如果不是不处理
         if (redisDao.dec("c_" + studentId, 1) == 0) {
             logger.info("====当前处理{}", studentId);
+            //l为该学生请求的区域
             int l = Integer.parseInt(redisDao.get("l_" + studentId).split(",")[0]);
             // 如果当前区域没有柜子
             if ("0".equals(redisDao.get("location_" + l))) {
@@ -336,7 +337,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 User user = new User();
                 user.setStudentId(studentId);
                 List<User> reUser = userMapper.selectByCondition(user);
-                bookCaseMapper.updateOwnerbyBcNumber(bookCase.getNumber(), reUser.get(0).getSystemId());
+                bookCaseMapper.updateOwnerByBcNumber(bookCase.getNumber(), reUser.get(0).getSystemId());
                 redisDao.dec("location_" + l, 1);
                 redisDao.add("finish", studentId);
             } else {

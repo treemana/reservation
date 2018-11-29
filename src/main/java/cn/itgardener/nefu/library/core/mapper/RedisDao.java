@@ -38,6 +38,7 @@ public interface RedisDao {
      *
      * @param key   关键词
      * @param value 内容
+     * @return
      */
     boolean pushValue(String key, String value);
 
@@ -46,6 +47,7 @@ public interface RedisDao {
      *
      * @param key
      * @param list
+     * @return
      */
     boolean pushList(String key, List<String> list);
 
@@ -53,6 +55,7 @@ public interface RedisDao {
      * 单值出队
      *
      * @param key 键
+     * @return
      */
     String popValue(String key);
 
@@ -61,6 +64,7 @@ public interface RedisDao {
      *
      * @param key   键
      * @param value 移除的内容
+     * @return
      */
     boolean removeListValue(String key, String value);
 
@@ -131,8 +135,21 @@ public interface RedisDao {
      */
     boolean updateRedis();
 
+    /**
+     *
+     * @param key
+     * @param filed
+     * @param value
+     * @return
+     */
     void pushHash(String key, String filed, String value);
 
+    /**
+     *
+     * @param key
+     * @param filed
+     * @return
+     */
     String getHash(String key, String filed);
 
 }

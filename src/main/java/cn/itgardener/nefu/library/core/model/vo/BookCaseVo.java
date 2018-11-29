@@ -56,7 +56,7 @@ public class BookCaseVo {
     /**
      * 验证码
      */
-    private String vrifyCode;
+    private String verifyCode;
 
     public Integer getSystemId() {
         return systemId;
@@ -130,11 +130,11 @@ public class BookCaseVo {
         this.location = location;
     }
 
-    public String getVrifyCode() {
-        return vrifyCode;
+    public String getVerifyCode() {
+        return verifyCode;
     }
 
-    public void setVrifyCode(String vrifyCode) {
-        this.vrifyCode = vrifyCode;
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
     }
 }

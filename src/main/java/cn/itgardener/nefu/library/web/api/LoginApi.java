@@ -70,12 +70,10 @@ public class LoginApi {
         byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
-        //System.out.println(user.getStudentId());
         try {
             //生产验证码字符串并保存到redis中
             String createText = defaultKaptcha.createText();
             logger.info(createText);
-            //httpServletRequest.getSession().setAttribute("vrifyCode", createText);
             redisDao.pushHash("code",user.getStudentId(),createText);
 
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
@@ -97,16 +95,17 @@ public class LoginApi {
         return new RestData(apache);
     }
 
-    @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
-    public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
-        logger.info("GET vrifyCode : vrifyCode=" + vrifyCode);
+    @RequestMapping(value = "/verifycode/{verifyCode}", method = RequestMethod.GET)
+    public RestData verifyCode(@PathVariable(value = "verifyCode") String verifyCode, HttpServletRequest httpServletRequest) {
+        logger.info("GET verifyCode : verifyCode=" + verifyCode);
 
         User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
         String captchaId = redisDao.getHash("code",user.getStudentId());
-        if (captchaId.equals(vrifyCode)) {
+        if (captchaId.equals(verifyCode)) {
             return new RestData("请求成功");
         } else {
             return new RestData(1, "验证码错误");
         }
     }
+
 }

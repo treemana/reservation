@@ -4,9 +4,11 @@
 
 package cn.itgardener.nefu.library.web.api;
 
+import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
+import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,7 +56,8 @@ public class StudentApi {
     }
 
     @RequestMapping(value = "/time", method = RequestMethod.GET)
-    public RestData getStartTime(HttpServletRequest request) {
+    public RestData getStartTime() {
+        logger.info("GET getStartTime");
 
         Map<String, Object> data = reservationService.getStartTime();
         return new RestData(data);
@@ -66,7 +70,7 @@ public class StudentApi {
         User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
         String captchaId = redisDao.getHash("code",user.getStudentId());
 
-        if (captchaId.equals(bookCaseVo.getVrifyCode())) {
+        if (captchaId.equals(bookCaseVo.getVerifyCode())) {
             try {
                 VerifyUtil.verify(request.getHeader("token"));
             } catch (LibException e) {
@@ -89,8 +93,8 @@ public class StudentApi {
     public RestData getStatus(UserVo userVo, HttpServletRequest request) {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
-        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
-        if (captchaId.equals(userVo.getVrifyCode())) {
+        String captchaId = (String) request.getSession().getAttribute("verifyCode");
+        if (captchaId.equals(userVo.getVerifyCode())) {
             if (userService.getStatus(userVo) != -1) {
                 return new RestData(userService.getStatus(userVo));
             } else {
@@ -111,4 +115,62 @@ public class StudentApi {
         }
         return new RestData(1, "获取区域预约状态失败");
     }
+
+    @RequestMapping(value = "/open-area", method = RequestMethod.GET)
+    public RestData getReservationArea() {
+        logger.info("GET getReservationArea");
+        try {
+            List<Map<String, String>> reservationArea = reservationService.getReservationArea();
+            return new RestData(reservationArea);
+        } catch (LibException e) {
+            logger.info(e.getMessage());
+            return new RestData(1, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "open-grades", method = RequestMethod.GET)
+    public RestData getGrade(HttpServletRequest request) {
+        logger.info("GET getGrade");
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+        User currentUser = TokenUtil.getUserByToken(request);
+        if (null == currentUser) {
+            logger.info(ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+        } else {
+            try {
+                Map rtv = reservationService.getOpenGrade();
+                logger.info("getGrade  is  successful");
+                return new RestData(rtv);
+            } catch (Exception e) {
+                logger.info(e.getMessage());
+                return new RestData(1, e.getMessage());
+            }
+        }
+    }
+
+    @RequestMapping(value = "/info/{studentId}", method = RequestMethod.GET)
+    public RestData getLocation(@PathVariable(value = "studentId") String studentId, HttpServletRequest request) {
+        logger.info("GET getLocation : studentId=" + studentId);
+
+        User user = new User();
+        user.setStudentId(studentId);
+
+        try {
+            Map<String, Object> data = bookCaseService.getLocationByUserId(user);
+            return new RestData(data);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/num", method = RequestMethod.GET)
+    public RestData getNum() {
+        logger.info("GET getNum");
+
+        List<Map<String, Object>> data = bookCaseService.getBagNum();
+        return new RestData(data);
+    }
+
 }

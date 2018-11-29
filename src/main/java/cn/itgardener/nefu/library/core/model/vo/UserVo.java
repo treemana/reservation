@@ -18,7 +18,7 @@ public class UserVo {
     /**
      * 验证码
      */
-    private String vrifyCode;
+    private String verifyCode;
 
     public String getStudentId() {
         return studentId;
@@ -28,11 +28,11 @@ public class UserVo {
         this.studentId = studentId;
     }
 
-    public String getVrifyCode() {
-        return vrifyCode;
+    public String getVerifyCode() {
+        return verifyCode;
     }
 
-    public void setVrifyCode(String vrifyCode) {
-        this.vrifyCode = vrifyCode;
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
     }
 }

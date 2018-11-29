@@ -27,8 +27,9 @@ public interface ConfigMapper {
      *
      * @return 数组<config>
      */
-    @SelectProvider(type = ConfigProvider.class, method = "selectOpenAera")
-    List<Config> selectOpenAera();
+    @SelectProvider(type = ConfigProvider.class, method = "selectOpenArea")
+    List<Config> selectOpenArea();
+
     /**
      * 查询预约时间
      *
@@ -49,10 +50,11 @@ public interface ConfigMapper {
     /**
      * 修改开放区域
      *
+     * @param config
      * @return 修改的个数
      */
-    @UpdateProvider(type = ConfigProvider.class, method = "updateOpenAera")
-    int updateOpenArea(Config config);
+    @UpdateProvider(type = ConfigProvider.class, method = "selectOpenAreaBySystemId")
+    int selectOpenAreaBySystemId(Config config);
 
     /**
      * 修改开始和结束年级年级
@@ -63,7 +65,6 @@ public interface ConfigMapper {
     @UpdateProvider(type = ConfigProvider.class, method = "updateGrade")
     int updateGrade(Config config);
 
-
     /**
      * 查询开放时间
      *
@@ -71,7 +72,6 @@ public interface ConfigMapper {
      */
     @SelectProvider(type = ConfigProvider.class, method = "selectStartTime")
     Config selectStartTime();
-
 
     /**
      * 查询开放年级
@@ -84,8 +84,10 @@ public interface ConfigMapper {
 
     /**
      * 查询结束时间
+     *
      * @return Config
      */
     @SelectProvider(type = ConfigProvider.class, method = "selectEndTime")
     Config selectEndTime();
+
 }

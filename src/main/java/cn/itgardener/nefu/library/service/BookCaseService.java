@@ -101,7 +101,7 @@ public interface BookCaseService {
     /**
      * redis书包柜队列
      *
-     * @param
+     * @param studentId
      */
     void boxQueue(String studentId);
 

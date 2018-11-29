@@ -66,6 +66,8 @@ public interface UserMapper {
     int updateTypeByStudentId(User user);
 
     /**
+     * 根据userId查询用户
+     *
      * @param bookCase
      * @return User
      */
