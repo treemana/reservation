@@ -100,12 +100,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public boolean postGrade(GradeVo gradeVO) throws LibException {
-        boolean rtv = false;
         Config config = new Config();
-        config.setConfigKey("startGrade");
+        config.setConfigKey("start_grade");
         config.setConfigValue(gradeVO.getStartGrade());
         int startGrade = configMapper.updateGrade(config);
-        config.setConfigKey("endGrade");
+        config.setConfigKey("end_grade");
         config.setConfigValue(gradeVO.getEndGrade());
         int endGrade = configMapper.updateGrade(config);
         if (0 == startGrade || 0 == endGrade) {
@@ -113,9 +112,8 @@ public class ReservationServiceImpl implements ReservationService {
         } else {
             logger.info("更新成功");
             redisDao.updateRedis();
-            rtv = true;
+            return true;
         }
-        return rtv;
     }
 
     @Override
@@ -169,10 +167,10 @@ public class ReservationServiceImpl implements ReservationService {
     public Map<String, Object> getOpenGrade() {
         Map<String, Object> rtv = new HashMap<>(2);
         Config config = new Config();
-        config.setConfigKey("startGrade");
+        config.setConfigKey("start_grade");
         Config c = configMapper.selectOpenGrade(config);
         rtv.put("startGrade", c.getConfigValue());
-        config.setConfigKey("endGrade");
+        config.setConfigKey("end_grade");
         c = configMapper.selectOpenGrade(config);
         rtv.put("endGrade", c.getConfigValue());
         return rtv;
