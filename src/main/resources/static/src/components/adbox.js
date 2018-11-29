@@ -131,6 +131,9 @@ class Adbox extends Component {
             if(res.code === 0) {
               var data = [];
               data = res.data.ships;
+              this.setState({
+                totalPage: data.totalPage
+              });
               for(let i = 0;i < res.data.ships.length; i ++)
               {
                 if(res.data.ships[i].status == 0) {
@@ -550,6 +553,9 @@ class Adbox extends Component {
             <a href="javascript:;">释放所有书柜</a>
           </Popconfirm>
           </p>
+          <span style={{ marginLeft: 8 }}>
+            当前查询结果共计{this.state.totalSize?this.state.totalSize:0}条，{this.state.totalPage?this.state.totalPage:0}页
+          </span>
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `已选中 ${selectedRowKeys.length} 项` : ''}
           </span>

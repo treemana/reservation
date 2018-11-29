@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import $ from 'jquery';
 import '../css/app.css';
 import Stuheaderbar from '../components/stuheaderbar';
@@ -47,6 +47,12 @@ class Stumine extends Component {
             location: str,
             number: data.number
           });
+        }
+        else {
+          notification.open({
+                message: '提示',
+                description: res.message
+            });
         }
       }.bind(this)
     });

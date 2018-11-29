@@ -37,7 +37,7 @@ class Mine extends Component {
     this.sendCode = (value) => {
       $.ajax({
         method: "GET",
-        url: req+'vrifycode/'+value,
+        url: req+'verifycode/'+value,
         headers: {
           'token': $.cookie('token')
         },
@@ -50,7 +50,7 @@ class Mine extends Component {
           });
             $.ajax({
               method: "GET",
-              url: req+'status/studentId='+this.state.id+'&vrifyCode='+value,
+              url: req+'status?studentId='+this.state.id+'&verifyCode='+value,
               headers: {
                 'token': $.cookie('token')
               },
@@ -107,7 +107,7 @@ class Mine extends Component {
           footer= {false}
         >
         <div style= {{display: this.state.showMyStatus?'none':'inline'}}>
-        <p><img alt='获取验证码失败' onClick={this.myStatus} src={'data:image/jpeg;base64,'+this.state.code} /></p>
+        <p style={{textAlign:"center"}}><img alt='获取验证码失败' onClick={this.myStatus} src={'data:image/jpeg;base64,'+this.state.code} /></p>
           <Search
               style={{width: '100%'}}
               placeholder='请输入验证码'

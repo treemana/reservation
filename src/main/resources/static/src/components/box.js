@@ -122,7 +122,7 @@ class Box extends Component {
     this.sendCode2 = (value) => {
       $.ajax({
         method: "GET",
-        url: req+"vrifycode/"+value,
+        url: req+"verifycode/"+value,
         headers: {
           'token': $.cookie('token')
         },
@@ -131,7 +131,7 @@ class Box extends Component {
           var data = {
             location: this.state.boxArea,
             studentId: this.state.id,
-            vrifyCode: value
+            verifyCode: value
           };
           data = JSON.stringify(data);
           if(res.code === 0) {
@@ -153,6 +153,7 @@ class Box extends Component {
                   description: '已进入预约队列，请到“我的”查看！'
                 });
                 this.getStatus();
+                this.hide2();
               } 
               else {
                 notification.open({
@@ -230,7 +231,7 @@ class Box extends Component {
     this.sendCode = (value) => {
       $.ajax({
         method: "GET",
-        url: req+'vrifycode/'+value,
+        url: req+'verifycode/'+value,
         headers: {
           'token': $.cookie('token')
         },
@@ -324,6 +325,8 @@ class Box extends Component {
                   mss -= 1000;
                   if(mss <= 0 ){
                     clearInterval(timer);
+                    this.getStatus();
+                    this.getAreaBox();
                   }
                 },1000);
               
@@ -341,6 +344,8 @@ class Box extends Component {
                   mss -= 1000;
                   if(mss <= 0 ){
                     clearInterval(timer);
+                    this.getStatus();
+                    this.getAreaBox();
                     this.setState({
                     message: '活动已经结束！'
                   });
@@ -428,7 +433,7 @@ class Box extends Component {
           footer= {false}
         >
         <div style= {{display: this.state.showMyStatus2?'none':'inline'}}>
-        <p><img alt='获取验证码失败' onClick={this.myStatus2} src={'data:image/jpeg;base64,'+this.state.code2} /></p>
+        <p style={{textAlign:"center"}}><img alt='获取验证码失败' onClick={this.myStatus2} src={'data:image/jpeg;base64,'+this.state.code2} /></p>
           <Search
               style={{width: '100%'}}
               placeholder='请输入验证码'
@@ -447,7 +452,7 @@ class Box extends Component {
           footer= {false}
         >
         <div style= {{display: this.state.showMyStatus?'none':'inline'}}>
-        <p><img alt='获取验证码失败' onClick={this.myStatus} src={'data:image/jpeg;base64,'+this.state.code} /></p>
+        <p style={{textAlign:"center"}}><img alt='获取验证码失败' onClick={this.myStatus} src={'data:image/jpeg;base64,'+this.state.code} /></p>
           <Search
               style={{width: '100%'}}
               placeholder='请输入验证码'
