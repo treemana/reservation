@@ -4,8 +4,10 @@
 
 package cn.itgardener.nefu.library.service.impl;
 
+import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
+import cn.itgardener.nefu.library.common.util.TimeUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
@@ -23,9 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Boolean putReservationArea(List<Integer> list) throws LibException {
+    public boolean putReservationArea(List<Integer> list) throws LibException {
         int count = 0;
         for (int i = 1; i <= 4; i++) {
             Config config = new Config();
@@ -101,10 +100,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public boolean postGrade(GradeVo gradeVO) throws LibException {
         Config config = new Config();
-        config.setConfigKey("start_grade");
+        config.setConfigKey("GlobalConst.START_GRADE");
         config.setConfigValue(gradeVO.getStartGrade());
         int startGrade = configMapper.updateGrade(config);
-        config.setConfigKey("end_grade");
+        config.setConfigKey(GlobalConst.END_GRADE);
         config.setConfigValue(gradeVO.getEndGrade());
         int endGrade = configMapper.updateGrade(config);
         if (0 == startGrade || 0 == endGrade) {
@@ -153,8 +152,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Map<String, Object> getStartTime() {
 
-        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
-        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String nowTime = TimeUtil.getCurrentTime();
 
         Map<String, Object> rtv = new HashMap<>(2);
         rtv.put("startTime", redisDao.get("openTime"));
@@ -167,17 +165,17 @@ public class ReservationServiceImpl implements ReservationService {
     public Map<String, Object> getOpenGrade() {
         Map<String, Object> rtv = new HashMap<>(2);
         Config config = new Config();
-        config.setConfigKey("start_grade");
+        config.setConfigKey(GlobalConst.START_GRADE);
         Config c = configMapper.selectOpenGrade(config);
         rtv.put("startGrade", c.getConfigValue());
-        config.setConfigKey("end_grade");
+        config.setConfigKey(GlobalConst.END_GRADE);
         c = configMapper.selectOpenGrade(config);
         rtv.put("endGrade", c.getConfigValue());
         return rtv;
     }
 
     @Override
-    public List<Integer> getAreaStatus(String studentId) throws LibException {
+    public List<Integer> getAreaStatus(String studentId) {
         List<Integer> rtv = new ArrayList<>(4);
         User user = new User();
         user.setStudentId(studentId);
@@ -193,7 +191,7 @@ public class ReservationServiceImpl implements ReservationService {
             }
             return rtv;
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
 
         List<BookCase> bookCases = bookCaseMapper.selectBookCaseByUserId(user.getSystemId());
@@ -216,7 +214,6 @@ public class ReservationServiceImpl implements ReservationService {
             return rtv;
         }
         //联合判断 区域是否开放和柜子是否剩余
-        String[] locationnum = new String[4];
         for (int i = 1; i <= 4; i++) {
             if (Integer.parseInt(redisDao.get("location_" + i)) > 0) {
                 rtv.add(0);
@@ -227,5 +224,4 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return rtv;
     }
-
 }

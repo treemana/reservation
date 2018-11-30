@@ -55,7 +55,7 @@ public interface UserService {
     /**
      * 当前用户查询排队状态
      *
-     * @param userVo
+     * @param userVo 用户实体
      * @return 前面还有多少人
      */
     int getStatus(UserVo userVo);

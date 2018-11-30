@@ -67,14 +67,13 @@ public class LoginApi {
     public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         logger.info("GET getCode");
 
-        byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
         try {
             //生产验证码字符串并保存到redis中
             String createText = defaultKaptcha.createText();
             logger.info(createText);
-            redisDao.pushHash("code",user.getStudentId(),createText);
+            redisDao.pushHash("code", user.getStudentId(), createText);
 
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
@@ -84,13 +83,12 @@ public class LoginApi {
                 httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
             } catch (IOException e1) {
                 logger.warn(e1.getLocalizedMessage());
-
             }
             return new RestData(1, ErrorMessage.SYSTEM_ERROR);
         }
 
         //定义response输出类型为image/jpeg类型,使用base64输出流输出图片的byte数组
-        captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+        byte[] captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
         String apache = new String(Base64.encodeBase64(captchaChallengeAsJpeg));
         return new RestData(apache);
     }
@@ -100,12 +98,11 @@ public class LoginApi {
         logger.info("GET verifyCode : verifyCode=" + verifyCode);
 
         User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
-        String captchaId = redisDao.getHash("code",user.getStudentId());
+        String captchaId = redisDao.getHash("code", user.getStudentId());
         if (captchaId.equals(verifyCode)) {
             return new RestData("请求成功");
         } else {
             return new RestData(1, "验证码错误");
         }
     }
-
 }
