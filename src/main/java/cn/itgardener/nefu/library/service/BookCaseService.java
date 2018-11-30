@@ -5,9 +5,7 @@
 package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
-import cn.itgardener.nefu.library.common.Page;
 import cn.itgardener.nefu.library.common.RestData;
-import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
@@ -66,29 +64,18 @@ public interface BookCaseService {
     /**
      * 根据条件获取书包柜详情
      *
-     * @param bookCaseVo
-     * @return
+     * @param bookCaseVo 书包柜实体
+     * @return 书包柜详情
      */
     RestData selectDetailByCondition(BookCaseVo bookCaseVo);
 
     /**
      * 统一处理参数
      *
-     * @param bookCaseVo
+     * @param bookCaseVo 书包柜实体
      * @return bookCaseVo
      */
     String processParameter(BookCaseVo bookCaseVo);
-
-    /**
-     * 统一封装数据
-     *
-     * @param bookCases
-     * @param bookCaseVo
-     * @param page
-     * @return
-     */
-    RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page);
-
 
     /**
      * 预约书包柜

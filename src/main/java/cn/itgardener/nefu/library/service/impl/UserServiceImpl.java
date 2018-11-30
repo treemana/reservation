@@ -4,6 +4,7 @@
 
 package cn.itgardener.nefu.library.service.impl;
 
+import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
@@ -58,9 +59,9 @@ public class UserServiceImpl implements UserService {
                 if (0 == type) {
 
                     Config config = new Config();
-                    config.setConfigKey("start_grade");
+                    config.setConfigKey(GlobalConst.START_GRADE);
                     int startGrade = Integer.parseInt(configMapper.selectOpenGrade(config).getConfigValue());
-                    config.setConfigKey("end_grade");
+                    config.setConfigKey(GlobalConst.END_GRADE);
                     int endGrade = Integer.parseInt(configMapper.selectOpenGrade(config).getConfigValue());
                     int studentGrade = Integer.parseInt(user.getStudentId().substring(0, 4));
                     if (studentGrade < startGrade || studentGrade > endGrade) {

@@ -8,7 +8,6 @@ import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
-import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
@@ -50,22 +49,16 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/open-time", method = RequestMethod.GET)
-    public RestData getReservationTime(HttpServletRequest request) {
+    public RestData getReservationTime() {
         logger.info("GET getReservationTime");
 
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                final Map<String, String> reservationTime = reservationService.getReservationTime();
-                logger.info("get get reservationTime success");
-                return new RestData(reservationTime);
+        try {
+            final Map<String, String> reservationTime = reservationService.getReservationTime();
+            logger.info("get get reservationTime success");
+            return new RestData(reservationTime);
 
-            } catch (LibException e) {
-                return new RestData(e.getMessage());
-            }
+        } catch (LibException e) {
+            return new RestData(e.getMessage());
         }
     }
 
@@ -76,13 +69,7 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            return reservationService.putReservationTime(timeVO);
-        }
+        return reservationService.putReservationTime(timeVO);
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
@@ -92,12 +79,7 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            return bookCaseService.selectDetailByCondition(bookCaseVo);
-        } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        }
+        return bookCaseService.selectDetailByCondition(bookCaseVo);
     }
 
     @RequestMapping(value = "/ship", method = RequestMethod.PUT)
@@ -107,16 +89,10 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                return new RestData(bookCaseService.putShip(shipVO));
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
-            }
+        try {
+            return new RestData(bookCaseService.putShip(shipVO));
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
         }
     }
 
@@ -127,12 +103,7 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            return bookCaseService.deleteShip(data);
-        } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        }
+        return bookCaseService.deleteShip(data);
     }
 
     @RequestMapping(value = "/preorder", method = RequestMethod.POST)
@@ -142,12 +113,7 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null != currentUser) {
-            return bookCaseService.setKeepByNumber(data);
-        } else {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        }
+        return bookCaseService.setKeepByNumber(data);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -155,11 +121,7 @@ public class TeacherApi {
         logger.info("GET getBlackList");
 
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
-        }
-        User token = TokenUtil.getUserByToken(request);
-        if (null == token) {
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
             List<Map<String, Object>> blackList = userService.getBlackList();
@@ -192,7 +154,7 @@ public class TeacherApi {
         logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
 
         if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, "您没有访问权限");
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         if (1 == userService.postAddBlackList(user)) {
             return new RestData(null);
@@ -234,5 +196,4 @@ public class TeacherApi {
             return new RestData(1, e.getMessage());
         }
     }
-
 }

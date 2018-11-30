@@ -139,7 +139,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData deleteShip(List<Integer> data) {
         int success = 0;
-        if (0 == data.size() || null == data) {
+        if (null == data || 0 == data.size()) {
             if (0 >= bookCaseMapper.deleteAllShip()) {
                 return new RestData(1, "柜子已全部清空关系!");
             } else {
@@ -147,9 +147,9 @@ public class BookCaseServiceImpl implements BookCaseService {
                 return new RestData(0, "操作成功!");
             }
         } else {
-            for (int count = 0; count < data.size(); count++) {
+            for (Integer datum : data) {
                 BookCase bookCase = new BookCase();
-                bookCase.setNumber(data.get(count));
+                bookCase.setNumber(datum);
                 if (0 >= bookCaseMapper.deleteShipByNumber(bookCase)) {
                     success = 1;
                     break;
@@ -209,8 +209,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         return mes;
     }
 
-    @Override
-    public RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page) {
+    private RestData encapsulate(List<BookCase> bookCases, Page page) {
 
         List<Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
@@ -227,7 +226,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
             rtv.add(map);
         }
-        Map<String, Object> map = new HashMap(2);
+        Map<String, Object> map = new HashMap<>(2);
         map.put("ships", rtv);
         map.put("pages", page);
         return new RestData(map);
@@ -252,23 +251,16 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (null == bookCaseVo.getPage()) {
             bookCaseVo.setPage(1);
         }
-        if (null == bookCaseVo.getSystemId()) {
-            page = bookCaseMapper.countByCondition(bookCaseVo);
-            page.setNowPage(bookCaseVo.getPage());
-            page = PageUtil.checkPage(page);
-            List<BookCase> bookCases = bookCaseMapper.selectDetailByCondition(bookCaseVo, page);
-            return encapsulate(bookCases, bookCaseVo, page);
-        }
 
         page = bookCaseMapper.countByCondition(bookCaseVo);
         page.setNowPage(bookCaseVo.getPage());
         page = PageUtil.checkPage(page);
         List<BookCase> bookCases = bookCaseMapper.selectDetailByCondition(bookCaseVo, page);
-        return encapsulate(bookCases, bookCaseVo, page);
+        return encapsulate(bookCases, page);
 
     }
 
-    int maxLocation() {
+    private int maxLocation() {
         int maxValue = Integer.parseInt(redisDao.get("location_1"));
         int maxL = 1;
 
@@ -285,9 +277,9 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     @Override
     public Boolean postBoxOrder(BookCaseVo bookCaseVo) {
-        Boolean rtv = false;
+        boolean rtv = false;
         String key = bookCaseVo.getStudentId();
-        String location = "";
+        String location;
 
         if (bookCaseVo.getLocation() != null) {
             location = bookCaseVo.getLocation().toString();
@@ -299,10 +291,10 @@ public class BookCaseServiceImpl implements BookCaseService {
         redisDao.set("l_" + key, location + "," + count);
         int total = Integer.parseInt(redisDao.get("total"));
 
-        /**
-         * 1. 进来先查 location 是否还有柜子
-         * 2. 如果有,判断 c_ 大于一 入队 不大于一 total--
-         * 3. 如果没有柜子返回false
+        /*
+          1. 进来先查 location 是否还有柜子
+          2. 如果有,判断 c_ 大于一 入队 不大于一 total--
+          3. 如果没有柜子返回false
          */
 
         if (total > 0 && Integer.parseInt(redisDao.get("location_" + location)) > 0) {
@@ -315,7 +307,6 @@ public class BookCaseServiceImpl implements BookCaseService {
             rtv = true;
         }
         return rtv;
-
     }
 
     @Override
@@ -349,13 +340,10 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public String popQueue() {
         String studentId = redisDao.popValue("userQueue");
-
         if (studentId != null) {
             redisDao.inc("popCount", 1);
         }
-
         return studentId;
     }
-
 }
 

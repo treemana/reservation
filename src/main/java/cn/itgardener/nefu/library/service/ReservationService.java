@@ -22,7 +22,7 @@ public interface ReservationService {
     /**
      * 查询预约的区域
      *
-     * @return
+     * @return 区域状态
      * @throws LibException 异常信息
      */
     List<Map<String, String>> getReservationArea() throws LibException;
@@ -30,8 +30,8 @@ public interface ReservationService {
     /**
      * 修改开始结束年级
      *
-     * @param gradeVO
-     * @return
+     * @param gradeVO 年级实体
+     * @return 是否成功
      * @throws LibException 异常信息
      */
     boolean postGrade(GradeVo gradeVO) throws LibException;
@@ -39,11 +39,11 @@ public interface ReservationService {
     /**
      * 修改预约区域
      *
-     * @param list
-     * @return
+     * @param list 区域列表
+     * @return 是否成功
      * @throws LibException 异常信息
      */
-    Boolean putReservationArea(List<Integer> list) throws LibException;
+    boolean putReservationArea(List<Integer> list) throws LibException;
 
     /**
      * 查询预约时间
@@ -56,7 +56,7 @@ public interface ReservationService {
     /**
      * 修改预约时间
      *
-     * @param timeVO
+     * @param timeVO 时间实体
      * @return 是否修改着成功
      */
     RestData putReservationTime(TimeVo timeVO);
@@ -64,7 +64,7 @@ public interface ReservationService {
     /**
      * 查询开放时间
      *
-     * @return
+     * @return 开放时间
      */
     Map<String, Object> getStartTime();
 
@@ -78,7 +78,7 @@ public interface ReservationService {
     /**
      * 获取各个区域的预约状态
      *
-     * @param studentId
+     * @param studentId 学号
      * @return [0, 1, 1, 0] 0表示可以预约,1表示不可预约
      * @throws LibException 异常信息
      */

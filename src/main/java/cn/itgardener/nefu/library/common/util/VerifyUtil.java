@@ -4,6 +4,7 @@
 
 package cn.itgardener.nefu.library.common.util;
 
+import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
@@ -15,9 +16,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +48,7 @@ public class VerifyUtil {
 
         int userGrade = Integer.parseInt(users.get(0).getStudentId().substring(0, 4));
 
-        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
-        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String nowTime = TimeUtil.getCurrentTime();
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (Config config : configList) {
@@ -59,9 +56,9 @@ public class VerifyUtil {
                 startTime = config.getConfigValue();
             } else if ("endTime".equals(config.getConfigKey())) {
                 endTime = config.getConfigValue();
-            } else if ("start_grade".equals(config.getConfigKey())) {
+            } else if (GlobalConst.START_GRADE.equals(config.getConfigKey())) {
                 startGrade = Integer.parseInt(config.getConfigValue());
-            } else if ("end_grade".equals(config.getConfigKey())) {
+            } else if (GlobalConst.END_GRADE.equals(config.getConfigKey())) {
                 endGrade = Integer.parseInt(config.getConfigValue());
             }
         }
@@ -90,12 +87,12 @@ public class VerifyUtil {
     }
 
     public static boolean verifyTime() throws LibException {
-        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(ZoneId.SHORT_IDS.get("CTT")));
-        String nowTime = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String nowTime = TimeUtil.getCurrentTime();
+
         List<Config> configs = configMapper.selectOpenTime();
         long startTime = 0L;
         long endTime = 0L;
-        Long currentTime = 0L;
+        long currentTime;
         for (Config config2 : configs) {
             if ("startTime".equals(config2.getConfigKey())) {
                 try {

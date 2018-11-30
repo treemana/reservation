@@ -68,7 +68,7 @@ public class StudentApi {
         logger.info("POST postBoxOrder : " + JsonUtil.getJsonString(bookCaseVo));
 
         User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
-        String captchaId = redisDao.getHash("code",user.getStudentId());
+        String captchaId = redisDao.getHash("code", user.getStudentId());
 
         if (captchaId.equals(bookCaseVo.getVerifyCode())) {
             try {
@@ -94,7 +94,7 @@ public class StudentApi {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
         User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
-        String captchaId = redisDao.getHash("code",user.getStudentId());
+        String captchaId = redisDao.getHash("code", user.getStudentId());
         if (captchaId.equals(userVo.getVerifyCode())) {
             if (userService.getStatus(userVo) != -1) {
                 return new RestData(userService.getStatus(userVo));
@@ -112,7 +112,7 @@ public class StudentApi {
         try {
             return new RestData(reservationService.getAreaStatus(studentId));
         } catch (LibException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return new RestData(1, "获取区域预约状态失败");
     }
@@ -142,7 +142,6 @@ public class StudentApi {
         } else {
             try {
                 Map rtv = reservationService.getOpenGrade();
-                logger.info("getGrade  is  successful");
                 return new RestData(rtv);
             } catch (Exception e) {
                 logger.info(e.getMessage());
@@ -152,7 +151,7 @@ public class StudentApi {
     }
 
     @RequestMapping(value = "/info/{studentId}", method = RequestMethod.GET)
-    public RestData getLocation(@PathVariable(value = "studentId") String studentId, HttpServletRequest request) {
+    public RestData getLocation(@PathVariable(value = "studentId") String studentId) {
         logger.info("GET getLocation : studentId=" + studentId);
 
         User user = new User();
