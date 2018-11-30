@@ -58,9 +58,9 @@ public class UserServiceImpl implements UserService {
                 if (0 == type) {
 
                     Config config = new Config();
-                    config.setConfigKey("startGrade");
+                    config.setConfigKey("start_grade");
                     int startGrade = Integer.parseInt(configMapper.selectOpenGrade(config).getConfigValue());
-                    config.setConfigKey("endGrade");
+                    config.setConfigKey("end_grade");
                     int endGrade = Integer.parseInt(configMapper.selectOpenGrade(config).getConfigValue());
                     int studentGrade = Integer.parseInt(user.getStudentId().substring(0, 4));
                     if (studentGrade < startGrade || studentGrade > endGrade) {

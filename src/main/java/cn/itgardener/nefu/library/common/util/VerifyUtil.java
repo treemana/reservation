@@ -59,9 +59,9 @@ public class VerifyUtil {
                 startTime = config.getConfigValue();
             } else if ("endTime".equals(config.getConfigKey())) {
                 endTime = config.getConfigValue();
-            } else if ("startGrade".equals(config.getConfigKey())) {
+            } else if ("start_grade".equals(config.getConfigKey())) {
                 startGrade = Integer.parseInt(config.getConfigValue());
-            } else if ("endGrade".equals(config.getConfigKey())) {
+            } else if ("end_grade".equals(config.getConfigKey())) {
                 endGrade = Integer.parseInt(config.getConfigValue());
             }
         }
