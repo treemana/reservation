@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
         if (!redisDao.isMember("finish", userVo.getStudentId())) {
             int currentCount = Integer.parseInt(redisDao.get("l_" + userVo.getStudentId()).split(",")[1]);
             int popCount = Integer.parseInt(redisDao.get("popCount"));
-            return currentCount - popCount + 1;
+            return currentCount - popCount;
         } else {
             return -1;
         }

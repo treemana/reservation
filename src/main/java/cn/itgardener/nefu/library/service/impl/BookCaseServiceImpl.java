@@ -287,7 +287,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             location = maxLocation() + "";
         }
 
-        long count = redisDao.getListSize("userQueue");
+        long count = redisDao.getListSize("userQueue") + Integer.parseInt(redisDao.get("popCount"));
         redisDao.set("l_" + key, location + "," + count);
         int total = Integer.parseInt(redisDao.get("total"));
 
