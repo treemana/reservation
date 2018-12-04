@@ -82,6 +82,12 @@ class Area extends Component {
               }
               this.setState({checkedList: list});
             }
+            else {
+              notification.open({
+                message: '提示',
+                description: res.message
+              });
+            }
           }.bind(this)
        });
   }

@@ -553,15 +553,16 @@ class Adbox extends Component {
             <a href="javascript:;">释放所有书柜</a>
           </Popconfirm>
           </p>
-          <span style={{ marginLeft: 8 }}>
+          
+        <Table rowSelection={rowSelection} columns={this.columns} dataSource={this.state.data} pagination = {pagination} />
+        <div style={{marginTop: -50}}>
+        <span style={{ marginLeft: 8 }}>
             当前查询结果共计{this.state.totalSize?this.state.totalSize:0}条，{this.state.totalPage?this.state.totalPage:0}页
           </span>
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `已选中 ${selectedRowKeys.length} 项` : ''}
           </span>
-          
-        <Table rowSelection={rowSelection} columns={this.columns} dataSource={this.state.data} pagination = {pagination} />
-        
+         </div>
         <Modal 
           mask={false}
           title="把该书包柜分配给："
