@@ -14,6 +14,7 @@ import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 import cn.itgardener.nefu.library.service.UserService;
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,14 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final RedisDao redisDao;
     private final ConfigMapper configMapper;
+    private final ReservationServiceImpl reservationService;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, RedisDao redisDao, ConfigMapper configMapper) {
+    public UserServiceImpl(UserMapper userMapper, RedisDao redisDao, ConfigMapper configMapper, ReservationServiceImpl reservationService) {
         this.userMapper = userMapper;
         this.redisDao = redisDao;
         this.configMapper = configMapper;
+        this.reservationService = reservationService;
     }
 
 
@@ -111,14 +114,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getStatus(UserVo userVo) {
-        if (!redisDao.isMember("finish", userVo.getStudentId())) {
-            int currentCount = Integer.parseInt(redisDao.get("l_" + userVo.getStudentId()).split(",")[1]);
-            int popCount = Integer.parseInt(redisDao.get("popCount"));
-            return currentCount - popCount;
-        } else {
-            return -1;
+    public int getStatus(UserVo userVo) throws LibException {
+        try {
+            reservationService.verifyCode(userVo.getVerifyCode(),userVo.getStudentId());
+            if (!redisDao.isMember("finish", userVo.getStudentId())) {
+                int currentCount = Integer.parseInt(redisDao.get("l_" + userVo.getStudentId()).split(",")[1]);
+                int popCount = Integer.parseInt(redisDao.get("popCount"));
+                if(currentCount - popCount < 0) {
+                    throw new  LibException("用户已分配");
+                }
+                return currentCount - popCount;
+            } else {
+                throw new LibException("用户已分配");
+            }
+        }catch (LibException e) {
+            throw e;
         }
+
     }
 
     @Override

@@ -83,4 +83,11 @@ public interface ReservationService {
      * @throws LibException 异常信息
      */
     List<Integer> getAreaStatus(String studentId) throws LibException;
+
+    /**
+     * 验证码校验
+     * @param verifyCode
+     * @param studentId
+     */
+    void verifyCode(String verifyCode, String studentId) throws LibException;
 }

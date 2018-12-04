@@ -42,11 +42,14 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     private final RedisDao redisDao;
 
+    private final ReservationServiceImpl reservationService;
+
     @Autowired
-    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper, RedisDao redisDao) {
+    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper, RedisDao redisDao, ReservationServiceImpl reservationService) {
         this.bookCaseMapper = bookCaseMapper;
         this.userMapper = userMapper;
         this.redisDao = redisDao;
+        this.reservationService = reservationService;
     }
 
     @Override
@@ -276,8 +279,14 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public Boolean postBoxOrder(BookCaseVo bookCaseVo) {
-        boolean rtv = false;
+    public boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException {
+
+        try {
+            reservationService.verifyCode(bookCaseVo.getVerifyCode(),bookCaseVo.getStudentId());
+        } catch (LibException e) {
+            throw e;
+        }
+
         String key = bookCaseVo.getStudentId();
         String location;
 
@@ -304,9 +313,11 @@ public class BookCaseServiceImpl implements BookCaseService {
                 redisDao.pushValue("userQueue", key);
                 redisDao.dec("total", 1);
             }
-            rtv = true;
+        } else {
+            throw new LibException("排队失败,请重试");
         }
-        return rtv;
+
+        return true;
     }
 
     @Override

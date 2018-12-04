@@ -43,16 +43,12 @@ public class StudentApi {
     private final ReservationService reservationService;
     private final BookCaseService bookCaseService;
     private final UserService userService;
-    private final UserMapper userMapper;
-    private final RedisDao redisDao;
 
     @Autowired
-    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, UserService userService, UserMapper userMapper, RedisDao redisDao) {
+    public StudentApi(ReservationService reservationService, BookCaseService bookCaseService, UserService userService) {
         this.reservationService = reservationService;
         this.bookCaseService = bookCaseService;
         this.userService = userService;
-        this.userMapper = userMapper;
-        this.redisDao = redisDao;
     }
 
     @RequestMapping(value = "/time", method = RequestMethod.GET)
@@ -67,25 +63,19 @@ public class StudentApi {
     public RestData postBoxOrder(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("POST postBoxOrder : " + JsonUtil.getJsonString(bookCaseVo));
 
-        User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
-        String captchaId = redisDao.getHash("code", user.getStudentId());
+        try {
+            VerifyUtil.verify(request.getHeader("token"));
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        } catch (ParseException e) {
+            logger.error(e.getLocalizedMessage());
+        }
 
-        if (captchaId.equals(bookCaseVo.getVerifyCode())) {
-            try {
-                VerifyUtil.verify(request.getHeader("token"));
-            } catch (LibException e) {
-                return new RestData(1, e.getMessage());
-            } catch (ParseException e) {
-                logger.error(e.getLocalizedMessage());
-            }
 
-            if (bookCaseService.postBoxOrder(bookCaseVo)) {
-                return new RestData(true);
-            } else {
-                return new RestData(1, "排队失败,请重试");
-            }
-        } else {
-            return new RestData(1, "验证码出错！");
+        try {
+            return new RestData(bookCaseService.postBoxOrder(bookCaseVo));
+        } catch (LibException e) {
+            return new RestData(1,e.getMessage());
         }
     }
 
@@ -93,17 +83,11 @@ public class StudentApi {
     public RestData getStatus(UserVo userVo, HttpServletRequest request) {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
-        User user = userMapper.selectByCondition(new User(request.getHeader("token"))).get(0);
-        String captchaId = redisDao.getHash("code", user.getStudentId());
-        if (captchaId.equals(userVo.getVerifyCode())) {
-            if (userService.getStatus(userVo) != -1) {
+           try {
                 return new RestData(userService.getStatus(userVo));
-            } else {
-                return new RestData(1, "用户已分配");
-            }
-        } else {
-            return new RestData(1, "验证码出错！");
-        }
+            } catch (LibException e) {
+               return new RestData(1,e.getMessage());
+           }
     }
 
     @RequestMapping(value = "/area-status/{studentId}", method = RequestMethod.GET)

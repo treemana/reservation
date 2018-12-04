@@ -92,17 +92,4 @@ public class LoginApi {
         String apache = new String(Base64.encodeBase64(captchaChallengeAsJpeg));
         return new RestData(apache);
     }
-
-    @RequestMapping(value = "/verifycode/{verifyCode}", method = RequestMethod.GET)
-    public RestData verifyCode(@PathVariable(value = "verifyCode") String verifyCode, HttpServletRequest httpServletRequest) {
-        logger.info("GET verifyCode : verifyCode=" + verifyCode);
-
-        User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
-        String captchaId = redisDao.getHash("code", user.getStudentId());
-        if (captchaId.equals(verifyCode)) {
-            return new RestData("请求成功");
-        } else {
-            return new RestData(1, "验证码错误");
-        }
-    }
 }

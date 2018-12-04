@@ -83,7 +83,7 @@ public interface BookCaseService {
      * @param bookCaseVo
      * @return 是否成功
      */
-    Boolean postBoxOrder(BookCaseVo bookCaseVo);
+    boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException;
 
     /**
      * redis书包柜队列

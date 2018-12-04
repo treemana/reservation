@@ -58,5 +58,5 @@ public interface UserService {
      * @param userVo 用户实体
      * @return 前面还有多少人
      */
-    int getStatus(UserVo userVo);
+    int getStatus(UserVo userVo) throws LibException;
 }

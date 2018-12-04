@@ -8,6 +8,7 @@ import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.TimeUtil;
+import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.tools.jstat.Token;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -223,5 +225,15 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
         return rtv;
+    }
+
+    @Override
+    public void verifyCode(String verifyCode, String studentId) throws LibException {
+            String captchaId = redisDao.getHash("code",studentId);
+            if (!captchaId.equals(verifyCode)) {
+                throw new LibException("验证码出错!");
+            }
+            redisDao.pushHash("code",studentId, TokenUtil.getToken());
+
     }
 }
