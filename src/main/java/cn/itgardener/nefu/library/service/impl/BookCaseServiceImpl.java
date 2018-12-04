@@ -16,6 +16,7 @@ import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 import cn.itgardener.nefu.library.service.BookCaseService;
+import cn.itgardener.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cn.itgardener.nefu.library.common.GlobalConst.USER_DISABLE;
 
 /**
  * @author : chenchenT CMY
@@ -42,10 +45,10 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     private final RedisDao redisDao;
 
-    private final ReservationServiceImpl reservationService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper, RedisDao redisDao, ReservationServiceImpl reservationService) {
+    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper, RedisDao redisDao, ReservationService reservationService) {
         this.bookCaseMapper = bookCaseMapper;
         this.userMapper = userMapper;
         this.redisDao = redisDao;
@@ -61,7 +64,7 @@ public class BookCaseServiceImpl implements BookCaseService {
 
         if (null != user1) {
 
-            if (2 == user1.getType()) {
+            if (USER_DISABLE == user1.getType()) {
                 throw new LibException("当前用户已被禁用!");
             } else {
                 BookCase bookCase = bookCaseMapper.selectByUserId(user1);
@@ -282,7 +285,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     public boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException {
 
         try {
-            reservationService.verifyCode(bookCaseVo.getVerifyCode(),bookCaseVo.getStudentId());
+            reservationService.verifyCode(bookCaseVo.getVerifyCode(), bookCaseVo.getStudentId());
         } catch (LibException e) {
             throw e;
         }

@@ -14,9 +14,6 @@ import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 import cn.itgardener.nefu.library.service.UserService;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cn.itgardener.nefu.library.common.GlobalConst.USER_DISABLE;
+import static cn.itgardener.nefu.library.common.GlobalConst.USER_STUDENT;
+
 /**
  * @author : Jimi,pc CMY
  * @date : 2018/10/27
@@ -32,8 +32,6 @@ import java.util.Map;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserMapper userMapper;
     private final RedisDao redisDao;
@@ -56,10 +54,10 @@ public class UserServiceImpl implements UserService {
         if (null != users && 1 == users.size()) {
             user = users.get(0);
             int type = user.getType();
-            if (2 == type) {
+            if (USER_DISABLE == type) {
                 throw new LibException("当前用户已被禁用!");
             } else {
-                if (0 == type) {
+                if (USER_STUDENT == type) {
 
                     Config config = new Config();
                     config.setConfigKey(GlobalConst.START_GRADE);
@@ -116,18 +114,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getStatus(UserVo userVo) throws LibException {
         try {
-            reservationService.verifyCode(userVo.getVerifyCode(),userVo.getStudentId());
+            reservationService.verifyCode(userVo.getVerifyCode(), userVo.getStudentId());
             if (!redisDao.isMember("finish", userVo.getStudentId())) {
                 int currentCount = Integer.parseInt(redisDao.get("l_" + userVo.getStudentId()).split(",")[1]);
                 int popCount = Integer.parseInt(redisDao.get("popCount"));
-                if(currentCount - popCount < 0) {
-                    throw new  LibException("用户已分配");
+                if (currentCount - popCount < 0) {
+                    throw new LibException("用户已分配");
                 }
                 return currentCount - popCount;
             } else {
                 throw new LibException("用户已分配");
             }
-        }catch (LibException e) {
+        } catch (LibException e) {
             throw e;
         }
 

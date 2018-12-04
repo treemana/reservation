@@ -59,6 +59,7 @@ public interface UserMapper {
 
     /**
      * 添加黑名单
+     *
      * @param user
      * @return 添加黑名单个数
      */
@@ -86,6 +87,7 @@ public interface UserMapper {
 
     /**
      * 根据token查找类型
+     *
      * @param user token
      * @return user
      */
