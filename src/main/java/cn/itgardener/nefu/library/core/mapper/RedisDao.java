@@ -131,12 +131,12 @@ public interface RedisDao {
 
     /**
      * 同步MySQL和Redis
+     *
      * @return
      */
     boolean updateRedis();
 
     /**
-     *
      * @param key
      * @param filed
      * @param value
@@ -145,7 +145,6 @@ public interface RedisDao {
     void pushHash(String key, String filed, String value);
 
     /**
-     *
      * @param key
      * @param filed
      * @return

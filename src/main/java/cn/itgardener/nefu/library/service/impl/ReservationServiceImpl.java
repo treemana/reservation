@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.tools.jstat.Token;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -229,11 +228,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void verifyCode(String verifyCode, String studentId) throws LibException {
-            String captchaId = redisDao.getHash("code",studentId);
-            if (!captchaId.equals(verifyCode)) {
-                throw new LibException("验证码出错!");
-            }
-            redisDao.pushHash("code",studentId, TokenUtil.getToken());
+        String captchaId = redisDao.getHash("code", studentId);
+        if (!captchaId.equals(verifyCode)) {
+            throw new LibException("验证码出错!");
+        }
+        redisDao.pushHash("code", studentId, TokenUtil.getToken());
 
     }
 }

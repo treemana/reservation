@@ -8,7 +8,6 @@ import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.model.Config;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -160,10 +159,7 @@ public class RedisDaoImpl implements RedisDao {
     @Override
     public boolean isMember(String key, String value) {
         Boolean rt = stringRedisTemplate.opsForSet().isMember(key, value);
-        if(rt == null) {
-            return false;
-        }
-        return rt;
+        return rt != null;
     }
 
     @Override

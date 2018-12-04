@@ -19,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static cn.itgardener.nefu.library.common.GlobalConst.USER_ADMIN;
+
 /**
  * @author : Jimi
  * @date : 2018/11/12
@@ -126,14 +128,13 @@ public class VerifyUtil {
         User user = new User();
         user.setToken(token);
         User user1 = userMapper.selectByToken(user);
-        return 1 == user1.getType();
+        return USER_ADMIN == user1.getType();
     }
 
-    public static long dateToStamp(String s) throws ParseException {
+    private static long dateToStamp(String s) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);
-        long ts = date.getTime();
-        return ts;
+        return date.getTime();
     }
 }
 

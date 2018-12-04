@@ -57,4 +57,19 @@ public class GlobalConst {
      * end_grade 结束年级
      */
     public static final String END_GRADE = "end_grade";
+
+    /**
+     * 0 学生
+     */
+    public static final int USER_STUDENT = 0;
+
+    /**
+     * 1 管理员
+     */
+    public static final int USER_ADMIN = 1;
+
+    /**
+     * 2 黑名单
+     */
+    public static final int USER_DISABLE = 2;
 }

@@ -10,8 +10,6 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
-import cn.itgardener.nefu.library.core.mapper.RedisDao;
-import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
@@ -75,19 +73,19 @@ public class StudentApi {
         try {
             return new RestData(bookCaseService.postBoxOrder(bookCaseVo));
         } catch (LibException e) {
-            return new RestData(1,e.getMessage());
+            return new RestData(1, e.getMessage());
         }
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
-    public RestData getStatus(UserVo userVo, HttpServletRequest request) {
+    public RestData getStatus(UserVo userVo) {
         logger.info("GET getStatus : " + JsonUtil.getJsonString(userVo));
 
-           try {
-                return new RestData(userService.getStatus(userVo));
-            } catch (LibException e) {
-               return new RestData(1,e.getMessage());
-           }
+        try {
+            return new RestData(userService.getStatus(userVo));
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/area-status/{studentId}", method = RequestMethod.GET)
