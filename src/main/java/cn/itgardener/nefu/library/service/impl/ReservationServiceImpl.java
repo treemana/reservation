@@ -14,7 +14,6 @@ import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
-import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.GradeVo;
@@ -195,9 +194,8 @@ public class ReservationServiceImpl implements ReservationService {
             logger.error(e.getLocalizedMessage());
         }
 
-        List<BookCase> bookCases = bookCaseMapper.selectBookCaseByUserId(user.getSystemId());
         //判断是否已经分配了柜子
-        if (null != bookCases && 1 <= bookCases.size()) {
+        if (redisDao.isMember("finish", studentId)) {
             for (int i = 0; i < 4; i++) {
                 rtv.add(1);
             }

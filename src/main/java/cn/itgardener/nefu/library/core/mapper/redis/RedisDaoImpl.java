@@ -159,7 +159,13 @@ public class RedisDaoImpl implements RedisDao {
     @Override
     public boolean isMember(String key, String value) {
         Boolean rt = stringRedisTemplate.opsForSet().isMember(key, value);
-        return rt != null;
+
+        if (rt == null) {
+            return false;
+        } else {
+            return rt;
+        }
+            
     }
 
     @Override
