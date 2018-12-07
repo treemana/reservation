@@ -35,16 +35,6 @@ class Mine extends Component {
       });
     };
     this.sendCode = (value) => {
-      $.ajax({
-        method: "GET",
-        url: req+'verifycode/'+value,
-        headers: {
-          'token': $.cookie('token')
-        },
-         xhrFields: {withCredentials: true},
-        contentType: 'application/json;charset=UTF-8',
-        success: function(res) {
-          if(res.code === 0) {
             this.setState({
             showMyStatus: true
           });
@@ -70,16 +60,6 @@ class Mine extends Component {
                 }
               }.bind(this)
             });
-          }
-          else {
-            notification.open({
-                message: '提示',
-                description: res.message
-            });
-          }
-        }.bind(this)
-      });
-      
     }
     this.hide = () => {
       this.setState({

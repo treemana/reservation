@@ -120,21 +120,12 @@ class Box extends Component {
       });
     }
     this.sendCode2 = (value) => {
-      $.ajax({
-        method: "GET",
-        url: req+"verifycode/"+value,
-        headers: {
-          'token': $.cookie('token')
-        },
-        contentType: 'application/json;charset=UTF-8',
-        success: function(res) {
           var data = {
             location: this.state.boxArea,
             studentId: this.state.id,
             verifyCode: value
           };
           data = JSON.stringify(data);
-          if(res.code === 0) {
           this.setState({
             visible2: false
           });
@@ -163,15 +154,7 @@ class Box extends Component {
               }
             }.bind(this)
           });
-          }
-          else {
-            notification.open({
-                message: '提示',
-                description: res.message
-            });
-          }
-        }.bind(this)
-      });
+          
     }
     this.refresh = () => {//刷新页面
       this.setState({
@@ -444,7 +427,7 @@ class Box extends Component {
         </Modal>
 
       <Modal 
-          title="当前状态"
+          title="刷新"
           visible={visible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
