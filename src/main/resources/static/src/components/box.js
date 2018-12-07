@@ -157,24 +157,8 @@ class Box extends Component {
           
     }
     this.refresh = () => {//刷新页面
-      this.setState({
-        visible: true
-      });
-      $.ajax({
-        method: "GET",
-        url: req+'code',
-        headers: {
-          'token': $.cookie('token')
-        },
-         xhrFields: {withCredentials: true},
-        contentType: 'application/json;charset=UTF-8',
-        success: function(res) {
-          this.setState({
-            code: res.data
-          });
-        }.bind(this)
-      });
-
+      this.getStatus();
+      this.getAreaBox();
     }
     this.myStatus = () => {//查看我的状态
       this.setState({
@@ -422,25 +406,6 @@ class Box extends Component {
               placeholder='请输入验证码'
               enterButton='确定'
               onSearch={this.sendCode2}
-            />
-        </div>
-        </Modal>
-
-      <Modal 
-          title="刷新"
-          visible={visible}
-          onOk={this.handleOk}
-          confirmLoading={confirmLoading}
-          onCancel={this.hide}
-          footer= {false}
-        >
-        <div style= {{display: this.state.showMyStatus?'none':'inline'}}>
-        <p style={{textAlign:"center"}}><img alt='获取验证码失败' onClick={this.myStatus} src={'data:image/jpeg;base64,'+this.state.code} /></p>
-          <Search
-              style={{width: '100%'}}
-              placeholder='请输入验证码'
-              enterButton='确定'
-              onSearch={this.sendCode}
             />
         </div>
         </Modal>
