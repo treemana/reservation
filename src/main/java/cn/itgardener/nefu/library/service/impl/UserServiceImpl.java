@@ -57,22 +57,6 @@ public class UserServiceImpl implements UserService {
             if (USER_DISABLE == type) {
                 throw new LibException("当前用户已被禁用!");
             } else {
-                if (USER_STUDENT == type) {
-
-                    Config config = new Config();
-                    config.setConfigKey(GlobalConst.START_GRADE);
-                    int startGrade = Integer.parseInt(configMapper.selectOpenGrade(config).getConfigValue());
-                    config.setConfigKey(GlobalConst.END_GRADE);
-                    int endGrade = Integer.parseInt(configMapper.selectOpenGrade(config).getConfigValue());
-                    int studentGrade = Integer.parseInt(user.getStudentId().substring(0, 4));
-                    if (studentGrade < startGrade || studentGrade > endGrade) {
-                        if (startGrade == endGrade) {
-                            throw new LibException("仅对" + startGrade + "级开放!");
-                        } else {
-                            throw new LibException("仅对" + startGrade + "-" + endGrade + "级开放!");
-                        }
-                    }
-                }
                 user.setToken(TokenUtil.getToken());
                 if (0 < userMapper.updateTokenBySystemId(user)) {
                     rtv = new HashMap<>(3);
