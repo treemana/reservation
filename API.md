@@ -55,7 +55,7 @@
   - studentId : 学生学号
   - index : 数据库主键id
   - number ： 书包柜编号
-  - location : null 全部 | 1 二楼北 | 2 二楼南 | 3 三楼北 | 4 三楼南
+  - location : 1_1 代表一楼区域1 1_2代表区域2
 
 ## 1.2. 登陆相关
 
@@ -106,7 +106,7 @@
 
 ```json
 {
-    "location" : 1,
+    "location" : "1_1",
     "studentId" : "2016210111",
     "verifyCode" : "12ab"
 }
@@ -146,7 +146,7 @@
 {
     "code" : 0,
     "data" : {
-        "location" : 1,
+        "location" : "1_1",
         "number" : "123"
     }
 }
@@ -170,7 +170,7 @@
 
 ### 1.3.5. 获取书包柜数量
 
-- GET /num
+- GET /num?floor=1
 
 - return :
 
@@ -180,11 +180,11 @@
     "data" :
         [
             {
-                "location" : 1,
+                "location" : "1_2",
                 "num" : 100
             },
             {
-                "location" : 2,
+                "location" : "1_3",
                 "num" : 100
             }
         ]
@@ -236,7 +236,7 @@
 
 #### 1.4.1.3. 获取预约区域
 
-- GET /open-area
+- GET /open-area?floor=1
 
 - return :
 
@@ -246,22 +246,22 @@
     "data":
     [
         {
-            "configKey" : "area_two_n",
+            "configKey" : "1_4",
             "configValue" : "1",
             "systemId" : "1"
         },
         {
-            "configKey" : "area_two_s",
+            "configKey" : "1_4",
             "configValue" : "1",
             "systemId" : "2"
         },
         {
-            "configKey": "area_three_n",
+            "configKey": "1_3",
             "configValue": "1",
             "systemId": "3"
         },
         {
-            "configKey": "area_three_s",
+            "configKey": "1_2",
             "configValue": "0",
             "systemId": "4"
         }
@@ -275,7 +275,7 @@
 - payload :
 
 ```json
-[1, 2]
+["1_1", "2_2"]
 ```
 
 - return :
@@ -288,11 +288,11 @@
 
 #### 1.4.1.5. 区域预约状态
 
-- GET /area-status/{studentId}
+- GET /area-status/?studentId=2016224283&floor=1
 
   - 0表示可以预约，1表示不可预约
 
-  - data中的数据分别为二楼北、二楼南、三楼北、三楼南
+  - data中的长度代表这一楼层中区域的数量，分别对应1_1，1_2...
 
 - return:
 
@@ -307,10 +307,10 @@
 
 #### 1.4.2.1. 查询
 
-- GET /detail?location=2&status=0&id=10-11&studentId=2016224283&page=1
+- GET /detail?location=1_1&status=0&id=10-11&studentId=2016224283&page=1
 
 - 默认page=1, status=0 查询开放柜子 || status=1 查询被占用柜子 || status=2 查询预留柜子
-
+- id代表书包柜的systemId
 - return :
   - perPage 每页显示条数
 
@@ -321,13 +321,13 @@
         "ships" :
         [
             {
-                "location" : 1,
+                "location" : "1_1",
                 "id" : "123",
                 "status" : 0,
                 "studentId" : "123"
             },
             {
-                "location" : 2,
+                "location" : "1_1",
                 "id" : "123",
                 "status" : 0,
                 "studentId" : "123"
@@ -364,12 +364,12 @@
 
 - PUT /ship
 - payload :
-  - number : 书包柜编号
-  - stuid : 为 null 则释放关系, 为学号则建立关系
+  - systemId : 书包柜systemId
+  - stuId : 为 null 则释放关系, 为学号则建立关系
 
 ```json
 {
-    "number" : "123",
+    "systemId" : "123",
     "studentId" : "1234555"
 }
 ```
@@ -388,7 +388,11 @@
 - payload :
 
 ```json
-[123, 234, 345]
+{
+    "location" : "1_2",
+    "startId" : 12,
+    "endId" : 100
+}
 ```
 
 - return :
