@@ -17,9 +17,9 @@ public class BookCase {
     private Integer systemId;
 
     /**
-     * 柜子位置 null 全部 1 二楼北 2 二楼南 3 三楼北 4 三楼南
+     * 柜子位置 2_1 2楼1区域 || 3_2 3楼2区域
      */
-    private Integer location;
+    private String location;
 
     /**
      * 柜子编号
@@ -44,11 +44,11 @@ public class BookCase {
         this.systemId = systemId;
     }
 
-    public Integer getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Integer location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 

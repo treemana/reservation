@@ -311,6 +311,7 @@
 
 - 默认page=1, status=0 查询开放柜子 || status=1 查询被占用柜子 || status=2 查询预留柜子
 - id代表书包柜的systemId
+- location 2_代表2楼所有区域
 - return :
   - perPage 每页显示条数
 
