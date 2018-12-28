@@ -107,13 +107,13 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/preorder", method = RequestMethod.POST)
-    public RestData postKeep(@RequestBody List<Integer> data, HttpServletRequest request) {
-        logger.info("POST postKeep: " + JsonUtil.getJsonString(data));
+    public RestData postKeep(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
+        logger.info("POST postKeep: " + JsonUtil.getJsonString(bookCaseVo));
 
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        return bookCaseService.setKeepByNumber(data);
+        return bookCaseService.setKeepByNumber(bookCaseVo);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

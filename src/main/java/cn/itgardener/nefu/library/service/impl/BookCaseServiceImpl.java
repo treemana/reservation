@@ -104,14 +104,14 @@ public class BookCaseServiceImpl implements BookCaseService {
             return true;
         }
 
-
     }
 
     @Override
-    public RestData setKeepByNumber(List<Integer> data) {
+    public RestData setKeepByNumber(BookCaseVo bookCaseVo) {
         int success = 0;
+        List<Integer> data = bookCaseVo.getArray();
         if (0 == data.size() || null == data) {
-            return new RestData(1, "无预留柜子编号!");
+            return new RestData(1, "无效参数");
         } else {
             for (int count = 0; count < data.size(); count++) {
                 ShipVo shipVo = new ShipVo();
@@ -383,15 +383,15 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     @Override
     public RestData deleteBookcaseById(BookCaseVo bookCaseVo) throws LibException {
-            if (0 != bookCaseVo.getArray().size()) {
-                for (Integer systemId : bookCaseVo.getArray()) {
-                    bookCaseVo.setSystemId(systemId);
-                    bookCaseMapper.deleteBookcaseById(bookCaseVo);
-                }
-                return new RestData(true);
-            } else {
-                throw new LibException("数组为空");
+        if (0 != bookCaseVo.getArray().size()) {
+            for (Integer systemId : bookCaseVo.getArray()) {
+                bookCaseVo.setSystemId(systemId);
+                bookCaseMapper.deleteBookcaseById(bookCaseVo);
             }
+            return new RestData(true);
+        } else {
+            throw new LibException("数组为空");
+        }
 
 
     }

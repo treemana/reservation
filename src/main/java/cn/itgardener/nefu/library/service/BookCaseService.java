@@ -32,10 +32,10 @@ public interface BookCaseService {
     /**
      * 设置预留的书包柜
      *
-     * @param data 书包柜编号
+     * @param bookCaseVo
      * @return 是否预留成功
      */
-    RestData setKeepByNumber(List<Integer> data);
+    RestData setKeepByNumber(BookCaseVo bookCaseVo);
 
     /**
      * 修改单个关系

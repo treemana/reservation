@@ -127,7 +127,16 @@ public interface BookCaseMapper {
     int updateSingleShip(ShipVo shipVO);
 
     /**
-     * 查询是否存在这个number的书包柜
+     * 根据systemId查询书包柜
+     *
+     * @param shipVO systemId
+     * @return bookcase
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectBySystemId")
+    BookCase selectBySystemId(ShipVo shipVO);
+
+    /**
+     * 根据number查询书包柜
      *
      * @param shipVO number
      * @return bookcase

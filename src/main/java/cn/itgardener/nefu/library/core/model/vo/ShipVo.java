@@ -12,6 +12,11 @@ package cn.itgardener.nefu.library.core.model.vo;
 public class ShipVo {
 
     /**
+     * 书包柜的systemId
+     */
+    private String systemId;
+
+    /**
      * 书包柜的编号
      */
     private String number;

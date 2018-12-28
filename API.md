@@ -390,12 +390,12 @@
 
 - POST /preorder
 - payload :
+- payload ：
+  - array : 代表预留柜子的id的数组 
 
 ```json
 {
-    "location" : "1_2",
-    "startId" : 12,
-    "endId" : 100
+    "array" : [1,2,3]
 }
 ```
 
@@ -403,7 +403,8 @@
 
 ```json
 {
-    "code" : 0
+    "code" : 0,
+    "data": true
 }
 ```
 

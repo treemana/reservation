@@ -93,7 +93,7 @@ public class BookCaseProvider {
                         WHERE(" bc_status=1");
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
                     WHERE(" bc_user_id is null");
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
@@ -105,7 +105,7 @@ public class BookCaseProvider {
                         WHERE(" bc_status=1");
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
                     if (null == bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id is not null");
@@ -122,7 +122,7 @@ public class BookCaseProvider {
                         WHERE(" bc_status=" + bookCaseVo.getStatus());
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
@@ -147,7 +147,7 @@ public class BookCaseProvider {
                         WHERE(" bc_status=1");
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
                     WHERE(" bc_user_id is null");
                 } else if (null != bookCaseVo.getStatus() && 1 == bookCaseVo.getStatus()) {
@@ -156,7 +156,7 @@ public class BookCaseProvider {
                     }
                     WHERE(" bc_status=1");
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
                     if (null == bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id is not null");
@@ -172,7 +172,7 @@ public class BookCaseProvider {
                         WHERE(" bc_status=" + bookCaseVo.getStatus());
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
@@ -217,6 +217,17 @@ public class BookCaseProvider {
         }.toString();
     }
 
+
+    public String selectBySystemId(ShipVo shipVO) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                WHERE("bc_system_id = #{systemId}");
+            }
+        }.toString();
+    }
 
     public String selectByNumber(ShipVo shipVO) {
         return new SQL() {
