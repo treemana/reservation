@@ -7,6 +7,7 @@ package cn.itgardener.nefu.library.core.mapper;
 import cn.itgardener.nefu.library.common.Page;
 import cn.itgardener.nefu.library.core.mapper.provider.BookCaseProvider;
 import cn.itgardener.nefu.library.core.model.BookCase;
+import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
@@ -143,4 +144,30 @@ public interface BookCaseMapper {
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByUserId")
     List<BookCase> selectBookCaseByUserId(@Param("userId") int userId);
 
+    /**
+     * 根据location查询
+     *
+     * @param location 位置
+     * @return list
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectConfigByLocation")
+    List<Config> selectConfigByLocation(String location);
+
+    /**
+     * 根据开始结束的num删除柜子
+     *
+     * @param bookCaseVo vo
+     * @return 删除的行数
+     */
+    @DeleteProvider(type = BookCaseProvider.class, method = "deleteBookcaseByRange")
+    int deleteBookcaseByRange(BookCaseVo bookCaseVo);
+
+    /**
+     * 根据id删除柜子
+     *
+     * @param bookCaseVo vo
+     * @return int
+     */
+    @DeleteProvider(type = BookCaseProvider.class, method = "deleteBookcaseById")
+    int deleteBookcaseById(BookCaseVo bookCaseVo);
 }

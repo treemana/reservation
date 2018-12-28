@@ -239,6 +239,36 @@ public class BookCaseProvider {
             }
         }.toString();
     }
+
+    public String selectConfigByLocation(String location) {
+        return new SQL() {
+            {
+                SELECT("config_system_id as configId , config_key as configKey , config_value as configValue");
+                FROM("config");
+                WHERE("config_key=#{loctation}");
+            }
+        }.toString();
+    }
+
+
+    public String deleteBookcaseByRange(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                DELETE_FROM("bookcase");
+                WHERE("bc_number between #{start} and #{end} and bc_location = #{location}");
+            }
+        }.toString();
+    }
+
+    public String deleteBookcaseById(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                DELETE_FROM("bookcase");
+                WHERE("bc_system_id = #{systemId}");
+            }
+
+        }.toString();
+    }
 }
 
 

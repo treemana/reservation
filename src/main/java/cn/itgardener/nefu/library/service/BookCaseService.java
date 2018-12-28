@@ -99,4 +99,23 @@ public interface BookCaseService {
      */
     String popQueue();
 
+    /**
+     * 删除书包柜
+     *
+     * @param bookCaseVo vo
+     * @return restdata
+     * @throws LibException 异常
+     */
+
+    RestData deleteBookcaseById(BookCaseVo bookCaseVo) throws LibException;
+
+    /**
+     * 按照编号删除书包柜
+     *
+     * @param bookCaseVo list
+     * @return restdata
+     * @throws LibException 异常
+     */
+    RestData deleteBookcaseByNumber(BookCaseVo bookCaseVo) throws LibException;
+
 }

@@ -4,8 +4,10 @@
 
 package cn.itgardener.nefu.library.core.model.vo;
 
+import java.util.List;
+
 /**
- * @author : chenchenT
+ * @author : chenchenT ，pc
  * @date : 2018/10/29
  * @since : Java 8
  */
@@ -57,6 +59,30 @@ public class BookCaseVo {
      * 验证码
      */
     private String verifyCode;
+    /**
+     * 楼层
+     */
+    private Integer floor;
+    /**
+     * 区域
+     */
+    private Integer area;
+    /**
+     * systemId的数组
+     */
+    private List<Integer> array;
+    /**
+     * 柜子开始的编号
+     */
+    private Integer start;
+    /**
+     * 柜子结束的编号
+     */
+    private Integer end;
+    /**
+     * 柜子的编号
+     */
+    private Integer number;
 
     public Integer getSystemId() {
         return systemId;
@@ -136,5 +162,53 @@ public class BookCaseVo {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
+    }
+
+    public List<Integer> getArray() {
+        return array;
+    }
+
+    public void setArray(List<Integer> array) {
+        this.array = array;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public Integer getEnd() {
+        return end;
+    }
+
+    public void setEnd(Integer end) {
+        this.end = end;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

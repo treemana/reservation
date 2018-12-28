@@ -196,4 +196,23 @@ public class TeacherApi {
             return new RestData(1, e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/delete-id", method = RequestMethod.DELETE)
+    public RestData DeleteBookcaseById(@RequestBody BookCaseVo bookCaseVo) {
+        try {
+            return bookCaseService.deleteBookcaseById(bookCaseVo);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/delete-number", method = RequestMethod.DELETE)
+    public RestData deleteBookcaseByNumber(@RequestBody BookCaseVo bookCaseVo) {
+
+        try {
+            return bookCaseService.deleteBookcaseByNumber(bookCaseVo);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+    }
 }

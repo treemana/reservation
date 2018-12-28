@@ -8,6 +8,7 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.Page;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.PageUtil;
+import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
@@ -348,6 +349,40 @@ public class BookCaseServiceImpl implements BookCaseService {
             } else {
                 logger.info(studentId + "已经分配柜子,无需再分配");
             }
+        }
+    }
+
+
+    @Override
+    public RestData deleteBookcaseById(BookCaseVo bookCaseVo) throws LibException {
+            if (0 != bookCaseVo.getArray().size()) {
+                for (Integer systemId : bookCaseVo.getArray()) {
+                    bookCaseVo.setSystemId(systemId);
+                    bookCaseMapper.deleteBookcaseById(bookCaseVo);
+                }
+                return new RestData(true);
+            } else {
+                throw new LibException("数组为空");
+            }
+
+
+    }
+
+    @Override
+    public RestData deleteBookcaseByNumber(BookCaseVo bookCaseVo) throws LibException {
+        if (!VerifyUtil.verifyArea(bookCaseVo)) {
+            throw new LibException("此区域不存在");
+        }
+        bookCaseVo.setLocation(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea());
+        if (bookCaseVo.getEnd() >= bookCaseVo.getStart() && 0 < bookCaseVo.getStart()) {
+            int i = bookCaseMapper.deleteBookcaseByRange(bookCaseVo);
+            if (0 == i) {
+                throw new LibException("输入的数据有误");
+            } else {
+                return new RestData(true);
+            }
+        } else {
+            throw new LibException("输入的数据有误");
         }
     }
 

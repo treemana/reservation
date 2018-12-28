@@ -6,10 +6,12 @@ package cn.itgardener.nefu.library.common.util;
 
 import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
+import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,11 +33,13 @@ public class VerifyUtil {
 
     private static UserMapper userMapper;
     private static ConfigMapper configMapper;
+    private static BookCaseMapper bookCaseMapper;
 
     @Autowired
-    public VerifyUtil(UserMapper userMapper, ConfigMapper configMapper) {
+    public VerifyUtil(UserMapper userMapper, ConfigMapper configMapper, BookCaseMapper bookCaseMapper) {
         VerifyUtil.userMapper = userMapper;
         VerifyUtil.configMapper = configMapper;
+        VerifyUtil.bookCaseMapper = bookCaseMapper;
     }
 
     public static boolean verify(String token) throws LibException, ParseException {
@@ -136,5 +140,16 @@ public class VerifyUtil {
         Date date = simpleDateFormat.parse(s);
         return date.getTime();
     }
+
+    public static boolean verifyArea(BookCaseVo bookCaseVo) {
+        String location = bookCaseVo.getFloor() + "_" + bookCaseVo.getArea();
+        List<Config> configs = bookCaseMapper.selectConfigByLocation(location);
+        if (0 != configs.size()) {
+            return true;
+        }
+        return false;
+
+    }
+
 }
 
