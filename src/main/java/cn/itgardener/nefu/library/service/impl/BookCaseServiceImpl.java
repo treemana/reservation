@@ -191,9 +191,22 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (null != bookCaseVo.getId() && 0 != bookCaseVo.getId().length()) {
             String id = bookCaseVo.getId();
             if (id.indexOf("-") != -1) {
-                String[] splitstr = id.split("-");
-                bookCaseVo.setL(splitstr[0]);
-                bookCaseVo.setR(splitstr[1]);
+                String[] splitstr = id.split("-", -1);
+                if (null == splitstr[0] || splitstr[0].equals("")) {
+                    bookCaseVo.setL(splitstr[1]);
+                    bookCaseVo.setR(splitstr[1]);
+                } else if (null == splitstr[1] || splitstr[1].equals("")) {
+                    bookCaseVo.setL(splitstr[0]);
+                    bookCaseVo.setR(splitstr[0]);
+                } else {
+                    if (Integer.parseInt(splitstr[1]) < Integer.parseInt(splitstr[0])) {
+                        bookCaseVo.setL(splitstr[1]);
+                        bookCaseVo.setR(splitstr[0]);
+                    } else {
+                        bookCaseVo.setL(splitstr[0]);
+                        bookCaseVo.setR(splitstr[1]);
+                    }
+                }
             } else {
                 bookCaseVo.setL(id);
                 bookCaseVo.setR(id);
@@ -221,12 +234,29 @@ public class BookCaseServiceImpl implements BookCaseService {
         List<Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
             Map<String, Object> map = new HashMap<>(4);
-            map.put("location", data.getLocation());
-            map.put("id", data.getNumber());
-            map.put("status", data.getStatus());
+            if (null != data.getLocation()) {
+                map.put("location", data.getLocation());
+            } else {
+                map.put("location", "");
+            }
+            if (null != data.getLocation()) {
+                map.put("location", data.getLocation());
+            } else {
+                map.put("location", "");
+            }
+            if (null != data.getNumber()) {
+                map.put("id", data.getNumber());
+            } else {
+                map.put("id", "");
+            }
+            if (null != data.getStatus()) {
+                map.put("status", data.getStatus());
+            } else {
+                map.put("status", "");
+            }
             Integer userId = data.getUserId();
-            if (null != userId) {
-                User user = userMapper.selectByUserId(data);
+            User user = userMapper.selectByUserId(data);
+            if (null != userId && null != userMapper.selectByUserId(data)) {
                 map.put("studentId", user.getStudentId());
             } else {
                 map.put("studentId", "");
@@ -242,12 +272,10 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public RestData selectDetailByCondition(BookCaseVo bookCaseVo) {
 
-        if (null != bookCaseVo.getStatus() && 2 == bookCaseVo.getStatus() && null != bookCaseVo.getStudentId()) {
+        if (null != bookCaseVo.getStatus() && (2 == bookCaseVo.getStatus() || 0 == bookCaseVo.getStatus()) && null != bookCaseVo.getStudentId()) {
             return new RestData(1, "无效查询");
         }
-        if (null != bookCaseVo.getStatus() && 0 == bookCaseVo.getStatus() && null != bookCaseVo.getStudentId()) {
-            return new RestData(1, "无效查询");
-        }
+
         String message = processParameter(bookCaseVo);
         /*传入的学号有误*/
         if (null != message) {

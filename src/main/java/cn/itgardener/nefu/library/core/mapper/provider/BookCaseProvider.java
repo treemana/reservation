@@ -87,25 +87,25 @@ public class BookCaseProvider {
                 FROM("bookcase");
                 if (null != bookCaseVo.getStatus() && 2 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=1");
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
                     }
                     WHERE(" bc_user_id is null");
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 } else if (null != bookCaseVo.getStatus() && 1 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=1");
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
                     }
                     if (null == bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id is not null");
@@ -116,13 +116,13 @@ public class BookCaseProvider {
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 } else {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=" + bookCaseVo.getStatus());
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
                     }
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
@@ -133,31 +133,30 @@ public class BookCaseProvider {
         }.toString();
     }
 
-
     public String countByCondition(BookCaseVo bookCaseVo) {
 
         return new SQL() {
             {
-                SELECT("count(bc_system_id) AS totalSize");
+                SELECT("count(bc_system_id) As totalSize");
                 FROM("bookcase");
                 if (null != bookCaseVo.getStatus() && 2 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=1");
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
                     }
                     WHERE(" bc_user_id is null");
                 } else if (null != bookCaseVo.getStatus() && 1 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     WHERE(" bc_status=1");
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
                     }
                     if (null == bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id is not null");
@@ -167,13 +166,13 @@ public class BookCaseProvider {
                     }
                 } else {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=" + bookCaseVo.getStatus());
                     }
                     if (null != bookCaseVo.getId()) {
-                        WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                        WHERE("( bc_system_id>=" + bookCaseVo.getL() + " and bc_system_id<= " + bookCaseVo.getR() + " )");
                     }
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
@@ -181,6 +180,7 @@ public class BookCaseProvider {
                 }
             }
         }.toString();
+
     }
 
     public String selectBookCaseNumberByLocation(@Param("l") int l) {
