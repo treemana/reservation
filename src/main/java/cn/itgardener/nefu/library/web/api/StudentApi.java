@@ -4,11 +4,9 @@
 
 package cn.itgardener.nefu.library.web.api;
 
-import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
-import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
@@ -108,27 +106,6 @@ public class StudentApi {
         } catch (LibException e) {
             logger.info(e.getMessage());
             return new RestData(1, e.getMessage());
-        }
-    }
-
-    @RequestMapping(value = "open-grades", method = RequestMethod.GET)
-    public RestData getGrade(HttpServletRequest request) {
-        logger.info("GET getGrade");
-        if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
-        }
-        User currentUser = TokenUtil.getUserByToken(request);
-        if (null == currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            try {
-                Map rtv = reservationService.getOpenGrade();
-                return new RestData(rtv);
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-                return new RestData(1, e.getMessage());
-            }
         }
     }
 

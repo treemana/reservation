@@ -5,13 +5,14 @@
 package cn.itgardener.nefu.library.web.api;
 
 import cn.itgardener.nefu.library.common.ErrorMessage;
+import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
+import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
-import cn.itgardener.nefu.library.core.model.vo.GradeVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 import cn.itgardener.nefu.library.service.BookCaseService;
@@ -21,8 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -175,30 +179,8 @@ public class TeacherApi {
         }
     }
 
-    @RequestMapping(value = "open-grades", method = RequestMethod.PUT)
-    public RestData postGrade(@RequestBody GradeVo gradeVO, HttpServletRequest request) {
-        logger.info("PUT postGrade : " + JsonUtil.getJsonString(gradeVO));
-
-        if (!VerifyUtil.verifyType(request)) {
-            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
-        }
-
-        try {
-            VerifyUtil.verifyTime();
-            boolean result = reservationService.postGrade(gradeVO);
-            if (result) {
-                return new RestData(true);
-            } else {
-                return new RestData(1, "postGrade is failure");
-            }
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            return new RestData(1, e.getMessage());
-        }
-    }
-
     @RequestMapping(value = "/delete-id", method = RequestMethod.DELETE)
-    public RestData DeleteBookcaseById(@RequestBody BookCaseVo bookCaseVo) {
+    public RestData deleteBookCaseById(@RequestBody BookCaseVo bookCaseVo) {
         try {
             return bookCaseService.deleteBookcaseById(bookCaseVo);
         } catch (LibException e) {
@@ -207,12 +189,50 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/delete-number", method = RequestMethod.DELETE)
-    public RestData deleteBookcaseByNumber(@RequestBody BookCaseVo bookCaseVo) {
+    public RestData deleteBookCaseByNumber(@RequestBody BookCaseVo bookCaseVo) {
 
         try {
             return bookCaseService.deleteBookcaseByNumber(bookCaseVo);
         } catch (LibException e) {
             return new RestData(1, e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/student", method = RequestMethod.POST)
+    public RestData postStudent(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        logger.info("POST postStudent : ");
+
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+
+        RestData rtv;
+        String fileName = GlobalConst.UPLOAD_PATH + TokenUtil.getToken() + ".xlsx";
+
+        File localFile = new File(fileName);
+        try {
+            file.transferTo(localFile);
+            rtv = userService.postStudent(fileName);
+            if (!localFile.delete()) {
+                logger.warn("Delete " + fileName + " failed!");
+            }
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+            rtv = new RestData(1, e.getLocalizedMessage());
+        }
+
+        return rtv;
+    }
+
+    @RequestMapping(value = "/student", method = RequestMethod.DELETE)
+    public RestData deleteStudent(HttpServletRequest request) {
+        logger.info("DELETE deleteStudent : ");
+
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+
+        userService.deleteStudent();
+        return new RestData(true);
     }
 }

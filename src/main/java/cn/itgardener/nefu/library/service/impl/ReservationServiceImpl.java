@@ -4,7 +4,6 @@
 
 package cn.itgardener.nefu.library.service.impl;
 
-import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.TimeUtil;
@@ -16,7 +15,6 @@ import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
-import cn.itgardener.nefu.library.core.model.vo.GradeVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 import cn.itgardener.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
@@ -98,24 +96,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean postGrade(GradeVo gradeVO) throws LibException {
-        Config config = new Config();
-        config.setConfigKey("GlobalConst.START_GRADE");
-        config.setConfigValue(gradeVO.getStartGrade());
-        int startGrade = configMapper.updateGrade(config);
-        config.setConfigKey(GlobalConst.END_GRADE);
-        config.setConfigValue(gradeVO.getEndGrade());
-        int endGrade = configMapper.updateGrade(config);
-        if (0 == startGrade || 0 == endGrade) {
-            throw new LibException("更新开放年级失败");
-        } else {
-            logger.info("更新成功");
-            redisDao.updateRedis();
-            return true;
-        }
-    }
-
-    @Override
     public Map<String, String> getReservationTime() throws LibException {
         Map<String, String> rtv = new HashMap<>(2);
         List<Config> configs = configMapper.selectOpenTime();
@@ -159,19 +139,6 @@ public class ReservationServiceImpl implements ReservationService {
         rtv.put("nowTime", nowTime);
         return rtv;
 
-    }
-
-    @Override
-    public Map<String, Object> getOpenGrade() {
-        Map<String, Object> rtv = new HashMap<>(2);
-        Config config = new Config();
-        config.setConfigKey(GlobalConst.START_GRADE);
-        Config c = configMapper.selectOpenGrade(config);
-        rtv.put("startGrade", c.getConfigValue());
-        config.setConfigKey(GlobalConst.END_GRADE);
-        c = configMapper.selectOpenGrade(config);
-        rtv.put("endGrade", c.getConfigValue());
-        return rtv;
     }
 
     @Override

@@ -29,36 +29,6 @@ public class GlobalConst {
 
     // Config.configKey
     /**
-     * area_two_n 二楼北
-     */
-    public static final String AREA_TWO_N = "area_two_n";
-
-    /**
-     * area_two_s 二楼南
-     */
-    public static final String AREA_TWO_S = "area_two_s";
-
-    /**
-     * area_three_n 三楼北
-     */
-    public static final String AREA_THREE_N = "area_three_n";
-
-    /**
-     * area_three_s 三楼南
-     */
-    public static final String AREA_THREE_S = "area_three_s";
-
-    /**
-     * start_grade 开始年级
-     */
-    public static final String START_GRADE = "start_grade";
-
-    /**
-     * end_grade 结束年级
-     */
-    public static final String END_GRADE = "end_grade";
-
-    /**
      * 0 学生
      */
     public static final int USER_STUDENT = 0;
@@ -72,4 +42,9 @@ public class GlobalConst {
      * 2 黑名单
      */
     public static final int USER_DISABLE = 2;
+
+    /**
+     * 上传文件路径
+     */
+    public static final String UPLOAD_PATH = "/tmp/";
 }

@@ -4,7 +4,6 @@
 
 package cn.itgardener.nefu.library.common.util;
 
-import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
@@ -62,34 +61,21 @@ public class VerifyUtil {
                 startTime = config.getConfigValue();
             } else if ("endTime".equals(config.getConfigKey())) {
                 endTime = config.getConfigValue();
-            } else if (GlobalConst.START_GRADE.equals(config.getConfigKey())) {
-                startGrade = Integer.parseInt(config.getConfigValue());
-            } else if (GlobalConst.END_GRADE.equals(config.getConfigKey())) {
-                endGrade = Integer.parseInt(config.getConfigValue());
             }
         }
 
-        if (userGrade < startGrade || userGrade > endGrade) {
-            if (startGrade == endGrade) {
-                throw new LibException("仅对" + startGrade + "级开放!");
-            } else {
-                throw new LibException("仅对" + startGrade + "-" + endGrade + "级开放!");
-            }
-        } else {
-            Date nowDate = format.parse(nowTime);
-            Date startDate = format.parse(startTime);
-            Date endDate = format.parse(endTime);
+        Date nowDate = format.parse(nowTime);
+        Date startDate = format.parse(startTime);
+        Date endDate = format.parse(endTime);
 
-            long now = nowDate.getTime();
-            long start = startDate.getTime();
-            long end = endDate.getTime();
-            if (now < start || now > end) {
-                throw new LibException("未到开放时间");
-            }
+        long now = nowDate.getTime();
+        long start = startDate.getTime();
+        long end = endDate.getTime();
+        if (now < start || now > end) {
+            throw new LibException("未到开放时间");
         }
 
         return true;
-
     }
 
     public static boolean verifyTime() throws LibException {
@@ -144,10 +130,7 @@ public class VerifyUtil {
     public static boolean verifyArea(BookCaseVo bookCaseVo) {
         String location = bookCaseVo.getFloor() + "_" + bookCaseVo.getArea();
         List<Config> configs = bookCaseMapper.selectConfigByLocation(location);
-        if (0 != configs.size()) {
-            return true;
-        }
-        return false;
+        return 0 != configs.size();
 
     }
 

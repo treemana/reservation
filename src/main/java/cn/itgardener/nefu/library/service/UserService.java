@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 
@@ -59,4 +60,17 @@ public interface UserService {
      * @return 前面还有多少人
      */
     int getStatus(UserVo userVo) throws LibException;
+
+    /**
+     * 上传 xlsx 导入学生
+     *
+     * @param fileName 上传后的文件名
+     * @return RestData
+     */
+    RestData postStudent(String fileName);
+
+    /**
+     * 删除现有的学生账户
+     */
+    void deleteStudent();
 }

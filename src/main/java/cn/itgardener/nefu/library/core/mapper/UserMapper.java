@@ -22,6 +22,16 @@ import java.util.List;
 public interface UserMapper {
 
     /**
+     * 插入学生
+     *
+     * @param user 数据
+     * @return 插入数据数量
+     */
+    @Insert("INSERT INTO user(user_username,user_password,user_type) VALUES(#{studentId},#{studentName},#{type})")
+    @Options(useGeneratedKeys = true, keyProperty = "user_system_id")
+    int insert(User user);
+
+    /**
      * 根据条件筛选
      *
      * @param user
@@ -93,4 +103,12 @@ public interface UserMapper {
      */
     @SelectProvider(type = UserProvider.class, method = "selectByToken")
     User selectByToken(User user);
+
+    /**
+     * 删除
+     *
+     * @return
+     */
+    @Delete("DELETE FROM `user` WHERE user_type <> 1")
+    int deleteAllStudent();
 }

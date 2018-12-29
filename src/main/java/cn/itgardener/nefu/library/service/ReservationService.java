@@ -6,7 +6,6 @@ package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
-import cn.itgardener.nefu.library.core.model.vo.GradeVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 
 import java.util.List;
@@ -26,15 +25,6 @@ public interface ReservationService {
      * @throws LibException 异常信息
      */
     List<Map<String, String>> getReservationArea() throws LibException;
-
-    /**
-     * 修改开始结束年级
-     *
-     * @param gradeVO 年级实体
-     * @return 是否成功
-     * @throws LibException 异常信息
-     */
-    boolean postGrade(GradeVo gradeVO) throws LibException;
 
     /**
      * 修改预约区域
@@ -67,13 +57,6 @@ public interface ReservationService {
      * @return 开放时间
      */
     Map<String, Object> getStartTime();
-
-    /**
-     * 获取开放年级
-     *
-     * @return {"startGrade":2016,"endGrade":2018}
-     */
-    Map<String, Object> getOpenGrade();
 
     /**
      * 获取各个区域的预约状态
