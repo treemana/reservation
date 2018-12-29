@@ -55,6 +55,12 @@ public class LoginApi {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user) {
         logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
+
+        if (null == user.getStudentId() || 1 > user.getStudentId().length() ||
+                null == user.getStudentName() || 1 > user.getStudentName().length()) {
+            return new RestData(1, ErrorMessage.PARAMATER_ERROR);
+        }
+
         try {
             Map<String, Object> data = userService.postLogin(user);
             return new RestData(data);
