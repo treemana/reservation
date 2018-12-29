@@ -31,7 +31,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURI();
-        logger.info("TokenInterceptor");
+        logger.debug("TokenInterceptor");
 
         boolean result = path.contains("login") || "OPTIONS".equals(request.getMethod());
 
