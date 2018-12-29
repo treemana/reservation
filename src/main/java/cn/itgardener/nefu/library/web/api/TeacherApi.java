@@ -11,13 +11,16 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
+import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
+import cn.itgardener.nefu.library.core.model.vo.*;
 import cn.itgardener.nefu.library.service.BookCaseService;
 import cn.itgardener.nefu.library.service.ReservationService;
 import cn.itgardener.nefu.library.service.UserService;
+import cn.itgardener.nefu.library.service.impl.BookCaseServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,6 +248,18 @@ public class TeacherApi {
             return new RestData(null);
         }else {
             return new RestData(1,"批量添加柜子失败");
+        }
+    }
+    @RequestMapping(value = "/location",method = RequestMethod.POST)
+    public RestData addLocation(@RequestBody LocationVo locationVo,HttpServletRequest request){
+        logger.info("get addLocation:"+JsonUtil.getJsonString(locationVo));
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+        if (bookCaseService.addLocation(locationVo)) {
+            return new RestData(null);
+        } else {
+            return new RestData(1, "添加区域失败");
         }
     }
 }

@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -98,4 +100,22 @@ public interface ConfigMapper {
      */
     @SelectProvider(type=ConfigProvider.class,method = "selectLocation")
     List<Config> selectLocation(String location);
+
+    /**
+     * 从config表查询某楼层所有的区域
+     * @param locationVo 实例
+     * @return config结果集
+     */
+    @SelectProvider(type = ConfigProvider.class, method = "selectFloorLocation")
+    List<Config> selectFloorLocation(LocationVo locationVo);
+
+    /**
+     * 插入新区域
+     *
+     * @param location 位置
+     * @param status   0为可预约 1为不可预约
+     * @return
+     */
+    @Insert("INSERT INTO config(config_key,config_value) values (#{location},#{status})")
+    int addLocation(String location, int status);
 }

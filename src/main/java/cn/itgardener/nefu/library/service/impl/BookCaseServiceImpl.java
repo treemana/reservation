@@ -17,6 +17,7 @@ import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 import cn.itgardener.nefu.library.service.BookCaseService;
 import cn.itgardener.nefu.library.service.ReservationService;
@@ -446,6 +447,23 @@ public class BookCaseServiceImpl implements BookCaseService {
             if(0==bookCaseMapper.addBookcase(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea(),++number))
             return false;
         }
+        return true;
+    }
+
+    @Override
+    public boolean addLocation(LocationVo locationVo){
+        List<Config> list;
+        int maxarea = 0;
+        list = configMapper.selectFloorLocation(locationVo);
+        for (int i = 0; i < list.size(); i++){
+            Config config = list.get(i);
+            String[] x = config.getConfigKey().split("_");
+            if(Integer.parseInt(x[1])>maxarea){
+                maxarea = Integer.parseInt(x[1]);
+            }
+        }
+        maxarea++;
+        configMapper.addLocation(locationVo.getFloor()+"_"+maxarea,locationVo.getStatus());
         return true;
     }
 }

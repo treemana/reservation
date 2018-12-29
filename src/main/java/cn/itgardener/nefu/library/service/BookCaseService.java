@@ -9,6 +9,7 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 
 import java.util.List;
@@ -126,4 +127,10 @@ public interface BookCaseService {
      */
     boolean addBookcase(BookCaseVo bookCaseVo);
 
+    /**
+     * 增加区域
+     * @param locationVo 实例
+     * @return Boolean
+     */
+    boolean addLocation(LocationVo locationVo);
 }
