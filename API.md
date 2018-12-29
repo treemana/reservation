@@ -448,7 +448,7 @@
 
 ```json
 {
-    "floor" : 1 ,
+    "floor" : 1,
     "area" : 1,
     "total" : 100
 }

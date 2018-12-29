@@ -10,9 +10,11 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.PageUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
+import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.BookCase;
+import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
@@ -46,12 +48,15 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     private final RedisDao redisDao;
 
+    private final ConfigMapper configMapper;
+
     private final ReservationService reservationService;
 
     @Autowired
-    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, UserMapper userMapper, RedisDao redisDao, ReservationService reservationService) {
+    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, ConfigMapper configMapper,UserMapper userMapper, RedisDao redisDao, ReservationService reservationService) {
         this.bookCaseMapper = bookCaseMapper;
         this.userMapper = userMapper;
+        this.configMapper = configMapper;
         this.redisDao = redisDao;
         this.reservationService = reservationService;
     }
@@ -421,6 +426,27 @@ public class BookCaseServiceImpl implements BookCaseService {
             redisDao.inc("popCount", 1);
         }
         return studentId;
+    }
+
+    @Override
+    public boolean addBookcase(BookCaseVo bookCaseVo) {
+        List<Integer> list;
+        List<Config> list1;
+        int number=0;
+        list1 = configMapper.selectLocation(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea());
+        if(list1.size()==0){
+            logger.info("所选区域不存在");
+            return false;
+        }
+        list = bookCaseMapper.getMaxNumber(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea());
+        if(null != list.get(0)){
+            number = list.get(0);
+        }
+        for(int i=0;i<bookCaseVo.getTotal();i++){
+            if(0==bookCaseMapper.addBookcase(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea(),++number))
+            return false;
+        }
+        return true;
     }
 }
 

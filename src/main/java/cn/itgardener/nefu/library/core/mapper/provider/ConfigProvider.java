@@ -93,4 +93,13 @@ public class ConfigProvider {
         }.toString();
     }
 
+    public String selectLocation(String location){
+        return new SQL(){
+            {
+                SELECT("config_key as configKey,config_value as configValue");
+                FROM("config");
+                WHERE("config_key=#{location}");
+            }
+        }.toString();
+    }
 }

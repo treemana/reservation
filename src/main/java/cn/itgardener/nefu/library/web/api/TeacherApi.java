@@ -235,4 +235,16 @@ public class TeacherApi {
         userService.deleteStudent();
         return new RestData(true);
     }
+    @RequestMapping(value = "/bookcase",method = RequestMethod.POST)
+    public RestData AddBookCase(@RequestBody BookCaseVo bookCaseVo,HttpServletRequest request){
+        logger.info("get AddBookCase"+JsonUtil.getJsonString(bookCaseVo));
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+        if(bookCaseService.addBookcase(bookCaseVo)){
+            return new RestData(null);
+        }else {
+            return new RestData(1,"批量添加柜子失败");
+        }
+    }
 }

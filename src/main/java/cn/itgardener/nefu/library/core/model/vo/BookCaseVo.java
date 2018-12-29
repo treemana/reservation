@@ -83,6 +83,37 @@ public class BookCaseVo {
      * 柜子的编号
      */
     private Integer number;
+    /**
+     * 新添加柜子的数量
+     */
+    private Integer total;
+
+
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
 
     public Integer getSystemId() {
         return systemId;
@@ -162,22 +193,6 @@ public class BookCaseVo {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
-    }
-
-    public Integer getFloor() {
-        return floor;
-    }
-
-    public void setFloor(Integer floor) {
-        this.floor = floor;
-    }
-
-    public Integer getArea() {
-        return area;
-    }
-
-    public void setArea(Integer area) {
-        this.area = area;
     }
 
     public List<Integer> getArray() {

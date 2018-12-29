@@ -6,6 +6,7 @@ package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
+import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
@@ -117,5 +118,12 @@ public interface BookCaseService {
      * @throws LibException 异常
      */
     RestData deleteBookcaseByNumber(BookCaseVo bookCaseVo) throws LibException;
+
+    /**
+     * 批量增加柜子
+     * @param bookCaseVo
+     * @return 结果
+     */
+    boolean addBookcase(BookCaseVo bookCaseVo);
 
 }

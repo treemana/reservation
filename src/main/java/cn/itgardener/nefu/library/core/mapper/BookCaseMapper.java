@@ -179,4 +179,19 @@ public interface BookCaseMapper {
      */
     @DeleteProvider(type = BookCaseProvider.class, method = "deleteBookcaseById")
     int deleteBookcaseById(BookCaseVo bookCaseVo);
+    /**
+     * 获取location区域的最大柜子编号
+     * @return list
+     */
+    @Select("SELECT MAX(bc_number) FROM bookcase WHERE bc_location=#{location}")
+    List<Integer> getMaxNumber(String location);
+
+    /**
+     * 增加柜子
+     * @param  location 区域
+     * @param number 柜子编号
+     * @return 插入个数
+     */
+    @Insert("INSERT INTO bookcase(bc_location,bc_number,bc_status) VALUES (#{location},#{number},0)")
+    int addBookcase(@Param("location") String location, @Param("number") int number);
 }

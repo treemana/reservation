@@ -7,6 +7,7 @@ package cn.itgardener.nefu.library.core.mapper;
 import cn.itgardener.nefu.library.core.mapper.provider.ConfigProvider;
 import cn.itgardener.nefu.library.core.model.Config;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.stereotype.Repository;
@@ -90,4 +91,11 @@ public interface ConfigMapper {
     @SelectProvider(type = ConfigProvider.class, method = "selectEndTime")
     Config selectEndTime();
 
+    /**
+     * 查询出location的区域
+     * @param location
+     * @return Config结果集
+     */
+    @SelectProvider(type=ConfigProvider.class,method = "selectLocation")
+    List<Config> selectLocation(String location);
 }
