@@ -379,7 +379,8 @@
         "pages" : {
             "totalPage" : 15,
             "nowPage" : 10,
-            "perPage" : 10
+            "perPage" : 10,
+            "totalSize" : 85
         }
     }
 }
