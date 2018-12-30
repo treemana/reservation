@@ -34,14 +34,15 @@ public interface BookCaseMapper {
     @SelectProvider(type = BookCaseProvider.class, method = "selectByUserId")
     BookCase selectByUserId(User user);
 
+
     /**
      * 设置预留的书包柜
      *
-     * @param bookCase 书包柜编号
+     * @param bookCaseVo 书包柜编号
      * @return 操作是否成功 1 成功 0 失败
      */
-    @UpdateProvider(type = BookCaseProvider.class, method = "setByNumber")
-    int setByNumber(BookCase bookCase);
+    @UpdateProvider(type = BookCaseProvider.class, method = "setBookCaseByCondition")
+    int setBookCaseByCondition(BookCaseVo bookCaseVo);
 
     /**
      * 通过书包柜编号释放关系
@@ -179,8 +180,10 @@ public interface BookCaseMapper {
      */
     @DeleteProvider(type = BookCaseProvider.class, method = "deleteBookcaseById")
     int deleteBookcaseById(BookCaseVo bookCaseVo);
+
     /**
      * 获取location区域的最大柜子编号
+     *
      * @return list
      */
     @Select("SELECT MAX(bc_number) FROM bookcase WHERE bc_location=#{location}")
@@ -188,10 +191,21 @@ public interface BookCaseMapper {
 
     /**
      * 增加柜子
-     * @param  location 区域
-     * @param number 柜子编号
+     *
+     * @param location 区域
+     * @param number   柜子编号
      * @return 插入个数
      */
     @Insert("INSERT INTO bookcase(bc_location,bc_number,bc_status) VALUES (#{location},#{number},0)")
     int addBookcase(@Param("location") String location, @Param("number") int number);
+
+    /**
+     * 查询符合条件的书包柜
+     *
+     * @param bookCaseVo
+     * @return List<BookCase>
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByCondition")
+    List<BookCase> selectBookCaseByCondition(BookCaseVo bookCaseVo);
+
 }

@@ -54,7 +54,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     private final ReservationService reservationService;
 
     @Autowired
-    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, ConfigMapper configMapper,UserMapper userMapper, RedisDao redisDao, ReservationService reservationService) {
+    public BookCaseServiceImpl(BookCaseMapper bookCaseMapper, ConfigMapper configMapper, UserMapper userMapper, RedisDao redisDao, ReservationService reservationService) {
         this.bookCaseMapper = bookCaseMapper;
         this.userMapper = userMapper;
         this.configMapper = configMapper;
@@ -113,19 +113,19 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public RestData setKeepByNumber(BookCaseVo bookCaseVo) {
+    public RestData setKeepById(BookCaseVo bookCaseVo) {
         int success = 0;
         List<Integer> data = bookCaseVo.getArray();
         if (0 == data.size() || null == data) {
             return new RestData(1, "无效参数");
         } else {
             for (int count = 0; count < data.size(); count++) {
-                ShipVo shipVo = new ShipVo();
-                shipVo.setNumber(data.get(count).toString());
-                BookCase bookCase = bookCaseMapper.selectByNumber(shipVo);
-                if (null != bookCase) {
-                    if (null != bookCase.getUserId()) {
-                        return new RestData(1, "柜子存在已被占用的情况!");
+                BookCaseVo vo = new BookCaseVo();
+                vo.setSystemId(data.get(count));
+                List<BookCase> bookCases = bookCaseMapper.selectBookCaseByCondition(vo);
+                if (null != bookCases && 1 == bookCases.size()) {
+                    if (null != bookCases.get(0).getUserId()) {
+                        return new RestData(1, "编号为" + bookCases.get(0).getNumber() + "的柜子存在已被占用的情况!");
                     }
                 } else {
                     return new RestData(1, "柜子编号有误!");
@@ -133,9 +133,9 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
 
             for (int count = 0; count < data.size(); count++) {
-                BookCase bookCase = new BookCase();
-                bookCase.setNumber(data.get(count));
-                if (0 >= bookCaseMapper.setByNumber(bookCase)) {
+                BookCaseVo vo = new BookCaseVo();
+                vo.setSystemId(data.get(count));
+                if (0 >= bookCaseMapper.setBookCaseByCondition(vo)) {
                     success = 1;
                     break;
                 }
@@ -148,6 +148,46 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
         }
     }
+
+    @Override
+    public RestData setKeepByNumber(BookCaseVo bookCaseVo) {
+        if (!VerifyUtil.verifyArea(bookCaseVo)) {
+            return new RestData(1, "此区域不存在!");
+        }
+
+        if (null == bookCaseVo.getFloor() || null == bookCaseVo.getArea() || null == bookCaseVo.getStart() || null == bookCaseVo.getEnd()) {
+            return new RestData(1, "无效参数!");
+        } else {
+
+            if (bookCaseVo.getEnd() >= bookCaseVo.getStart() && 0 < bookCaseVo.getStart()) {
+
+                for (int count = bookCaseVo.getStart(); count <= bookCaseVo.getEnd(); count++) {
+                    BookCaseVo vo = new BookCaseVo();
+                    vo.setNumber(count);
+                    vo.setLocation(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea());
+                    List<BookCase> bookCases = bookCaseMapper.selectBookCaseByCondition(vo);
+                    if (null != bookCases && 1 == bookCases.size()) {
+                        if (null != bookCases.get(0).getUserId()) {
+                            return new RestData(1, "编号为" + bookCases.get(0).getNumber() + "的柜子存在已被占用的情况!");
+                        }
+                    } else {
+                        return new RestData(1, "柜子编号有误!");
+                    }
+                }
+
+                bookCaseVo.setLocation(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea());
+                int i = bookCaseMapper.setBookCaseByCondition(bookCaseVo);
+                if (0 == i) {
+                    return new RestData(1, "未知错误!");
+                } else {
+                    return new RestData(true);
+                }
+            } else {
+                return new RestData(1, "无效参数!");
+            }
+        }
+    }
+
 
     @Override
     public RestData deleteShip(List<Integer> data) {
@@ -433,37 +473,37 @@ public class BookCaseServiceImpl implements BookCaseService {
     public boolean addBookcase(BookCaseVo bookCaseVo) {
         List<Integer> list;
         List<Config> list1;
-        int number=0;
-        list1 = configMapper.selectLocation(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea());
-        if(list1.size()==0){
+        int number = 0;
+        list1 = configMapper.selectLocation(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea());
+        if (list1.size() == 0) {
             logger.info("所选区域不存在");
             return false;
         }
-        list = bookCaseMapper.getMaxNumber(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea());
-        if(null != list.get(0)){
+        list = bookCaseMapper.getMaxNumber(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea());
+        if (null != list.get(0)) {
             number = list.get(0);
         }
-        for(int i=0;i<bookCaseVo.getTotal();i++){
-            if(0==bookCaseMapper.addBookcase(bookCaseVo.getFloor()+"_"+bookCaseVo.getArea(),++number))
-            return false;
+        for (int i = 0; i < bookCaseVo.getTotal(); i++) {
+            if (0 == bookCaseMapper.addBookcase(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea(), ++number))
+                return false;
         }
         return true;
     }
 
     @Override
-    public boolean addLocation(LocationVo locationVo){
+    public boolean addLocation(LocationVo locationVo) {
         List<Config> list;
         int maxarea = 0;
         list = configMapper.selectFloorLocation(locationVo);
-        for (int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             Config config = list.get(i);
             String[] x = config.getConfigKey().split("_");
-            if(Integer.parseInt(x[1])>maxarea){
+            if (Integer.parseInt(x[1]) > maxarea) {
                 maxarea = Integer.parseInt(x[1]);
             }
         }
         maxarea++;
-        configMapper.addLocation(locationVo.getFloor()+"_"+maxarea,locationVo.getStatus());
+        configMapper.addLocation(locationVo.getFloor() + "_" + maxarea, locationVo.getStatus());
         return true;
     }
 }

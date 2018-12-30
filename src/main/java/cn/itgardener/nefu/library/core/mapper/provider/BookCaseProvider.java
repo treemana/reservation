@@ -31,12 +31,23 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String setByNumber(BookCase bookCase) {
+    public String setBookCaseByCondition(BookCaseVo bookCaseVo) {
         return new SQL() {
             {
                 UPDATE("bookcase");
                 SET("bc_status=1");
-                WHERE("bc_number=#{number}");
+                if (null != bookCaseVo.getNumber()) {
+                    WHERE("bc_number=#{number}");
+                }
+                if (null != bookCaseVo.getSystemId()) {
+                    WHERE("bc_system_id=#{systemId}");
+                }
+                if (null != bookCaseVo.getStart() && null != bookCaseVo.getEnd()) {
+                    WHERE("bc_number between #{start} and #{end}");
+                }
+                if (null != bookCaseVo.getLocation()) {
+                    WHERE("bc_location=#{location}");
+                }
             }
         }.toString();
     }
@@ -280,6 +291,33 @@ public class BookCaseProvider {
 
         }.toString();
     }
+
+    public String selectBookCaseByCondition(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                if (null != bookCaseVo.getSystemId()) {
+                    WHERE("bc_system_id = #{systemId}");
+                }
+                if (null != bookCaseVo.getLocation()) {
+                    WHERE("bc_location = #{location}");
+                }
+                if (null != bookCaseVo.getNumber()) {
+                    WHERE("bc_number = #{number}");
+                }
+                if (null != bookCaseVo.getUserId()) {
+                    WHERE("bc_user_id = #{userId}");
+                }
+                if (null != bookCaseVo.getStatus()) {
+                    WHERE("bc_status = #{status}");
+                }
+            }
+
+        }.toString();
+    }
+
 }
 
 

@@ -31,8 +31,17 @@ public interface BookCaseService {
      */
     Map<String, Object> getLocationByUserId(User user) throws LibException;
 
+
     /**
-     * 设置预留的书包柜
+     * 根据Id设置预留的书包柜
+     *
+     * @param bookCaseVo
+     * @return 是否预留成功
+     */
+    RestData setKeepById(BookCaseVo bookCaseVo);
+
+    /**
+     * 根据number设置预留的书包柜
      *
      * @param bookCaseVo
      * @return 是否预留成功
@@ -122,6 +131,7 @@ public interface BookCaseService {
 
     /**
      * 批量增加柜子
+     *
      * @param bookCaseVo
      * @return 结果
      */
@@ -129,6 +139,7 @@ public interface BookCaseService {
 
     /**
      * 增加区域
+     *
      * @param locationVo 实例
      * @return Boolean
      */
