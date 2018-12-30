@@ -124,11 +124,10 @@ public class StudentApi {
         }
     }
 
-    @RequestMapping(value = "/num", method = RequestMethod.GET)
-    public RestData getNum() {
+    @RequestMapping(value = "/num/{floor}", method = RequestMethod.GET)
+    public RestData getNum(@PathVariable(value = "floor") String floor) {
         logger.info("GET getNum");
-
-        List<Map<String, Object>> data = bookCaseService.getBagNum();
+        List<Map<String, Object>> data = bookCaseService.getBagNum(floor);
         return new RestData(data);
     }
 
