@@ -8,6 +8,7 @@ import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -183,19 +184,21 @@ public class RedisDaoImpl implements RedisDao {
     public boolean updateRedis() {
         try {
             int count = 0;
-
-            for (int i = 1; i <= 4; i++) {
-
-                if ("1".equals(configMapper.selectOpenArea().get(i - 1).getConfigValue())) {
-                    this.set("location_" + i, "0");
-                    continue;
+            LocationVo locationVo = new LocationVo();
+            for (int i = 1; i <= 6; i++) {
+                locationVo.setFloor(i);
+                List<Config> list = configMapper.selectFloorLocation(locationVo);
+                this.set("floor_" + i, String.valueOf(list.size()));
+                for (int j = 1; j <= list.size(); j++) {
+                    if ("1".equals(configMapper.selectLocation(i + "_" + j).get(0).getConfigValue())) {
+                        this.set("location_" + i + "_" + "j", "0");
+                        continue;
+                    }
+                    int num = bookCaseMapper.selectBagNum(i + "_" + j);
+                    count += num;
+                    this.set("location_" + i + "_" + j, String.valueOf(num));
                 }
-
-                int num = bookCaseMapper.selectBagNum(i);
-                count += num;
-                this.set("location_" + i, String.valueOf(num));
             }
-
             this.set("popCount", "0");
             this.set("total", String.valueOf(count));
             this.remove("finish");

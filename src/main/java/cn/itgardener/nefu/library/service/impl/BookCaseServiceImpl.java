@@ -218,12 +218,12 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public List<Map<String, Object>> getBagNum() {
+    public List<Map<String, Object>> getBagNum(String floor) {
         List<Map<String, Object>> rtv = new ArrayList<>();
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= Integer.parseInt(redisDao.get("floor_" + floor)); i++) {
             Map<String, Object> map = new HashMap<>(2);
-            int num = Integer.parseInt(redisDao.get("location_" + i));
-            map.put("location", i);
+            int num = Integer.parseInt(redisDao.get("location_" + floor + "_" + i));
+            map.put("location_", floor + "_" + i);
             map.put("num", num);
             rtv.add(map);
         }

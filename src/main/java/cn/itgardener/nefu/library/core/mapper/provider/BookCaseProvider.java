@@ -72,7 +72,7 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String selectBagNum(@Param("location") int location) {
+    public String selectBagNum(@Param("location") String location) {
         return new SQL() {
             {
                 SELECT("count(*)");

@@ -70,7 +70,7 @@ public interface BookCaseService {
      *
      * @return 书包柜位置和数量的列表
      */
-    List<Map<String, Object>> getBagNum();
+    List<Map<String, Object>> getBagNum(String floor);
 
     /**
      * 根据条件获取书包柜详情

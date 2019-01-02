@@ -189,7 +189,7 @@
 
 ### 1.3.5. 获取书包柜数量
 
-- GET /num?floor=1
+- GET /num/{floor}  
 
 - return :
 

@@ -62,13 +62,13 @@ public interface BookCaseMapper {
     int deleteAllShip();
 
     /**
-     * 通过location筛选书包柜数量
+     * 通过location筛选可预约的书包柜数量
      *
      * @param location
      * @return
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectBagNum")
-    int selectBagNum(@Param("location") int location);
+    int selectBagNum(@Param("location") String location);
 
     /**
      * 查询出对应位置编号最小的一个书包柜
