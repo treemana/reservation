@@ -180,12 +180,14 @@ public class BookCaseServiceImpl implements BookCaseService {
                 if (0 == i) {
                     return new RestData(1, "未知错误!");
                 } else {
+                    redisDao.updateRedis();
                     return new RestData(true);
                 }
             } else {
                 return new RestData(1, "无效参数!");
             }
         }
+
     }
 
 
@@ -341,19 +343,26 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     }
 
-    private int maxLocation() {
-        int maxValue = Integer.parseInt(redisDao.get("location_1"));
-        int maxL = 1;
-
-        for (int i = 2; i <= 4; i++) {
-            int nowValue = Integer.parseInt(redisDao.get("location_" + i));
-            if (nowValue > maxValue) {
-                maxValue = nowValue;
-                maxL = i;
+    //选择出最大数量的区域
+    private String maxLocation() {
+        int max = 0;
+        int nowvalue;
+        String maxlocation = null;
+        for (int i = 1; i <= 6; i++) {
+            int locationnum = Integer.parseInt(redisDao.get("floor_" + i));
+            for (int j = 0; j < locationnum; j++) {
+                try {
+                    nowvalue = Integer.parseInt(redisDao.get("location_" + i + "_" + j));//redis中可能没有该区域
+                } catch (Exception e) {
+                    nowvalue = 0;
+                }
+                if (nowvalue > max) {
+                    max = nowvalue;
+                    maxlocation = i + "_" + j;
+                }
             }
         }
-
-        return maxL;
+        return maxlocation;
     }
 
     @Override
@@ -369,9 +378,9 @@ public class BookCaseServiceImpl implements BookCaseService {
         String location;
 
         if (bookCaseVo.getLocation() != null) {
-            location = bookCaseVo.getLocation().toString();
+            location = bookCaseVo.getLocation();
         } else {
-            location = maxLocation() + "";
+            location = maxLocation();
         }
 
         long count = redisDao.getListSize("userQueue") + Integer.parseInt(redisDao.get("popCount"));
@@ -383,7 +392,6 @@ public class BookCaseServiceImpl implements BookCaseService {
           2. 如果有,判断 c_ 大于一 入队 不大于一 total--
           3. 如果没有柜子返回false
          */
-
         if (total > 0 && Integer.parseInt(redisDao.get("location_" + location)) > 0) {
             if (redisDao.inc("c_" + key, 1) > 1) {
                 redisDao.pushValue("userQueue", key);
@@ -394,7 +402,6 @@ public class BookCaseServiceImpl implements BookCaseService {
         } else {
             throw new LibException("排队失败,请重试");
         }
-
         return true;
     }
 
@@ -405,7 +412,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (redisDao.dec("c_" + studentId, 1) == 0) {
             logger.info("====当前处理{}", studentId);
             //l为该学生请求的区域
-            int l = Integer.parseInt(redisDao.get("l_" + studentId).split(",")[0]);
+            String l = redisDao.get("l_" + studentId).split(",")[0];
             // 如果当前区域没有柜子
             if ("0".equals(redisDao.get("location_" + l))) {
                 // 取当前区域中的最大值
@@ -417,7 +424,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 User user = new User();
                 user.setStudentId(studentId);
                 List<User> reUser = userMapper.selectByCondition(user);
-                bookCaseMapper.updateOwnerByBcNumber(bookCase.getNumber(), reUser.get(0).getSystemId());
+                bookCaseMapper.updateOwnerByBcId(bookCase.getSystemId(), reUser.get(0).getSystemId());
                 redisDao.dec("location_" + l, 1);
                 redisDao.add("finish", studentId);
             } else {
@@ -434,6 +441,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 bookCaseVo.setSystemId(systemId);
                 bookCaseMapper.deleteBookcaseById(bookCaseVo);
             }
+            redisDao.updateRedis();
             return new RestData(true);
         } else {
             throw new LibException("数组为空");
@@ -453,6 +461,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (0 == i) {
                 throw new LibException("输入的数据有误");
             } else {
+                redisDao.updateRedis();
                 return new RestData(true);
             }
         } else {
@@ -487,6 +496,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (0 == bookCaseMapper.addBookcase(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea(), ++number))
                 return false;
         }
+        redisDao.updateRedis();
         return true;
     }
 
@@ -504,6 +514,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         }
         maxarea++;
         configMapper.addLocation(locationVo.getFloor() + "_" + maxarea, locationVo.getStatus());
+        redisDao.updateRedis();
         return true;
     }
 }

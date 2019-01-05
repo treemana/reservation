@@ -113,6 +113,7 @@
 ### 1.3.1. 预约书包柜
 
 - POST /box-order
+    -location 为 null时，随机预约书包柜
 - payload :
 
 ```json

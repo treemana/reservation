@@ -77,7 +77,7 @@ public interface BookCaseMapper {
      * @return
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseNumberByLocation")
-    BookCase selectBookCaseNumberByLocation(@Param("l") int l);
+    BookCase selectBookCaseNumberByLocation(@Param("l") String l);
 
     /**
      * 根据书包柜编号更新使用者ID
@@ -86,8 +86,8 @@ public interface BookCaseMapper {
      * @param studentId
      * @return
      */
-    @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_number=#{bcNumber}")
-    int updateOwnerByBcNumber(@Param("bcNumber") int bcNumber, @Param("studentId") int studentId);
+    @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_system_id=#{bcSystemId}")
+    int updateOwnerByBcNumber(@Param("bcSystemId") int bcSystemId, @Param("studentId") int studentId);
 
 
     /**
