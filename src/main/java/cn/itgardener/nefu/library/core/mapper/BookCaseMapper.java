@@ -208,4 +208,14 @@ public interface BookCaseMapper {
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByCondition")
     List<BookCase> selectBookCaseByCondition(BookCaseVo bookCaseVo);
 
+    /**
+     * 根据书包柜编号更新使用者ID
+     *
+     * @param bcSystemId
+     * @param studentId
+     * @return
+     */
+    @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_system_id=#{bcSystemId}")
+    int updateOwnerByBcId(@Param("bcSystemId") int bcSystemId, @Param("studentId") int studentId);
+
 }
