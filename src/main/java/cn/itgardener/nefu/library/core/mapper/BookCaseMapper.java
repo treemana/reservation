@@ -82,12 +82,12 @@ public interface BookCaseMapper {
     /**
      * 根据书包柜编号更新使用者ID
      *
-     * @param bcNumber
+     * @param bcSystemId
      * @param studentId
      * @return
      */
     @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_system_id=#{bcSystemId}")
-    int updateOwnerByBcNumber(@Param("bcSystemId") int bcSystemId, @Param("studentId") int studentId);
+    int updateOwnerByBcId(@Param("bcSystemId") int bcSystemId, @Param("studentId") int studentId);
 
 
     /**

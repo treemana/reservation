@@ -8,6 +8,8 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,10 +64,11 @@ public interface ReservationService {
      * 获取各个区域的预约状态
      *
      * @param studentId 学号
+     * @param floor 楼层
      * @return [0, 1, 1, 0] 0表示可以预约,1表示不可预约
-     * @throws LibException 异常信息
+     * @throws ParseException 异常信息
      */
-    List<Integer> getAreaStatus(String studentId) throws LibException;
+    List<HashMap<String, Object>> getAreaStatus(String studentId, String floor) throws ParseException;
 
     /**
      * 验证码校验

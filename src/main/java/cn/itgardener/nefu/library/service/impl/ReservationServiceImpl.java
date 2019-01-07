@@ -23,10 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author : pc CMY
@@ -142,29 +140,42 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Integer> getAreaStatus(String studentId) {
-        List<Integer> rtv = new ArrayList<>(4);
-        User user = new User();
-        user.setStudentId(studentId);
-        user = userMapper.selectByCondition(user).get(0);
-        String token = user.getToken();
-        try {
-            VerifyUtil.verify(token);
+    public List<HashMap<String, Object>> getAreaStatus(String studentId, String floor) throws ParseException {
+        int locationNum = Integer.parseInt(redisDao.get("floor_" + floor));
+        List<HashMap<String, Object>> rtv = new ArrayList<>(locationNum);
 
-        } catch (LibException e) {
-            logger.info(String.valueOf(e));
-            for (int i = 0; i < 4; i++) {
-                rtv.add(1);
+        //验证开放时间
+        String nowTime = TimeUtil.getCurrentTime();
+        String openTime = redisDao.get("openTime");
+        String endTime = redisDao.get("endTime");
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date nowDate = format.parse(nowTime);
+        Date startDate = format.parse(openTime);
+        Date endDate = format.parse(endTime);
+
+        long now = nowDate.getTime();
+        long start = startDate.getTime();
+        long end = endDate.getTime();
+        if (now < start || now > end) {
+            for (int i = 1; i <= locationNum; i++) {
+                HashMap<String, Object> hashMap = new HashMap<>(2);
+                hashMap.put("location", floor + "_" + i);
+                hashMap.put("status", 1);
+                rtv.add(hashMap);
             }
+            logger.info("不在开放时间");
             return rtv;
-        } catch (ParseException e) {
-            logger.error(e.getLocalizedMessage());
         }
 
         //判断是否已经分配了柜子
         if (redisDao.isMember("finish", studentId)) {
-            for (int i = 0; i < 4; i++) {
-                rtv.add(1);
+            for (int i = 1; i <= locationNum; i++) {
+                HashMap<String, Object> hashMap = new HashMap<>(2);
+                hashMap.put("location", floor + "_" + i);
+                hashMap.put("status", 1);
+                rtv.add(hashMap);
             }
             logger.info("已经分配了柜子");
             return rtv;
@@ -173,23 +184,33 @@ public class ReservationServiceImpl implements ReservationService {
         List<String> list = redisDao.getList("userQueue", 0, -1);
         //判斷排队队列中是否有该studentId
         if (list.contains(studentId)) {
-            for (int i = 0; i < 4; i++) {
-                rtv.add(1);
+            for (int i = 1; i <= locationNum; i++) {
+                HashMap<String, Object> hashMap = new HashMap<>(2);
+                hashMap.put("location", floor + "_" + i);
+                hashMap.put("status", 1);
+                rtv.add(hashMap);
             }
             logger.info("已在队列中");
             return rtv;
         }
         //联合判断 区域是否开放和柜子是否剩余
-        for (int i = 1; i <= 4; i++) {
-            if (Integer.parseInt(redisDao.get("location_" + i)) > 0) {
-                rtv.add(0);
+        for (int i = 1; i <= locationNum; i++) {
+            if (Integer.parseInt(redisDao.get("location_" + floor + "_" + i)) > 0) {
+                HashMap<String, Object> hashMap = new HashMap<>(2);
+                hashMap.put("location", floor + "_" + i);
+                hashMap.put("status", 0);
+                rtv.add(hashMap);
             } else {
-                logger.info("locatioin" + i + "区域未开放或该区域无剩余柜子");
-                rtv.add(1);
+                logger.info("locatioin_" + floor + "_" + i + "区域未开放或该区域无剩余柜子");
+                HashMap<String, Object> hashMap = new HashMap<>(2);
+                hashMap.put("location", floor + "_" + i);
+                hashMap.put("status", 1);
+                rtv.add(hashMap);
             }
         }
         return rtv;
     }
+
 
     @Override
     public void verifyCode(String verifyCode, String studentId) throws LibException {

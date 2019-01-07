@@ -86,13 +86,18 @@ public class StudentApi {
         }
     }
 
-    @RequestMapping(value = "/area-status/{studentId}", method = RequestMethod.GET)
-    public RestData getAreaStatus(@PathVariable String studentId) {
-        logger.info("GET getAreaStatus");
+    @RequestMapping(value = "/area-status", method = RequestMethod.GET)
+    public RestData getAreaStatus(BookCaseVo bookCaseVo) {
+        logger.info("GET getAreaStatus:" + bookCaseVo.getStudentId());
+        String studentId = bookCaseVo.getStudentId();
+        String floor = String.valueOf(bookCaseVo.getFloor());
+        if (null == studentId || null == floor) {
+            return new RestData("请输入学号和楼层");
+        }
         try {
-            return new RestData(reservationService.getAreaStatus(studentId));
-        } catch (LibException e) {
-            logger.error(e.getLocalizedMessage());
+            return new RestData(reservationService.getAreaStatus(studentId, floor));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return new RestData(1, "获取区域预约状态失败");
     }
