@@ -103,7 +103,7 @@ public class StudentApi {
     }
 
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
-    public RestData getReservationArea(int floor) {
+    public RestData getReservationArea(@RequestParam int floor) {
         logger.info("GET getReservationArea");
         try {
             List<Map<String, String>> reservationArea = reservationService.getReservationArea(floor);
