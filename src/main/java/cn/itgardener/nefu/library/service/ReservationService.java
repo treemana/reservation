@@ -26,7 +26,7 @@ public interface ReservationService {
      * @return 区域状态
      * @throws LibException 异常信息
      */
-    List<Map<String, String>> getReservationArea() throws LibException;
+    List<Map<String, String>> getReservationArea(int floor) throws LibException;
 
     /**
      * 修改预约区域

@@ -71,7 +71,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Map<String, String>> getReservationArea() throws LibException {
+    public List<Map<String, String>> getReservationArea(int floor) throws LibException {
 
         List<Config> configs = configMapper.selectOpenArea();
         if (null == configs) {
@@ -81,13 +81,12 @@ public class ReservationServiceImpl implements ReservationService {
             List<Map<String, String>> rtv = new ArrayList<>(4);
             for (Config config : configs) {
                 Map<String, String> map = new HashMap<>(3);
-                if (config.getConfigKey().contains("area_")) {
+                if (config.getConfigKey().contains(floor + "_")) {
                     map.put("systemId", config.getSystemId().toString());
                     map.put("configKey", config.getConfigKey());
                     map.put("configValue", config.getConfigValue());
                     rtv.add(map);
                 }
-
             }
             return rtv;
         }
