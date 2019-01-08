@@ -103,10 +103,10 @@ public class StudentApi {
     }
 
     @RequestMapping(value = "/open-area", method = RequestMethod.GET)
-    public RestData getReservationArea() {
+    public RestData getReservationArea(int floor) {
         logger.info("GET getReservationArea");
         try {
-            List<Map<String, String>> reservationArea = reservationService.getReservationArea();
+            List<Map<String, String>> reservationArea = reservationService.getReservationArea(floor);
             return new RestData(reservationArea);
         } catch (LibException e) {
             logger.info(e.getMessage());

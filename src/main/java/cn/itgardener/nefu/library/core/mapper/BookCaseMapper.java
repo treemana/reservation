@@ -191,7 +191,6 @@ public interface BookCaseMapper {
 
     /**
      * 增加柜子
-     *
      * @param location 区域
      * @param number   柜子编号
      * @return 插入个数
@@ -201,12 +200,10 @@ public interface BookCaseMapper {
 
     /**
      * 查询符合条件的书包柜
-     *
      * @param bookCaseVo
      * @return List<BookCase>
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByCondition")
     List<BookCase> selectBookCaseByCondition(BookCaseVo bookCaseVo);
-
 
 }
