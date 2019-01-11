@@ -117,5 +117,5 @@ public interface ConfigMapper {
      * @return
      */
     @Insert("INSERT INTO config(config_key,config_value) values (#{location},#{status})")
-    int addLocation(String location, int status);
+    int addLocation(@Param("location") String location,@Param("status") int status);
 }
