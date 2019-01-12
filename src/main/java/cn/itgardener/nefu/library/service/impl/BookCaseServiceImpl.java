@@ -513,7 +513,8 @@ public class BookCaseServiceImpl implements BookCaseService {
             }
         }
         maxarea++;
-        configMapper.addLocation(locationVo.getFloor() + "_" + maxarea, locationVo.getStatus());
+        locationVo.setLocation(locationVo.getFloor() + "_" + maxarea);
+        configMapper.addLocation(locationVo);
         redisDao.updateRedis();
         return true;
     }

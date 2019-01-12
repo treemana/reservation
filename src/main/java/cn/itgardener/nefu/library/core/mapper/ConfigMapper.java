@@ -111,11 +111,9 @@ public interface ConfigMapper {
 
     /**
      * 插入新区域
-     *
-     * @param location 位置
-     * @param status   0为可预约 1为不可预约
+     * @param locationVo 对象
      * @return
      */
     @Insert("INSERT INTO config(config_key,config_value) values (#{location},#{status})")
-    int addLocation(@Param("location") String location,@Param("status") int status);
+    int addLocation(LocationVo locationVo);
 }
