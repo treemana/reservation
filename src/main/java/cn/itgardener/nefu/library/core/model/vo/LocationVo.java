@@ -16,6 +16,19 @@ public class LocationVo {
      */
     private Integer status;
 
+    /**
+     * 位置：1_1
+     */
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public Integer getFloor() {
         return floor;
     }
