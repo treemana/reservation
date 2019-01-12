@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service;
@@ -64,7 +64,7 @@ public interface ReservationService {
      * 获取各个区域的预约状态
      *
      * @param studentId 学号
-     * @param floor 楼层
+     * @param floor     楼层
      * @return [0, 1, 1, 0] 0表示可以预约,1表示不可预约
      * @throws ParseException 异常信息
      */

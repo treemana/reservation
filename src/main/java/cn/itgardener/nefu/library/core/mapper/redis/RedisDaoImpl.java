@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper.redis;
@@ -166,7 +166,7 @@ public class RedisDaoImpl implements RedisDao {
         } else {
             return rt;
         }
-            
+
     }
 
     @Override

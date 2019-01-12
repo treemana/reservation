@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service.impl;
@@ -446,8 +446,6 @@ public class BookCaseServiceImpl implements BookCaseService {
         } else {
             throw new LibException("数组为空");
         }
-
-
     }
 
     @Override

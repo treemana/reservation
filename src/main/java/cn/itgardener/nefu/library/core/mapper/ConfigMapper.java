@@ -1,17 +1,16 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper;
 
 import cn.itgardener.nefu.library.core.mapper.provider.ConfigProvider;
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import cn.itgardener.nefu.library.core.model.vo.LocationVo;
-import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -95,14 +94,16 @@ public interface ConfigMapper {
 
     /**
      * 查询出location的区域
+     *
      * @param location
      * @return Config结果集
      */
-    @SelectProvider(type=ConfigProvider.class,method = "selectLocation")
+    @SelectProvider(type = ConfigProvider.class, method = "selectLocation")
     List<Config> selectLocation(String location);
 
     /**
      * 从config表查询某楼层所有的区域
+     *
      * @param locationVo 实例
      * @return config结果集
      */
@@ -111,6 +112,7 @@ public interface ConfigMapper {
 
     /**
      * 插入新区域
+     *
      * @param locationVo 对象
      * @return
      */

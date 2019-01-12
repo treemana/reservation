@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service.impl;
@@ -8,13 +8,11 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.TimeUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
-import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.Config;
-import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 import cn.itgardener.nefu.library.service.ReservationService;
 import org.slf4j.Logger;

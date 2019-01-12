@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.web.api;
@@ -11,16 +11,14 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
-import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
-import cn.itgardener.nefu.library.core.model.vo.*;
 import cn.itgardener.nefu.library.service.BookCaseService;
 import cn.itgardener.nefu.library.service.ReservationService;
 import cn.itgardener.nefu.library.service.UserService;
-import cn.itgardener.nefu.library.service.impl.BookCaseServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -248,21 +246,23 @@ public class TeacherApi {
         userService.deleteStudent();
         return new RestData(true);
     }
-    @RequestMapping(value = "/bookcase",method = RequestMethod.POST)
-    public RestData AddBookCase(@RequestBody BookCaseVo bookCaseVo,HttpServletRequest request){
-        logger.info("get AddBookCase"+JsonUtil.getJsonString(bookCaseVo));
+
+    @RequestMapping(value = "/bookcase", method = RequestMethod.POST)
+    public RestData AddBookCase(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
+        logger.info("get AddBookCase" + JsonUtil.getJsonString(bookCaseVo));
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
-        if(bookCaseService.addBookcase(bookCaseVo)){
+        if (bookCaseService.addBookcase(bookCaseVo)) {
             return new RestData(null);
-        }else {
-            return new RestData(1,"批量添加柜子失败");
+        } else {
+            return new RestData(1, "批量添加柜子失败");
         }
     }
-    @RequestMapping(value = "/location",method = RequestMethod.POST)
-    public RestData addLocation(@RequestBody LocationVo locationVo,HttpServletRequest request){
-        logger.info("get addLocation:"+JsonUtil.getJsonString(locationVo));
+
+    @RequestMapping(value = "/location", method = RequestMethod.POST)
+    public RestData addLocation(@RequestBody LocationVo locationVo, HttpServletRequest request) {
+        logger.info("get addLocation:" + JsonUtil.getJsonString(locationVo));
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
