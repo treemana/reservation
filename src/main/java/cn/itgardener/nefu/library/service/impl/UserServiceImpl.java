@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service.impl;
@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
         this.reservationService = reservationService;
     }
 
-
     @Override
     public Map<String, Object> postLogin(User user) throws LibException {
         Map<String, Object> rtv = null;
@@ -88,7 +87,6 @@ public class UserServiceImpl implements UserService {
                 map.put("name", user.getStudentName());
                 rtv.add(map);
             }
-
         } else {
             throw new LibException("黑名单为空");
         }
@@ -117,7 +115,6 @@ public class UserServiceImpl implements UserService {
         } catch (LibException e) {
             throw e;
         }
-
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper.provider;
@@ -94,18 +94,18 @@ public class ConfigProvider {
         }.toString();
     }
 
-    public String selectFloorLocation(LocationVo locationVo){
-        return new SQL(){
+    public String selectFloorLocation(LocationVo locationVo) {
+        return new SQL() {
             {
                 SELECT("config_key as configKey,config_value as configValue");
                 FROM("config");
-                WHERE("config_key like '"+locationVo.getFloor()+"%'");
+                WHERE("config_key like '" + locationVo.getFloor() + "%'");
             }
         }.toString();
     }
 
-    public String selectLocation(String location){
-        return new SQL(){
+    public String selectLocation(String location) {
+        return new SQL() {
             {
                 SELECT("config_key as configKey,config_value as configValue");
                 FROM("config");

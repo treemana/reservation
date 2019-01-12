@@ -113,7 +113,7 @@
 ### 1.3.1. 预约书包柜
 
 - POST /box-order
-    -location 为 null时，随机预约书包柜
+  - location 为 null时,随机预约书包柜
 - payload :
 
 ```json
@@ -317,8 +317,8 @@
 #### 1.4.1.5. 区域预约状态
 
 - GET /area-status/?studentId=2016224283&floor=1
-  - 0表示可以预约，1表示不可预约
-  - data中的长度代表这一楼层中区域的数量，分别对应1_1，1_2...
+  - 0 表示可以预约 | 1 表示不可预约
+  - data 中的长度代表这一楼层中区域的数量,分别对应1_1,1_2...
 
 - return:
 
@@ -328,7 +328,7 @@
     "data" : [
         {
            "location" : "1_1",
-           "status" : 0 
+           "status" : 0
         },
         {
            "location" : "1_2",
@@ -336,7 +336,7 @@
         },
         {
            "location" : "1_3",
-           "status" : 0 
+           "status" : 0
         }
     ]
 }

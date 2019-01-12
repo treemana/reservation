@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.model.vo;
@@ -87,7 +87,6 @@ public class BookCaseVo {
      * 新添加柜子的数量
      */
     private Integer total;
-
 
 
     public Integer getFloor() {
