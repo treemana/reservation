@@ -364,13 +364,15 @@
         [
             {
                 "location" : "1_1",
-                "id" : "123",
+                "number" : 123,
+                "systemId" : 145,
                 "status" : 0,
                 "studentId" : "123"
             },
             {
                 "location" : "1_1",
-                "id" : "123",
+                "number" : 123,
+                "systemId" : 140,
                 "status" : 0,
                 "studentId" : "123"
             }
