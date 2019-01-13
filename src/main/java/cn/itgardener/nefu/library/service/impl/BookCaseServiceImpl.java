@@ -285,6 +285,11 @@ public class BookCaseServiceImpl implements BookCaseService {
         List<Map<String, Object>> rtv = new ArrayList<>();
         for (BookCase data : bookCases) {
             Map<String, Object> map = new HashMap<>(4);
+            if (null != data.getSystemId()) {
+                map.put("systemId", data.getSystemId());
+            } else {
+                map.put("systemId", "");
+            }
             if (null != data.getLocation()) {
                 map.put("location", data.getLocation());
             } else {
@@ -296,9 +301,9 @@ public class BookCaseServiceImpl implements BookCaseService {
                 map.put("location", "");
             }
             if (null != data.getNumber()) {
-                map.put("id", data.getNumber());
+                map.put("number", data.getNumber());
             } else {
-                map.put("id", "");
+                map.put("number", "");
             }
             if (null != data.getStatus()) {
                 map.put("status", data.getStatus());
