@@ -94,13 +94,16 @@ public class BookCaseServiceImpl implements BookCaseService {
         } else {
             shipVO.setStatus(1);
             User user = bookCaseMapper.selectUserIdByStudentId(shipVO);
-            BookCase bookCase = bookCaseMapper.selectByNumber(shipVO);
+            BookCase bookCase = bookCaseMapper.selectBySystemId(shipVO);
             if (null == bookCase) {
                 throw new LibException("此书包柜不存在");
             }
-            if (null != user) {
-                shipVO.setUserId(user.getSystemId());
+            if (null == user) {
+                throw new LibException("此学号不存在");
             }
+
+            shipVO.setUserId(user.getSystemId());
+
         }
         int i = bookCaseMapper.updateSingleShip(shipVO);
         if (0 == i) {

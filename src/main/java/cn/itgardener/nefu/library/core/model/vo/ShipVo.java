@@ -14,7 +14,7 @@ public class ShipVo {
     /**
      * 书包柜的systemId
      */
-    private String systemId;
+    private Integer systemId;
 
     /**
      * 书包柜的编号
@@ -66,5 +66,13 @@ public class ShipVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(Integer systemId) {
+        this.systemId = systemId;
     }
 }

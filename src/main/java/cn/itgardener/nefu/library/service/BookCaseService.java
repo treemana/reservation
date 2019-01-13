@@ -50,7 +50,7 @@ public interface BookCaseService {
     /**
      * 修改单个关系
      *
-     * @param shipVO 书包柜的编号贺学号
+     * @param shipVO 书包柜的id和学号
      * @return 是否修改成功
      * @throws LibException 异常信息
      */

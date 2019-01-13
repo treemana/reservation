@@ -223,7 +223,7 @@ public class BookCaseProvider {
                 UPDATE("bookcase");
                 SET("bc_user_id = #{userId}," +
                         "bc_status = #{status}");
-                WHERE("bc_number = #{number}");
+                WHERE("bc_system_id = #{systemId}");
             }
         }.toString();
     }
