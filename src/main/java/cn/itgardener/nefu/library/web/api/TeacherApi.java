@@ -190,7 +190,7 @@ public class TeacherApi {
         }
     }
 
-    @RequestMapping(value = "/delete-id", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/bookcase-id", method = RequestMethod.DELETE)
     public RestData deleteBookCaseById(@RequestBody BookCaseVo bookCaseVo) {
         try {
             return bookCaseService.deleteBookcaseById(bookCaseVo);
@@ -199,7 +199,7 @@ public class TeacherApi {
         }
     }
 
-    @RequestMapping(value = "/delete-number", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/bookcase-number", method = RequestMethod.DELETE)
     public RestData deleteBookCaseByNumber(@RequestBody BookCaseVo bookCaseVo) {
 
         try {
