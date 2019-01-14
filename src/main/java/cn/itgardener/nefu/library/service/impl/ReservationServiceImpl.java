@@ -13,12 +13,15 @@ import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
 import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.vo.AreaVo;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 import cn.itgardener.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,27 +48,20 @@ public class ReservationServiceImpl implements ReservationService {
         this.redisDao = redisDao;
         this.userMapper = userMapper;
     }
-
     @Override
-    public boolean putReservationArea(List<Integer> list) throws LibException {
-        int count = 0;
-        for (int i = 1; i <= 4; i++) {
-            Config config = new Config();
-            config.setSystemId(i);
-            if (list.contains(i)) {
-                config.setConfigValue("0");
-                count++;
-            } else {
-                config.setConfigValue("1");
+    public boolean putReservationArea(AreaVo areaVo) throws LibException {
+        ArrayList<String> locationList = areaVo.getLocationList();
+        for (String location : locationList) {
+            LocationVo locationVo = new LocationVo();
+            locationVo.setLocation(location);
+            locationVo.setStatus(areaVo.getStatus());
+            int i = configMapper.updateLocation(locationVo);
+            if (i == 0) {
+                throw new LibException("更新失败");
             }
-            configMapper.selectOpenAreaBySystemId(config);
         }
-        if (count == list.size()) {
-            redisDao.updateRedis();
-            return true;
-        } else {
-            throw new LibException("修改失败");
-        }
+
+        return true;
     }
 
     @Override
@@ -218,4 +214,5 @@ public class ReservationServiceImpl implements ReservationService {
         redisDao.pushHash("code", studentId, TokenUtil.getToken());
 
     }
+
 }

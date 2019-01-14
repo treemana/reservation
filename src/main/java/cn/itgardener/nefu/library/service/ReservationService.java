@@ -6,6 +6,7 @@ package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
+import cn.itgardener.nefu.library.core.model.vo.AreaVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 
 import java.text.ParseException;
@@ -31,11 +32,11 @@ public interface ReservationService {
     /**
      * 修改预约区域
      *
-     * @param list 区域列表
+     * @param areaVo 区域列表
      * @return 是否成功
      * @throws LibException 异常信息
      */
-    boolean putReservationArea(List<Integer> list) throws LibException;
+    boolean putReservationArea(AreaVo areaVo) throws LibException;
 
     /**
      * 查询预约时间
