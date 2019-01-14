@@ -52,12 +52,12 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String deleteShipByNumber(BookCase bookCase) {
+    public String deleteShipById(BookCase bookCase) {
         return new SQL() {
             {
                 UPDATE("bookcase");
                 SET("bc_user_id=null, bc_status=0");
-                WHERE("bc_number=#{number}");
+                WHERE("bc_system_id=#{systemId}");
             }
         }.toString();
     }
