@@ -12,10 +12,7 @@ import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
-import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
-import cn.itgardener.nefu.library.core.model.vo.LocationVo;
-import cn.itgardener.nefu.library.core.model.vo.ShipVo;
-import cn.itgardener.nefu.library.core.model.vo.TimeVo;
+import cn.itgardener.nefu.library.core.model.vo.*;
 import cn.itgardener.nefu.library.service.BookCaseService;
 import cn.itgardener.nefu.library.service.ReservationService;
 import cn.itgardener.nefu.library.service.UserService;
@@ -179,12 +176,12 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/open-area", method = RequestMethod.PUT)
-    public RestData putReservationArea(@RequestBody List<Integer> list) {
-        logger.info("PUT putReservationArea: " + list.toString());
+    public RestData putReservationArea(@RequestBody AreaVo areaVo) {
+        logger.info("PUT putReservationArea: " + JsonUtil.getJsonString(areaVo));
 
         try {
             VerifyUtil.verifyTime();
-            return new RestData(reservationService.putReservationArea(list));
+            return new RestData(reservationService.putReservationArea(areaVo));
         } catch (Exception e) {
             return new RestData(1, e.getMessage());
         }

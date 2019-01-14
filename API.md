@@ -299,9 +299,14 @@
 
 - PUT /open-area
 - payload :
+  - status : 0代表关闭，1代表开放
 
 ```json
-["1_1", "2_2"]
+{
+    "locationList":["1_1","1_2"],
+    "status" : 1
+
+}
 ```
 
 - return :

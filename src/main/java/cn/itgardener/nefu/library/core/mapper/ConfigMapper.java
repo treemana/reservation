@@ -7,10 +7,7 @@ package cn.itgardener.nefu.library.core.mapper;
 import cn.itgardener.nefu.library.core.mapper.provider.ConfigProvider;
 import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.vo.LocationVo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -118,4 +115,13 @@ public interface ConfigMapper {
      */
     @Insert("INSERT INTO config(config_key,config_value) values (#{location},#{status})")
     int addLocation(LocationVo locationVo);
+
+    /**
+     * updateLocation
+     *
+     * @param locationVo locationVo
+     * @return int
+     */
+    @Update("update config set config_value = #{status} where config_key=#{location} ")
+    int updateLocation(LocationVo locationVo);
 }
