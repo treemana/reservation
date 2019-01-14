@@ -50,8 +50,8 @@ public interface BookCaseMapper {
      * @param bookcase 书包柜编号
      * @return 操作是否成功 1 成功 0 失败
      */
-    @UpdateProvider(type = BookCaseProvider.class, method = "deleteShipByNumber")
-    int deleteShipByNumber(BookCase bookcase);
+    @DeleteProvider(type = BookCaseProvider.class, method = "deleteShipById")
+    int deleteShipById(BookCase bookcase);
 
     /**
      * 清空所有书包柜关系

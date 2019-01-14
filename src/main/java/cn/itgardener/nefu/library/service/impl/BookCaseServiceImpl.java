@@ -207,8 +207,8 @@ public class BookCaseServiceImpl implements BookCaseService {
         } else {
             for (Integer datum : data) {
                 BookCase bookCase = new BookCase();
-                bookCase.setNumber(datum);
-                if (0 >= bookCaseMapper.deleteShipByNumber(bookCase)) {
+                bookCase.setSystemId(datum);
+                if (0 >= bookCaseMapper.deleteShipById(bookCase)) {
                     success = 1;
                     break;
                 }
