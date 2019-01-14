@@ -348,10 +348,10 @@
 
 #### 1.4.2.1. 查询
 
-- GET /detail?location=1_1&status=0&id=10-11&studentId=2016224283&page=1
+- GET /detail?location=1_1&status=0&number=10-11&studentId=2016224283&page=1
 
 - 默认page=1, status=0 查询开放柜子 || status=1 查询被占用柜子 || status=2 查询预留柜子
-- id代表书包柜的systemId
+- number代表书包柜的编号（与location一块查询 例如location=1_1&id=3-20）
 - location 2_代表2楼所有区域
 - return :
   - perPage 每页显示条数
