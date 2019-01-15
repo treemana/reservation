@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -523,6 +524,17 @@ public class BookCaseServiceImpl implements BookCaseService {
         configMapper.addLocation(locationVo);
         redisDao.updateRedis();
         return true;
+    }
+
+    @Override
+    public RestData deleteLocation(String location) throws LibException {
+        int i = configMapper.deleteLocation(location);
+        int i1 = bookCaseMapper.deleteBookcaseByLocation(location);
+        if (i > 0 & i1 > 0) {
+            return new RestData(true);
+        } else {
+            throw new LibException("删除区域失败");
+        }
     }
 }
 

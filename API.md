@@ -568,7 +568,7 @@
 - POST /location
 - payload :
   - floor : 楼层
-  - status : 0 可预约 | 1 不可预约
+  - status : 0 不可预约 | 1 可预约
 
 ```json
 {
@@ -579,6 +579,27 @@
 
 - return :
 
+```json
+{
+    "code" : 0,
+    "data" : true
+}
+
+```
+#### 1.4.2.10. 删除区域
+
+- DELETE /location/{location}
+
+- return : 
+
+```json
+{
+    "code" : 0,
+    "data" : true
+}
+```
+
+ 
 ---
 
 ### 1.4.3. 学生管理

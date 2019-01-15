@@ -124,4 +124,13 @@ public interface ConfigMapper {
      */
     @Update("update config set config_value = #{status} where config_key=#{location} ")
     int updateLocation(LocationVo locationVo);
+
+    /**
+     * 删除区域
+     *
+     * @param location 区域
+     * @return int
+     */
+    @Delete("delete from config where config_key = #{location}")
+    int deleteLocation(String location);
 }
