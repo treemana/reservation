@@ -143,4 +143,14 @@ public interface BookCaseService {
      * @return Boolean
      */
     boolean addLocation(LocationVo locationVo);
+
+    /**
+     * 删除区域
+     *
+     * @param location location
+     * @return restData
+     * @throws LibException exp
+     */
+
+    RestData deleteLocation(String location) throws LibException;
 }

@@ -208,4 +208,6 @@ public interface BookCaseMapper {
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByCondition")
     List<BookCase> selectBookCaseByCondition(BookCaseVo bookCaseVo);
 
+    @Delete("delete from bookcase where bc_location = #{location}")
+    int deleteBookcaseByLocation(String location);
 }

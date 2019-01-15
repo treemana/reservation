@@ -250,6 +250,11 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
+        try {
+            VerifyUtil.verifyTime();
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
         if (bookCaseService.addBookcase(bookCaseVo)) {
             return new RestData(null);
         } else {
@@ -263,10 +268,33 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
+        try {
+            VerifyUtil.verifyTime();
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
         if (bookCaseService.addLocation(locationVo)) {
             return new RestData(null);
         } else {
             return new RestData(1, "添加区域失败");
         }
     }
+
+    @RequestMapping(value = "/location/{location}", method = RequestMethod.DELETE)
+    public RestData deleteLocation(@PathVariable String location, HttpServletRequest request) {
+        logger.info("deleteLocation:" + JsonUtil.getJsonString(location));
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+
+        try {
+            VerifyUtil.verifyTime();
+            return bookCaseService.deleteLocation(location);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+
+    }
+
+
 }
