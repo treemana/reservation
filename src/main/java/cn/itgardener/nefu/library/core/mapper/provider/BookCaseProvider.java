@@ -35,7 +35,7 @@ public class BookCaseProvider {
         return new SQL() {
             {
                 UPDATE("bookcase");
-                SET("bc_status=1");
+                SET("bc_status=2");
                 if (null != bookCaseVo.getNumber()) {
                     WHERE("bc_number=#{number}");
                 }
