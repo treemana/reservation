@@ -101,7 +101,7 @@ public class BookCaseProvider {
                         WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
-                        WHERE(" bc_status=1");
+                        WHERE(" bc_status=2");
                     }
                     if (null != bookCaseVo.getId()) {
                         WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
@@ -155,7 +155,7 @@ public class BookCaseProvider {
                         WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
-                        WHERE(" bc_status=1");
+                        WHERE(" bc_status=2");
                     }
                     if (null != bookCaseVo.getId()) {
                         WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
