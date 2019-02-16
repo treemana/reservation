@@ -67,7 +67,6 @@ public class BookCaseProvider {
             {
                 UPDATE("bookcase");
                 SET("bc_user_id=null, bc_status=0");
-                WHERE("bc_status=1");
             }
         }.toString();
     }
