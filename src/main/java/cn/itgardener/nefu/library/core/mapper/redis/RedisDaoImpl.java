@@ -190,8 +190,8 @@ public class RedisDaoImpl implements RedisDao {
                 List<Config> list = configMapper.selectFloorLocation(locationVo);
                 this.set("floor_" + i, String.valueOf(list.size()));
                 for (int j = 1; j <= list.size(); j++) {
-                    if ("1".equals(configMapper.selectLocation(i + "_" + j).get(0).getConfigValue())) {
-                        this.set("location_" + i + "_" + "j", "0");
+                    if ("0".equals(configMapper.selectLocation(i + "_" + j).get(0).getConfigValue())) {
+                        this.set("location_" + i + "_" + j, "-1");
                         continue;
                     }
                     int num = bookCaseMapper.selectBagNum(i + "_" + j);
