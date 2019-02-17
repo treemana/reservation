@@ -151,4 +151,11 @@ public interface RedisDao {
      */
     String getHash(String key, String filed);
 
+    /**
+     * 删除所有的key
+     *
+     * @return true or false
+     */
+    boolean removeALlKey();
+
 }

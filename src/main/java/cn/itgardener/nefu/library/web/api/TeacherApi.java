@@ -111,7 +111,6 @@ public class TeacherApi {
     @RequestMapping(value = "/reserved-id", method = RequestMethod.POST)
     public RestData postKeepById(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("POST postKeep: " + JsonUtil.getJsonString(bookCaseVo));
-
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }

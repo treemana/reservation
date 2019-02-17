@@ -110,6 +110,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (0 == i) {
             throw new LibException("修改失败");
         } else {
+            redisDao.removeALlKey();
             redisDao.updateRedis(); // 同步MySQL数据库
             return true;
         }
@@ -145,6 +146,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 }
             }
             if (0 == success) {
+                redisDao.removeALlKey();
                 redisDao.updateRedis();
                 return new RestData(0, "操作成功!");
             } else {
@@ -184,6 +186,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 if (0 == i) {
                     return new RestData(1, "未知错误!");
                 } else {
+                    redisDao.removeALlKey();
                     redisDao.updateRedis();
                     return new RestData(true);
                 }
@@ -202,6 +205,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (0 >= bookCaseMapper.deleteAllShip()) {
                 return new RestData(1, "柜子已全部清空关系!");
             } else {
+                redisDao.removeALlKey();
                 redisDao.updateRedis();
                 return new RestData(0, "操作成功!");
             }
@@ -215,6 +219,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 }
             }
             if (0 == success) {
+                redisDao.removeALlKey();
                 redisDao.updateRedis();
                 return new RestData(0, "操作成功!");
             } else {
@@ -450,6 +455,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 bookCaseVo.setSystemId(systemId);
                 bookCaseMapper.deleteBookcaseById(bookCaseVo);
             }
+            redisDao.removeALlKey();
             redisDao.updateRedis();
             return new RestData(true);
         } else {
@@ -468,6 +474,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (0 == i) {
                 throw new LibException("输入的数据有误");
             } else {
+                redisDao.removeALlKey();
                 redisDao.updateRedis();
                 return new RestData(true);
             }
@@ -503,6 +510,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             if (0 == bookCaseMapper.addBookcase(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea(), ++number))
                 return false;
         }
+        redisDao.removeALlKey();
         redisDao.updateRedis();
         return true;
     }
@@ -522,6 +530,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         maxarea++;
         locationVo.setLocation(locationVo.getFloor() + "_" + maxarea);
         configMapper.addLocation(locationVo);
+        redisDao.removeALlKey();
         redisDao.updateRedis();
         return true;
     }

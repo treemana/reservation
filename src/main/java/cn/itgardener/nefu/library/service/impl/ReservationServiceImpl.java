@@ -113,6 +113,7 @@ public class ReservationServiceImpl implements ReservationService {
         config1.setConfigValue(timeVO.getEndTime());
 
         if (0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1)) {
+            redisDao.removeALlKey();
             redisDao.updateRedis();
             return new RestData(0, "修改成功");
         } else {

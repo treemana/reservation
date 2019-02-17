@@ -232,4 +232,9 @@ public class RedisDaoImpl implements RedisDao {
         }
     }
 
+    @Override
+    public boolean removeALlKey() {
+        Long delete = stringRedisTemplate.delete(stringRedisTemplate.keys("*"));
+        return delete > 0;
+    }
 }
