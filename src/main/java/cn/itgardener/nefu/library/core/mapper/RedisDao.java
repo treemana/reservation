@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper;
@@ -156,6 +156,6 @@ public interface RedisDao {
      *
      * @return true or false
      */
-    boolean removeALlKey();
+    boolean removeAllKey();
 
 }
