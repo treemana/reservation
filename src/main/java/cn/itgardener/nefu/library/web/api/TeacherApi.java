@@ -114,6 +114,11 @@ public class TeacherApi {
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
+        try {
+            VerifyUtil.verifyTime();
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
         return bookCaseService.setKeepById(bookCaseVo);
     }
 
@@ -123,6 +128,11 @@ public class TeacherApi {
 
         if (!VerifyUtil.verifyType(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+        try {
+            VerifyUtil.verifyTime();
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
         }
         return bookCaseService.setKeepByNumber(bookCaseVo);
     }
@@ -177,7 +187,6 @@ public class TeacherApi {
     @RequestMapping(value = "/open-area", method = RequestMethod.PUT)
     public RestData putReservationArea(@RequestBody AreaVo areaVo) {
         logger.info("PUT putReservationArea: " + JsonUtil.getJsonString(areaVo));
-
         try {
             VerifyUtil.verifyTime();
             return new RestData(reservationService.putReservationArea(areaVo));
@@ -189,6 +198,7 @@ public class TeacherApi {
     @RequestMapping(value = "/bookcase-id", method = RequestMethod.DELETE)
     public RestData deleteBookCaseById(@RequestBody BookCaseVo bookCaseVo) {
         try {
+            VerifyUtil.verifyTime();
             return bookCaseService.deleteBookcaseById(bookCaseVo);
         } catch (LibException e) {
             return new RestData(1, e.getMessage());
@@ -199,6 +209,7 @@ public class TeacherApi {
     public RestData deleteBookCaseByNumber(@RequestBody BookCaseVo bookCaseVo) {
 
         try {
+            VerifyUtil.verifyTime();
             return bookCaseService.deleteBookcaseByNumber(bookCaseVo);
         } catch (LibException e) {
             return new RestData(1, e.getMessage());
