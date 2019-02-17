@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper;
@@ -28,7 +28,7 @@ public interface UserMapper {
      * @return 插入数据数量
      */
     @Insert("INSERT INTO user(user_username,user_password,user_type) VALUES(#{studentId},#{studentName},#{type})")
-    @Options(useGeneratedKeys = true, keyProperty = "user_system_id")
+    @Options(useGeneratedKeys = true, keyProperty = "systemId")
     int insert(User user);
 
     /**
