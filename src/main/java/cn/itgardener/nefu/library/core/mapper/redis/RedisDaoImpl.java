@@ -25,8 +25,9 @@ import java.util.List;
 @Repository
 public class RedisDaoImpl implements RedisDao {
 
-    private final StringRedisTemplate stringRedisTemplate;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final StringRedisTemplate stringRedisTemplate;
     private final BookCaseMapper bookCaseMapper;
     private final ConfigMapper configMapper;
 
@@ -233,7 +234,7 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public boolean removeALlKey() {
+    public boolean removeAllKey() {
         Long delete = stringRedisTemplate.delete(stringRedisTemplate.keys("*"));
         return delete > 0;
     }

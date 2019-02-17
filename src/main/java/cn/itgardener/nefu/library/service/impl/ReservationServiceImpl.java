@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -113,7 +112,7 @@ public class ReservationServiceImpl implements ReservationService {
         config1.setConfigValue(timeVO.getEndTime());
 
         if (0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1)) {
-            redisDao.removeALlKey();
+            redisDao.removeAllKey();
             redisDao.updateRedis();
             return new RestData(0, "修改成功");
         } else {
