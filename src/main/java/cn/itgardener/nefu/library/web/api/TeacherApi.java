@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -284,7 +285,9 @@ public class TeacherApi {
             return new RestData(1, e.getMessage());
         }
         if (bookCaseService.addLocation(locationVo)) {
-            return new RestData(null);
+            Map<String, String> map = new HashMap<>(2);
+            map.put("location", locationVo.getLocation());
+            return new RestData(map);
         } else {
             return new RestData(1, "添加区域失败");
         }
