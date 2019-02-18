@@ -233,7 +233,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         for (int i = 1; i <= Integer.parseInt(redisDao.get("floor_" + floor)); i++) {
             Map<String, Object> map = new HashMap<>(2);
             int num = Integer.parseInt(redisDao.get("location_" + floor + "_" + i));
-            map.put("location_", floor + "_" + i);
+            map.put("location", floor + "_" + i);
             map.put("num", num);
             rtv.add(map);
         }
