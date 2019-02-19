@@ -156,7 +156,7 @@ public class ReservationServiceImpl implements ReservationService {
             for (int i = 1; i <= locationNum; i++) {
                 HashMap<String, Object> hashMap = new HashMap<>(2);
                 hashMap.put("location", floor + "_" + i);
-                hashMap.put("status", 1);
+                hashMap.put("status", 0);
                 rtv.add(hashMap);
             }
             logger.info("不在开放时间");
@@ -168,7 +168,7 @@ public class ReservationServiceImpl implements ReservationService {
             for (int i = 1; i <= locationNum; i++) {
                 HashMap<String, Object> hashMap = new HashMap<>(2);
                 hashMap.put("location", floor + "_" + i);
-                hashMap.put("status", 1);
+                hashMap.put("status", 0);
                 rtv.add(hashMap);
             }
             logger.info("已经分配了柜子");
@@ -181,7 +181,7 @@ public class ReservationServiceImpl implements ReservationService {
             for (int i = 1; i <= locationNum; i++) {
                 HashMap<String, Object> hashMap = new HashMap<>(2);
                 hashMap.put("location", floor + "_" + i);
-                hashMap.put("status", 1);
+                hashMap.put("status", 0);
                 rtv.add(hashMap);
             }
             logger.info("已在队列中");
@@ -192,13 +192,13 @@ public class ReservationServiceImpl implements ReservationService {
             if (Integer.parseInt(redisDao.get("location_" + floor + "_" + i)) > 0) {
                 HashMap<String, Object> hashMap = new HashMap<>(2);
                 hashMap.put("location", floor + "_" + i);
-                hashMap.put("status", 0);
+                hashMap.put("status", 1);
                 rtv.add(hashMap);
             } else {
                 logger.info("locatioin_" + floor + "_" + i + "区域未开放或该区域无剩余柜子");
                 HashMap<String, Object> hashMap = new HashMap<>(2);
                 hashMap.put("location", floor + "_" + i);
-                hashMap.put("status", 1);
+                hashMap.put("status", 0);
                 rtv.add(hashMap);
             }
         }
