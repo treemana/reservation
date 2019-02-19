@@ -59,7 +59,8 @@ public class ReservationServiceImpl implements ReservationService {
                 throw new LibException("更新失败");
             }
         }
-
+        redisDao.removeAllKey();
+        redisDao.updateRedis();
         return true;
     }
 
