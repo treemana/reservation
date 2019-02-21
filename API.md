@@ -498,7 +498,7 @@
 ```json
 {
     "systemIdLeft" : 1,
-    "systemIdLeftRight" : 10
+    "systemIdRight" : 10
 }
 ```
 

@@ -210,4 +210,7 @@ public interface BookCaseMapper {
 
     @Delete("delete from bookcase where bc_location = #{location}")
     int deleteBookcaseByLocation(String location);
+
+    @UpdateProvider(type = BookCaseProvider.class, method = "updateBookcaseByRange")
+    int updateBookcaseByRange(BookCaseVo bookCaseVo);
 }
