@@ -208,9 +208,30 @@ public interface BookCaseMapper {
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookCaseByCondition")
     List<BookCase> selectBookCaseByCondition(BookCaseVo bookCaseVo);
 
+    /**
+     * 根据区域删除柜子
+     *
+     * @param location 区域
+     * @return int
+     */
     @Delete("delete from bookcase where bc_location = #{location}")
     int deleteBookcaseByLocation(String location);
 
+    /**
+     * 根据id范围预留柜子
+     *
+     * @param bookCaseVo id范围
+     * @return int
+     */
     @UpdateProvider(type = BookCaseProvider.class, method = "updateBookcaseByRange")
     int updateBookcaseByRange(BookCaseVo bookCaseVo);
+
+    /**
+     * 根据id范围删除柜子
+     *
+     * @param bookCaseVo 范围
+     * @return int
+     */
+    @DeleteProvider(type = BookCaseProvider.class, method = "deleteBookcaseByIdRange")
+    int deleteBookcaseByIdRange(BookCaseVo bookCaseVo);
 }

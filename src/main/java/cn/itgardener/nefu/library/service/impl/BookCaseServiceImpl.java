@@ -567,5 +567,22 @@ public class BookCaseServiceImpl implements BookCaseService {
         }
 
     }
+
+    @Override
+    public RestData deleteBookcase(BookCaseVo bookCaseVo) {
+        if (null != bookCaseVo.getSystemIdRight() && null != bookCaseVo.getSystemIdLeft()) {
+            if (bookCaseVo.getSystemIdRight() < bookCaseVo.getSystemIdLeft()) {
+                return new RestData(1, "输入数据异常，请重新输入");
+            } else {
+                if (bookCaseMapper.deleteBookcaseByIdRange(bookCaseVo) > 0) {
+                    return new RestData(true);
+                } else {
+                    return new RestData(1, "预留失败");
+                }
+            }
+        } else {
+            return new RestData(1, "输入数据异常，请重新输入");
+        }
+    }
 }
 
