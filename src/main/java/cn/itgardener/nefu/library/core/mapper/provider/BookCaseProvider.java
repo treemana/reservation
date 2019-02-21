@@ -105,6 +105,9 @@ public class BookCaseProvider {
                     if (null != bookCaseVo.getId()) {
                         WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
+                    if (null != bookCaseVo.getStrSystemIdLeft() && null != bookCaseVo.getGetStrSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getStrSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getGetStrSystemIdRight() + " )");
+                    }
                     WHERE(" bc_user_id is null");
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 } else if (null != bookCaseVo.getStatus() && 1 == bookCaseVo.getStatus()) {
@@ -123,6 +126,9 @@ public class BookCaseProvider {
                     if (null != bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
                     }
+                    if (null != bookCaseVo.getStrSystemIdLeft() && null != bookCaseVo.getGetStrSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getStrSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getGetStrSystemIdRight() + " )");
+                    }
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 } else {
                     if (null != bookCaseVo.getLocation()) {
@@ -136,6 +142,9 @@ public class BookCaseProvider {
                     }
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
+                    }
+                    if (null != bookCaseVo.getStrSystemIdLeft() && null != bookCaseVo.getGetStrSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getStrSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getGetStrSystemIdRight() + " )");
                     }
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 }
