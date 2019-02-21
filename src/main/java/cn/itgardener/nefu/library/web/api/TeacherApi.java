@@ -11,6 +11,7 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
+import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.*;
 import cn.itgardener.nefu.library.service.BookCaseService;
@@ -309,5 +310,19 @@ public class TeacherApi {
 
     }
 
+    @RequestMapping(value = "/bookcase-systemId", method = RequestMethod.POST)
+    public RestData postBookcase(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
+        logger.info("postBookcase:");
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+        try {
+            VerifyUtil.verifyTime();
+            return bookCaseService.postBookcase(bookCaseVo);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+
+    }
 
 }

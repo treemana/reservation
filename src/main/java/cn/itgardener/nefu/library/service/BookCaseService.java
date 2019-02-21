@@ -153,4 +153,12 @@ public interface BookCaseService {
      */
 
     RestData deleteLocation(String location) throws LibException;
+
+    /**
+     * 按照systemid范围预留鬼子
+     *
+     * @param bookCaseVo
+     * @return
+     */
+    RestData postBookcase(BookCaseVo bookCaseVo);
 }

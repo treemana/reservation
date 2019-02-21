@@ -347,8 +347,8 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (null == bookCaseVo.getPage()) {
             bookCaseVo.setPage(1);
         }
-        if (null != bookCaseVo.getGetStrSystemIdRight() && null != bookCaseVo.getStrSystemIdLeft()) {
-            if (bookCaseVo.getGetStrSystemIdRight() < bookCaseVo.getStrSystemIdLeft()) {
+        if (null != bookCaseVo.getSystemIdRight() && null != bookCaseVo.getSystemIdLeft()) {
+            if (bookCaseVo.getSystemIdRight() < bookCaseVo.getSystemIdRight()) {
                 return new RestData(1, "输入范围有误");
             }
         }
@@ -548,6 +548,24 @@ public class BookCaseServiceImpl implements BookCaseService {
         } else {
             throw new LibException("删除区域失败");
         }
+    }
+
+    @Override
+    public RestData postBookcase(BookCaseVo bookCaseVo) {
+        if (null != bookCaseVo.getSystemIdRight() && null != bookCaseVo.getSystemIdLeft()) {
+            if (bookCaseVo.getSystemIdRight() < bookCaseVo.getSystemIdLeft()) {
+                return new RestData(1, "输入数据异常，请重新输入");
+            } else {
+                if (bookCaseMapper.updateBookcaseByRange(bookCaseVo) > 0) {
+                    return new RestData(true);
+                } else {
+                    return new RestData(1, "预留失败");
+                }
+            }
+        } else {
+            return new RestData(1, "输入数据异常，请重新输入");
+        }
+
     }
 }
 
