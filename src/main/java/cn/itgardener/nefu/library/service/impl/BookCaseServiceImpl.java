@@ -347,10 +347,15 @@ public class BookCaseServiceImpl implements BookCaseService {
         if (null == bookCaseVo.getPage()) {
             bookCaseVo.setPage(1);
         }
-
+        if (null != bookCaseVo.getGetStrSystemIdRight() && null != bookCaseVo.getStrSystemIdLeft()) {
+            if (bookCaseVo.getGetStrSystemIdRight() < bookCaseVo.getStrSystemIdLeft()) {
+                return new RestData(1, "输入范围有误");
+            }
+        }
         page = bookCaseMapper.countByCondition(bookCaseVo);
         page.setNowPage(bookCaseVo.getPage());
         page = PageUtil.checkPage(page);
+
         List<BookCase> bookCases = bookCaseMapper.selectDetailByCondition(bookCaseVo, page);
         return encapsulate(bookCases, page);
 

@@ -87,7 +87,42 @@ public class BookCaseVo {
      * 新添加柜子的数量
      */
     private Integer total;
+    /**
+     * systemIdf范围 例如1-10
+     */
+    private String strSystemId;
+    /**
+     * strSystemId左范围
+     */
+    private Integer strSystemIdLeft;
+    /**
+     * strSystemId右范围
+     */
+    private Integer getStrSystemIdRight;
 
+    public Integer getStrSystemIdLeft() {
+        return strSystemIdLeft;
+    }
+
+    public void setStrSystemIdLeft(Integer strSystemIdLeft) {
+        this.strSystemIdLeft = strSystemIdLeft;
+    }
+
+    public Integer getGetStrSystemIdRight() {
+        return getStrSystemIdRight;
+    }
+
+    public void setGetStrSystemIdRight(Integer getStrSystemIdRight) {
+        this.getStrSystemIdRight = getStrSystemIdRight;
+    }
+
+    public String getStrSystemId() {
+        return strSystemId;
+    }
+
+    public void setStrSystemId(String strSystemId) {
+        this.strSystemId = strSystemId;
+    }
 
     public Integer getFloor() {
         return floor;
