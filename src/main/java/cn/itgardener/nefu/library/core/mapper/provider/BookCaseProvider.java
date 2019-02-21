@@ -336,6 +336,16 @@ public class BookCaseProvider {
             }
         }.toString();
     }
+
+    public String deleteBookcaseByIdRange(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                DELETE_FROM("bookcase");
+                WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+
+            }
+        }.toString();
+    }
 }
 
 

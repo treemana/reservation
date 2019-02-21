@@ -325,4 +325,19 @@ public class TeacherApi {
 
     }
 
+    @RequestMapping(value = "/bookcase-systemId", method = RequestMethod.DELETE)
+    public RestData deleteBookcase(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
+        logger.info("deleteBookcase:");
+        if (!VerifyUtil.verifyType(request)) {
+            return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
+        }
+        try {
+            VerifyUtil.verifyTime();
+            return bookCaseService.deleteBookcase(bookCaseVo);
+        } catch (LibException e) {
+            return new RestData(1, e.getMessage());
+        }
+
+    }
+
 }

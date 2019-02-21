@@ -157,8 +157,16 @@ public interface BookCaseService {
     /**
      * 按照systemid范围预留鬼子
      *
-     * @param bookCaseVo
-     * @return
+     * @param bookCaseVo 范围
+     * @return restData
      */
     RestData postBookcase(BookCaseVo bookCaseVo);
+
+    /**
+     * 按照systemid范围预留鬼子
+     *
+     * @param bookCaseVo 范围
+     * @return restData
+     */
+    RestData deleteBookcase(BookCaseVo bookCaseVo);
 }
