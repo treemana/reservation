@@ -577,7 +577,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 if (bookCaseMapper.deleteBookcaseByIdRange(bookCaseVo) > 0) {
                     return new RestData(true);
                 } else {
-                    return new RestData(1, "预留失败");
+                    return new RestData(1, "删除失败");
                 }
             }
         } else {

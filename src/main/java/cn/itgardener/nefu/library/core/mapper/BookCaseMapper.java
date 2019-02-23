@@ -234,4 +234,12 @@ public interface BookCaseMapper {
      */
     @DeleteProvider(type = BookCaseProvider.class, method = "deleteBookcaseByIdRange")
     int deleteBookcaseByIdRange(BookCaseVo bookCaseVo);
+
+    /**
+     * 查詢被占用的柜子
+     *
+     * @return list
+     */
+    @SelectProvider(type = BookCaseProvider.class, method = "selectBookcase")
+    List<BookCase> selectBookcase();
 }

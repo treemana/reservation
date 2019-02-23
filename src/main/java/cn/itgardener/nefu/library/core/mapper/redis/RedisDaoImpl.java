@@ -7,7 +7,10 @@ package cn.itgardener.nefu.library.core.mapper.redis;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.mapper.UserMapper;
+import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +33,13 @@ public class RedisDaoImpl implements RedisDao {
     private final StringRedisTemplate stringRedisTemplate;
     private final BookCaseMapper bookCaseMapper;
     private final ConfigMapper configMapper;
+    private final UserMapper userMapper;
 
-    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate, BookCaseMapper bookCaseMapper, ConfigMapper configMapper) {
+    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate, BookCaseMapper bookCaseMapper, ConfigMapper configMapper, UserMapper userMapper) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.bookCaseMapper = bookCaseMapper;
         this.configMapper = configMapper;
+        this.userMapper = userMapper;
     }
 
 
@@ -202,11 +207,18 @@ public class RedisDaoImpl implements RedisDao {
             }
             this.set("popCount", "0");
             this.set("total", String.valueOf(count));
-            this.remove("finish");
             Config configOpenTime = configMapper.selectStartTime();
             Config configEndTime = configMapper.selectEndTime();
             this.set("openTime", configOpenTime.getConfigValue());
             this.set("endTime", configEndTime.getConfigValue());
+            List<BookCase> bookCases = bookCaseMapper.selectBookcase();
+            for (BookCase bookcase : bookCases) {
+                User user = new User();
+                user.setSystemId(bookcase.getUserId());
+                List<User> users = userMapper.selectByCondition(user);
+                this.add("finish", users.get(0).getStudentId());
+            }
+
             return true;
         } catch (Exception e) {
             logger.info("updateRedis" + e);
