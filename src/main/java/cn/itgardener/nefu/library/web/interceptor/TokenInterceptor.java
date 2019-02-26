@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.web.interceptor;
@@ -56,6 +56,10 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     private void responseJson(HttpServletResponse response, RestData restData) throws Exception {
         response.setContentType("application/json; charset=utf-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "*");
+        response.addHeader("Access-Control-Allow-Headers", "*");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter writer = response.getWriter();
         writer.print(JsonUtil.getJsonString(restData));
         response.flushBuffer();

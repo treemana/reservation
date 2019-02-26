@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
+ */
+
 package cn.itgardener.nefu.library;
 
 import cn.itgardener.nefu.library.web.interceptor.TokenInterceptor;
