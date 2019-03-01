@@ -13,6 +13,7 @@ import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 import cn.itgardener.nefu.library.service.UserService;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -140,6 +141,7 @@ public class UserServiceImpl implements UserService {
         user.setType(0);
         String studentId;
         String name;
+        XSSFCell cell;
         // 循环输出表格中的内容
         for (int i = sheet.getFirstRowNum() + 1; i < sheet.getPhysicalNumberOfRows(); i++) {
             row = sheet.getRow(i);
@@ -154,11 +156,12 @@ public class UserServiceImpl implements UserService {
             user.setStudentId(studentId);
 
             // 获取密码
-            name = row.getCell(j + 1).toString();
-            if (6 > name.length()) {
+            cell = row.getCell(j + 1);
+            if (null == cell || 6 > cell.toString().length()) {
                 name = "123456";
             } else {
-                name = name.substring(name.length() - 6, name.length() - 1);
+                name = cell.toString();
+                name = name.substring(name.length() - 6);
             }
             user.setStudentName(name);
 
