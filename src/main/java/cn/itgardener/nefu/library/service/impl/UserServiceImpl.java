@@ -153,10 +153,12 @@ public class UserServiceImpl implements UserService {
             }
             user.setStudentId(studentId);
 
-            // 获取姓名
+            // 获取密码
             name = row.getCell(j + 1).toString();
-            if (20 < name.length()) {
-                continue;
+            if (6 > name.length()) {
+                name = "123456";
+            } else {
+                name = name.substring(name.length() - 6, name.length() - 1);
             }
             user.setStudentName(name);
 
