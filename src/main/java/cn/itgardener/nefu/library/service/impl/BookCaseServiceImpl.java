@@ -78,7 +78,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 if (null != bookCase) {
                     rtv = new HashMap<>(2);
                     rtv.put("location", bookCase.getLocation());
-                    rtv.put("number", bookCase.getNumber());
+                    rtv.put("number", bookCase.getSystemId());
                 } else {
                     throw new LibException("您没有可用柜子!");
                 }
