@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.web.api;
@@ -57,7 +57,7 @@ public class LoginApi {
         logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
 
         if (null == user.getStudentId() || 1 > user.getStudentId().length() ||
-                null == user.getStudentName() || 1 > user.getStudentName().length()) {
+                null == user.getStudentName() || 6 != user.getStudentName().length()) {
             return new RestData(1, ErrorMessage.PARAMATER_ERROR);
         }
 
