@@ -418,7 +418,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 redisDao.dec("total", 1);
             }
         } else {
-            throw new LibException("排队失败,请重试");
+            throw new LibException("排队失败,或已经没有可用柜子,请点击页面刷新状态按钮获取最新数据.");
         }
         return true;
     }
