@@ -1,6 +1,6 @@
 -- Insert into user
 INSERT INTO user (user_username, user_password, user_type, user_token)
-VALUES ('admin', 'admin', 1, NULL);
+VALUES ('admin', 'admin1', 1, NULL);
 
 -- Insert into config
 INSERT INTO config (config_key, config_value)
