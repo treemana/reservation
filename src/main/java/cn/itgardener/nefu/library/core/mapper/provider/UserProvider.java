@@ -27,7 +27,7 @@ public class UserProvider {
                 if (null != user.getStudentId()) {
                     WHERE("user_student_id=#{studentId}");
                 }
-                if (null != user.getStudentName()) {
+                if (null != user.getUserPassword()) {
                     WHERE("user_password=#{userPassword}");
                 }
                 if (null != user.getStudentName()) {
@@ -39,7 +39,6 @@ public class UserProvider {
                 if (null != user.getToken()) {
                     WHERE("user_token=#{token}");
                 }
-
             }
         }.toString();
     }
