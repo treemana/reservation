@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper.provider;
@@ -18,8 +18,8 @@ public class UserProvider {
     public String selectByCondition(User user) {
         return new SQL() {
             {
-                SELECT("user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword,user_student_name AS studentName, " +
-                        "user_type AS type, user_token AS token");
+                SELECT("user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword, " +
+                        "user_student_name AS studentName, user_type AS type, user_token AS token");
                 FROM("user");
                 if (null != user.getSystemId()) {
                     WHERE("user_system_id=#{systemId}");

@@ -57,7 +57,7 @@ public class LoginApi {
         logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
 
         if (null == user.getStudentId() || 1 > user.getStudentId().length() ||
-                null == user.getStudentName() || 6 != user.getStudentName().length()) {
+                null == user.getUserPassword() || 6 != user.getUserPassword().length()) {
             return new RestData(1, ErrorMessage.PARAMATER_ERROR);
         }
 

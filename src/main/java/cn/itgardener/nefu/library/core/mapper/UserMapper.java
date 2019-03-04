@@ -27,7 +27,7 @@ public interface UserMapper {
      * @param user 数据
      * @return 插入数据数量
      */
-    @Insert("INSERT INTO user(user_student_id,user_password,user_type) VALUES(#{studentId},#{userPassword},#{type})")
+    @Insert("INSERT INTO user(user_student_id,user_password,user_student_name,user_type) VALUES(#{studentId},#{userPassword},#{studentName},#{type})")
     @Options(useGeneratedKeys = true, keyProperty = "systemId")
     int insert(User user);
 
@@ -82,8 +82,8 @@ public interface UserMapper {
      * @param bookCase
      * @return User
      */
-    @Select("SELECT user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword, user_student_name AS studentName," +
-            "user_type AS type, user_token AS token from user where user_system_id=#{userId}")
+    @Select("SELECT user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword, " +
+            "user_student_name AS studentName, user_type AS type, user_token AS token from user where user_system_id=#{userId}")
     User selectByUserId(BookCase bookCase);
 
     /**

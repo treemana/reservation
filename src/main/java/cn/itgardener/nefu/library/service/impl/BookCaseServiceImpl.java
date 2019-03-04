@@ -248,10 +248,10 @@ public class BookCaseServiceImpl implements BookCaseService {
             String id = bookCaseVo.getId();
             if (id.indexOf("-") != -1) {
                 String[] splitstr = id.split("-", -1);
-                if (null == splitstr[0] || splitstr[0].equals("")) {
+                if (null == splitstr[0] || "".equals(splitstr[0])) {
                     bookCaseVo.setL(splitstr[1]);
                     bookCaseVo.setR(splitstr[1]);
-                } else if (null == splitstr[1] || splitstr[1].equals("")) {
+                } else if (null == splitstr[1] || "".equals(splitstr[1])) {
                     bookCaseVo.setL(splitstr[0]);
                     bookCaseVo.setR(splitstr[0]);
                 } else {
@@ -363,36 +363,37 @@ public class BookCaseServiceImpl implements BookCaseService {
 
     }
 
-    //选择出最大数量的区域
+    /**
+     * 选择出最大数量的区域
+     *
+     * @return maxlocation 区域
+     */
     private String maxLocation() {
         int max = 0;
-        int nowvalue;
-        String maxlocation = null;
+        int nowValue;
+        String maxLocation = null;
         for (int i = 1; i <= 6; i++) {
-            int locationnum = Integer.parseInt(redisDao.get("floor_" + i));
-            for (int j = 0; j < locationnum; j++) {
+            int locationNum = Integer.parseInt(redisDao.get("floor_" + i));
+            for (int j = 0; j < locationNum; j++) {
                 try {
-                    nowvalue = Integer.parseInt(redisDao.get("location_" + i + "_" + j));//redis中可能没有该区域
+                    // redis中可能没有该区域
+                    nowValue = Integer.parseInt(redisDao.get("location_" + i + "_" + j));
                 } catch (Exception e) {
-                    nowvalue = 0;
+                    nowValue = 0;
                 }
-                if (nowvalue > max) {
-                    max = nowvalue;
-                    maxlocation = i + "_" + j;
+                if (nowValue > max) {
+                    max = nowValue;
+                    maxLocation = i + "_" + j;
                 }
             }
         }
-        return maxlocation;
+        return maxLocation;
     }
 
     @Override
     public boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException {
 
-        try {
-            reservationService.verifyCode(bookCaseVo.getVerifyCode(), bookCaseVo.getStudentId());
-        } catch (LibException e) {
-            throw e;
-        }
+        reservationService.verifyCode(bookCaseVo.getVerifyCode(), bookCaseVo.getStudentId());
 
         String key = bookCaseVo.getStudentId();
         String location;
@@ -513,8 +514,9 @@ public class BookCaseServiceImpl implements BookCaseService {
             number = list.get(0);
         }
         for (int i = 0; i < bookCaseVo.getTotal(); i++) {
-            if (0 == bookCaseMapper.addBookcase(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea(), ++number))
+            if (0 == bookCaseMapper.addBookcase(bookCaseVo.getFloor() + "_" + bookCaseVo.getArea(), ++number)) {
                 return false;
+            }
         }
         redisDao.removeAllKey();
         redisDao.updateRedis();
@@ -526,8 +528,7 @@ public class BookCaseServiceImpl implements BookCaseService {
         List<Config> list;
         int maxarea = 0;
         list = configMapper.selectFloorLocation(locationVo);
-        for (int i = 0; i < list.size(); i++) {
-            Config config = list.get(i);
+        for (Config config : list) {
             String[] x = config.getConfigKey().split("_");
             if (Integer.parseInt(x[1]) > maxarea) {
                 maxarea = Integer.parseInt(x[1]);

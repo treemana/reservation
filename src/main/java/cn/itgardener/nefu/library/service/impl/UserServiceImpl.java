@@ -140,7 +140,8 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setType(0);
         String studentId;
-        String name;
+        String studentName;
+        String password;
         XSSFCell cell;
         // 循环输出表格中的内容
         for (int i = sheet.getFirstRowNum() + 1; i < sheet.getPhysicalNumberOfRows(); i++) {
@@ -155,15 +156,24 @@ public class UserServiceImpl implements UserService {
             }
             user.setStudentId(studentId);
 
-            // 获取密码
+            // 获取姓名
             cell = row.getCell(j + 1);
             if (null == cell || 6 > cell.toString().length()) {
-                name = "123456";
+                studentName = "未导入";
             } else {
-                name = cell.toString();
-                name = name.substring(name.length() - 6);
+                studentName = cell.toString();
             }
-            user.setStudentName(name);
+            user.setStudentName(studentName);
+
+            // 获取密码
+            cell = row.getCell(j + 2);
+            if (null == cell || 6 > cell.toString().length()) {
+                password = "123456";
+            } else {
+                password = cell.toString();
+                password = password.substring(password.length() - 6);
+            }
+            user.setUserPassword(password);
 
             userMapper.insert(user);
         }

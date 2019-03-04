@@ -12,7 +12,7 @@ CREATE TABLE `bookcase`
 (
   `bc_system_id` BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT
     COMMENT '表的id',
-  `bc_location`  CHAR(5) NOT NULL
+  `bc_location`  CHAR(5)          NOT NULL
     COMMENT '1_1代表一楼一号区域，以此类推',
   `bc_number`    INT UNSIGNED     NOT NULL
     COMMENT '书包柜的编号，每个区域的编号',
@@ -50,10 +50,10 @@ CREATE TABLE `user`
     COMMENT 'user表的id',
   `user_student_id`   CHAR(10)        NOT NULL
     COMMENT '学生端为学号，教师端为账号',
-  `user_password`     VARCHAR(20)     NOT NULL
+  `user_password`     VARCHAR(6)      NOT NULL
     COMMENT '密码',
   `user_student_name` VARCHAR(20)     NOT NULL
-  COMMENT '学生姓名',
+    COMMENT '学生姓名',
   `user_type`         TINYINT UNSIGNED DEFAULT '0'
     COMMENT '用户的状态，黑名单的同学为2，老师设置为1，学生设置为0，默认为0',
   `user_token`        VARCHAR(255)     DEFAULT NULL

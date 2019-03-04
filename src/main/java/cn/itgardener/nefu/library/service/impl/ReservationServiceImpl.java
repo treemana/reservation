@@ -47,6 +47,7 @@ public class ReservationServiceImpl implements ReservationService {
         this.redisDao = redisDao;
         this.userMapper = userMapper;
     }
+
     @Override
     public boolean putReservationArea(AreaVo areaVo) throws LibException {
         ArrayList<String> locationList = areaVo.getLocationList();
@@ -213,7 +214,5 @@ public class ReservationServiceImpl implements ReservationService {
             throw new LibException("验证码出错!");
         }
         redisDao.pushHash("code", studentId, TokenUtil.getToken());
-
     }
-
 }
