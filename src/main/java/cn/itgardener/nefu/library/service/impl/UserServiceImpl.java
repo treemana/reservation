@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
             if (null == cell || 6 > cell.toString().length()) {
                 password = "123456";
             } else {
-                password = cell.toString();
+                password = cell.toString().toUpperCase();
                 password = password.substring(password.length() - 6);
             }
             user.setUserPassword(password);
