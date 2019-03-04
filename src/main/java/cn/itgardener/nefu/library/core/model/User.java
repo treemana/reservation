@@ -17,9 +17,12 @@ public class User {
      * 学号 or 账号
      */
     private String studentId;
-
     /**
-     * 姓名 or 密码
+     *  密码
+     */
+    private String userPassword;
+    /**
+     * 姓名
      */
     private String studentName;
 
@@ -54,6 +57,14 @@ public class User {
 
     public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getStudentName() {

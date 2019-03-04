@@ -226,10 +226,10 @@ public class BookCaseProvider {
     public String selectUserIdByStudentId(ShipVo shipVO) {
         return new SQL() {
             {
-                SELECT("user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+                SELECT("user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword,user_student_name AS studentName, " +
                         "user_type AS type, user_token AS token");
                 FROM("user");
-                WHERE("user_username=#{studentId}");
+                WHERE("user_student_id=#{studentId}");
             }
         }.toString();
     }

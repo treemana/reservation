@@ -319,8 +319,10 @@ public class BookCaseServiceImpl implements BookCaseService {
             User user = userMapper.selectByUserId(data);
             if (null != userId && null != userMapper.selectByUserId(data)) {
                 map.put("studentId", user.getStudentId());
+                map.put("studentName", user.getStudentName());
             } else {
                 map.put("studentId", "");
+                map.put("studentName", "");
             }
             rtv.add(map);
         }

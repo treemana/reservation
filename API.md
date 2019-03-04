@@ -78,7 +78,7 @@
 ```json
 {
     "studentId" : "2016210111",
-    "studentName" : "张三"
+    "userPassword" : "123456"
 }
 ```
 
@@ -377,14 +377,16 @@
                 "number" : 123,
                 "systemId" : 145,
                 "status" : 0,
-                "studentId" : "123"
+                "studentId" : "123",
+                "studentName": "pc"
             },
             {
                 "location" : "1_1",
                 "number" : 123,
                 "systemId" : 140,
                 "status" : 0,
-                "studentId" : "123"
+                "studentId" : "123",
+                 "studentName": ""
             }
         ],
         "pages" : {
@@ -644,8 +646,8 @@
 
 ```json
 {
-    "studentId" : "12434555434"
-}
+     "studentId" : "12434555434"
+ }
 ```
 
 - return :
