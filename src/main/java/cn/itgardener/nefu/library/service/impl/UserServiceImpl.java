@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
 
             // 获取姓名
             cell = row.getCell(j + 1);
-            if (null == cell || 6 > cell.toString().length()) {
+            if (null == cell || 1 > cell.toString().length()) {
                 studentName = "未导入";
             } else {
                 studentName = cell.toString();
