@@ -162,6 +162,9 @@ public class UserServiceImpl implements UserService {
                 studentName = "未导入";
             } else {
                 studentName = cell.toString();
+                if (19 < studentName.length()) {
+                    studentName = studentName.substring(0, 18);
+                }
             }
             user.setStudentName(studentName);
 
