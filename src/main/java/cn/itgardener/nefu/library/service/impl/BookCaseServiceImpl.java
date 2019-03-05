@@ -21,15 +21,21 @@ import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 import cn.itgardener.nefu.library.service.BookCaseService;
 import cn.itgardener.nefu.library.service.ReservationService;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static cn.itgardener.nefu.library.common.GlobalConst.USER_DISABLE;
 
@@ -586,6 +592,140 @@ public class BookCaseServiceImpl implements BookCaseService {
         } else {
             return new RestData(1, "输入数据异常，请重新输入");
         }
+    }
+
+    @Override
+    public void downMessage(HttpServletResponse response) {
+        List<BookCase> bookCases = bookCaseMapper.selectBookcaseNoCondition();
+        List<String> tableTitles = new LinkedList<>();
+        tableTitles.add("书包柜编号");
+        tableTitles.add("区域");
+        tableTitles.add("状态");
+        tableTitles.add("使用者学号");
+        tableTitles.add("使用者姓名");
+
+        //总列数
+        int cellNum = tableTitles.size();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(new Date());
+        // 设置文件MIME类型
+        response.setContentType("application/ms-excel");
+        // 设置Content-Disposition
+        response.setHeader("Content-Disposition", "attachment;filename=" + format + ".xlsx");
+
+        // 创建excel工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        // 创建工作表sheet
+        XSSFSheet sheet = workbook.createSheet("预约信息表");
+        // 垂直居中
+        sheet.setVerticallyCenter(true);
+        // 水平居中
+        sheet.setHorizontallyCenter(true);
+        //页边距
+        sheet.setMargin(Sheet.TopMargin, 0.5D);
+        sheet.setMargin(Sheet.BottomMargin, 0.5D);
+        sheet.setMargin(Sheet.LeftMargin, 0.25D);
+        sheet.setMargin(Sheet.RightMargin, 0.25D);
+        //自适应列宽
+        sheet.autoSizeColumn(1, true);
+        //设置默认宽度
+        sheet.setDefaultColumnWidth(15);
+        // 创建行
+        XSSFRow row;
+        // 创建列
+        XSSFCell cell;
+        // 插入第一行数据的表头
+        row = sheet.createRow(0);
+
+        for (int i = 0; i < cellNum; i++) {
+            XSSFCellStyle xssfCellStyle = workbook.createCellStyle();
+            // 水平居中
+            xssfCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            // 垂直居中
+            xssfCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            // 上下左右边框
+            xssfCellStyle.setBorderTop(BorderStyle.THIN);
+            xssfCellStyle.setBorderBottom(BorderStyle.THIN);
+            xssfCellStyle.setBorderLeft(BorderStyle.THIN);
+            xssfCellStyle.setBorderRight(BorderStyle.THIN);
+            //创建单元格
+            cell = row.createCell(i);
+            cell.setCellStyle(xssfCellStyle);
+            cell.setCellValue(tableTitles.get(i));
+        }
+        int rowIndex = 1;
+        int cellIndex;
+
+        for (BookCase bookCase : bookCases) {
+            row = sheet.createRow(rowIndex);
+            rowIndex++;
+            cellIndex = 0;
+            XSSFCellStyle xssfCellStyle = workbook.createCellStyle();
+            // 水平居中
+            xssfCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            // 垂直居中
+            xssfCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            // 上写左右边框
+            xssfCellStyle.setBorderTop(BorderStyle.THIN);
+            xssfCellStyle.setBorderBottom(BorderStyle.THIN);
+            xssfCellStyle.setBorderLeft(BorderStyle.THIN);
+            xssfCellStyle.setBorderRight(BorderStyle.THIN);
+            //编号
+            if (null != bookCase.getSystemId()) {
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                cell.setCellValue(bookCase.getSystemId());
+            }
+            //区域
+            if (null != bookCase.getLocation()) {
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                String[] split = bookCase.getLocation().split("_");
+                cell.setCellValue(split[0] + "层" + split[1] + "列");
+            }
+            //状态
+            if (null != bookCase.getStatus()) {
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                if (0 == bookCase.getStatus()) {
+                    cell.setCellValue("空闲");
+                }
+                if (1 == bookCase.getStatus()) {
+                    cell.setCellValue("被占用");
+                }
+                if (2 == bookCase.getStatus()) {
+                    cell.setCellValue("被预留");
+                }
+            }
+            //学生的学号
+            if (null != bookCase.getUserId()) {
+                User user = new User();
+                user.setSystemId(bookCase.getUserId());
+                List<User> users = userMapper.selectByCondition(user);
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                cell.setCellValue(users.get(0).getStudentId());
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                cell.setCellValue(users.get(0).getStudentName());
+
+            } else {
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                cell.setCellValue("");
+                cell = row.createCell(cellIndex++);
+                cell.setCellStyle(xssfCellStyle);
+                cell.setCellValue("");
+            }
+        }
+        // 创建excel文件
+        // 将excel写入
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

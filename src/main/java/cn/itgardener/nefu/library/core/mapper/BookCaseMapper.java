@@ -242,4 +242,12 @@ public interface BookCaseMapper {
      */
     @SelectProvider(type = BookCaseProvider.class, method = "selectBookcase")
     List<BookCase> selectBookcase();
+
+    /**
+     * 查询所有的柜子
+     *
+     * @return list
+     */
+    @Select("select bc_system_id AS systemId,bc_location AS location, bc_number AS number,bc_user_id AS userId, bc_status AS status from bookcase")
+    List<BookCase> selectBookcaseNoCondition();
 }

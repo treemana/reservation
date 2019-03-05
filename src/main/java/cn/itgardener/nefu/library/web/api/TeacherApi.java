@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -338,6 +339,12 @@ public class TeacherApi {
             return new RestData(1, e.getMessage());
         }
 
+    }
+
+    @RequestMapping(value = "/downMessage", method = RequestMethod.GET)
+    public void downMessage(HttpServletResponse response) {
+        logger.info("downMessage");
+        bookCaseService.downMessage(response);
     }
 
 }

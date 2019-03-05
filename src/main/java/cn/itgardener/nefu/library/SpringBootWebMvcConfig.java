@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
  */
-
 package cn.itgardener.nefu.library;
 
 import cn.itgardener.nefu.library.web.interceptor.TokenInterceptor;
@@ -10,11 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 /**
  * @author CMY
  * @date 2018/11/17
  * @since : Java 8
  */
+
 @Configuration
 public class SpringBootWebMvcConfig implements WebMvcConfigurer {
 
@@ -30,3 +31,4 @@ public class SpringBootWebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor).addPathPatterns("/**");
     }
 }
+

@@ -11,6 +11,7 @@ import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
 import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -169,4 +170,9 @@ public interface BookCaseService {
      * @return restData
      */
     RestData deleteBookcase(BookCaseVo bookCaseVo);
+
+    /**
+     * 下载
+     */
+    void downMessage(HttpServletResponse response);
 }
