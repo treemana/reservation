@@ -11,7 +11,6 @@ import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
-import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.*;
 import cn.itgardener.nefu.library.service.BookCaseService;
@@ -342,8 +341,11 @@ public class TeacherApi {
     }
 
     @RequestMapping(value = "/downMessage", method = RequestMethod.GET)
-    public void downMessage(HttpServletResponse response) {
+    public void downMessage(HttpServletResponse response, HttpServletRequest request) {
         logger.info("downMessage");
+        if (!VerifyUtil.verifyType(request)) {
+            return;
+        }
         bookCaseService.downMessage(response);
     }
 
