@@ -55,11 +55,11 @@ public interface ReservationService {
     RestData putReservationTime(TimeVo timeVO);
 
     /**
-     * 查询开放时间
+     * 查询开放时间,结束时间，系统当前时间
      *
-     * @return 开放时间
+     * @return map
      */
-    Map<String, Object> getStartTime();
+    Map<String, Object> getAllTime();
 
     /**
      * 获取各个区域的预约状态

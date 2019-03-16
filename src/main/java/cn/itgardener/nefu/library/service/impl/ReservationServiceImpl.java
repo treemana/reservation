@@ -123,13 +123,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Map<String, Object> getStartTime() {
+    public Map<String, Object> getAllTime() {
 
         String nowTime = TimeUtil.getCurrentTime();
 
         Map<String, Object> rtv = new HashMap<>(2);
         rtv.put("startTime", redisDao.get("openTime"));
         rtv.put("nowTime", nowTime);
+        rtv.put("endTime",redisDao.get("endTime"));
         return rtv;
 
     }
@@ -188,7 +189,7 @@ public class ReservationServiceImpl implements ReservationService {
             logger.info("已在队列中");
             return rtv;
         }
-        //联合判断 区域是否开放和柜子是否剩余
+        //联合柜子是否剩余
         for (int i = 1; i <= locationNum; i++) {
             if (Integer.parseInt(redisDao.get("location_" + floor + "_" + i)) > 0) {
                 HashMap<String, Object> hashMap = new HashMap<>(2);

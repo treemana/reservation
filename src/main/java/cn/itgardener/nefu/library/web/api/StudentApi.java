@@ -51,7 +51,7 @@ public class StudentApi {
     public RestData getStartTime() {
         logger.info("GET getStartTime");
 
-        Map<String, Object> data = reservationService.getStartTime();
+        Map<String, Object> data = reservationService.getAllTime();
         return new RestData(data);
     }
 
