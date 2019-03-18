@@ -144,15 +144,20 @@ public class UserServiceImpl implements UserService {
         String password;
         XSSFCell cell;
         // 循环输出表格中的内容
-        for (int i = sheet.getFirstRowNum() + 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+        for (int i = sheet.getFirstRowNum(); i < sheet.getPhysicalNumberOfRows(); i++) {
             row = sheet.getRow(i);
             int j = row.getFirstCellNum();
             user.setSystemId(null);
 
             // 获取学号
-            studentId = row.getCell(j).toString();
-            if (0 < userMapper.selectByStudentId(studentId).size()) {
-                continue;
+            cell = row.getCell(j);
+            if (null == cell || 1 > cell.toString().length()) {
+                break;
+            } else {
+                studentId = cell.toString();
+                if (0 < userMapper.selectByStudentId(studentId).size()) {
+                    continue;
+                }
             }
             user.setStudentId(studentId);
 
