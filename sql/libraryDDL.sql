@@ -55,7 +55,7 @@ CREATE TABLE `user`
   `user_student_name` VARCHAR(20)     NOT NULL
     COMMENT '学生姓名',
   `user_type`         TINYINT UNSIGNED DEFAULT '0'
-    COMMENT '用户的状态，黑名单的同学为2，老师设置为1，学生设置为0，默认为0',
+  COMMENT '用户的状态，黑名单的同学为2，老师设置为1，学生设置为0，默认为0 只负责查询的老师设置为：3',
   `user_token`        VARCHAR(255)     DEFAULT NULL
     COMMENT '令牌',
   PRIMARY KEY (`user_system_id`),

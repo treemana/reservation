@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import static cn.itgardener.nefu.library.common.GlobalConst.USER_ADMIN;
+import static cn.itgardener.nefu.library.common.GlobalConst.USER_OTHER_ADMIN;
 
 /**
  * @author : Jimi
@@ -118,7 +119,10 @@ public class VerifyUtil {
         User user = new User();
         user.setToken(token);
         User user1 = userMapper.selectByToken(user);
-        return USER_ADMIN == user1.getType();
+        if (USER_ADMIN == user1.getType() || USER_OTHER_ADMIN == user1.getType()) {
+            return true;
+        }
+        return false;
     }
 
     private static long dateToStamp(String s) throws ParseException {
