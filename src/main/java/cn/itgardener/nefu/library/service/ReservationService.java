@@ -1,13 +1,16 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
-import cn.itgardener.nefu.library.core.model.vo.GradeVo;
+import cn.itgardener.nefu.library.common.RestData;
+import cn.itgardener.nefu.library.core.model.vo.AreaVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
 
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,59 +24,58 @@ public interface ReservationService {
     /**
      * 查询预约的区域
      *
-     * @return
+     * @return 区域状态
+     * @throws LibException 异常信息
      */
-    List<Map<String, String>> getReservationArea() throws LibException;
+    List<Map<String, String>> getReservationArea(int floor) throws LibException;
 
-    /**
-     * 修改开始结束年级
-     *
-     * @param gradeVO
-     * @throws LibException
-     */
-    boolean postGrade(GradeVo gradeVO) throws LibException;
-
-    /**
-     * 修改
-     * @param list dasd
-     * @return dasd
-     * @throws LibException sdas
-     */
     /**
      * 修改预约区域
      *
-     * @param list
-     * @return
-     * @throws LibException
+     * @param areaVo 区域列表
+     * @return 是否成功
+     * @throws LibException 异常信息
      */
-    Boolean putReservationArea(List<Integer> list) throws LibException;
+    boolean putReservationArea(AreaVo areaVo) throws LibException;
 
     /**
      * 查询预约时间
      *
      * @return map
+     * @throws LibException 异常信息
      */
     Map<String, String> getReservationTime() throws LibException;
 
     /**
      * 修改预约时间
      *
+     * @param timeVO 时间实体
      * @return 是否修改着成功
-     * @throws LibException 异常
      */
-    boolean putReservationTime(TimeVo timeVO);
+    RestData putReservationTime(TimeVo timeVO);
 
     /**
-     * 查询开放时间
+     * 查询开放时间,结束时间，系统当前时间
      *
-     * @return
+     * @return map
      */
-    Map<String, Object> getStartTime();
+    Map<String, Object> getAllTime();
 
     /**
-     * 获取开放年级
+     * 获取各个区域的预约状态
      *
-     * @return {"startGrade":2016,"endGrade":2018}
+     * @param studentId 学号
+     * @param floor     楼层
+     * @return [0, 1, 1, 0] 0表示可以预约,1表示不可预约
+     * @throws ParseException 异常信息
      */
-    Map<String, Object> getOpenGrade();
+    List<HashMap<String, Object>> getAreaStatus(String studentId, String floor) throws ParseException;
+
+    /**
+     * 验证码校验
+     *
+     * @param verifyCode
+     * @param studentId
+     */
+    void verifyCode(String verifyCode, String studentId) throws LibException;
 }

@@ -1,11 +1,13 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.model.vo;
 
+import java.util.List;
+
 /**
- * @author : chenchenT
+ * @author : chenchenT ，pc
  * @date : 2018/10/29
  * @since : Java 8
  */
@@ -49,9 +51,91 @@ public class BookCaseVo {
     private Integer status;
 
     /**
-     * 柜子位置 null 全部 1 二楼北 2 二楼南 3 三楼北 4 三楼南
+     * 柜子位置 2_1 2楼1区域 || 3_2 3楼2区域
      */
-    private Integer location;
+    private String location;
+
+    /**
+     * 验证码
+     */
+    private String verifyCode;
+    /**
+     * 楼层
+     */
+    private Integer floor;
+    /**
+     * 区域
+     */
+    private Integer area;
+    /**
+     * systemId的数组
+     */
+    private List<Integer> array;
+    /**
+     * 柜子开始的编号
+     */
+    private Integer start;
+    /**
+     * 柜子结束的编号
+     */
+    private Integer end;
+    /**
+     * 柜子的编号
+     */
+    private Integer number;
+    /**
+     * 新添加柜子的数量
+     */
+    private Integer total;
+    /**
+     * strSystemId左范围
+     */
+    private Integer systemIdLeft;
+    /**
+     * strSystemId右范围
+     */
+    private Integer systemIdRight;
+
+    public Integer getSystemIdLeft() {
+        return systemIdLeft;
+    }
+
+    public void setSystemIdLeft(Integer systemIdLeft) {
+        this.systemIdLeft = systemIdLeft;
+    }
+
+    public Integer getSystemIdRight() {
+        return systemIdRight;
+    }
+
+    public void setSystemIdRight(Integer systemIdRight) {
+        this.systemIdRight = systemIdRight;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
 
     public Integer getSystemId() {
         return systemId;
@@ -117,11 +201,51 @@ public class BookCaseVo {
         this.status = status;
     }
 
-    public Integer getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Integer location) {
+    public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
+    public List<Integer> getArray() {
+        return array;
+    }
+
+    public void setArray(List<Integer> array) {
+        this.array = array;
+    }
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public Integer getEnd() {
+        return end;
+    }
+
+    public void setEnd(Integer end) {
+        this.end = end;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

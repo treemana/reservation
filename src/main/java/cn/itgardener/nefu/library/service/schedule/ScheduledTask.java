@@ -32,18 +32,18 @@ public class ScheduledTask {
     }
 
     /**
-     * fixedRate = 5000表示当前方法开始执行5000ms后,Spring scheduling会再次调用该方法
+     * fixedDelay = 1000表示当前方法开始执行1000ms后,Spring scheduling会再次调用该方法
      */
     @Scheduled(fixedDelay = 1000)
     public void doPopList() {
         while (true) {
-            logger.info("===fixedRate: 第{}次查询队列", fixedRateCount++);
+            logger.debug("ScheduledTask: 第{}次查询队列", fixedRateCount++);
             String studentId = bookCaseService.popQueue();
             if (studentId == null) {
                 break;
             }
             bookCaseService.boxQueue(studentId);
-            logger.info("====当前{}已经分配完毕", studentId);
+            logger.debug("ScheduledTask: 当前{}已经分配完毕", studentId);
         }
     }
 }

@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
+import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.UserVo;
 
@@ -23,7 +24,7 @@ public interface UserService {
      *
      * @param user 用户实体
      * @return 结果集
-     * @throws LibException
+     * @throws LibException 异常信息
      */
     Map<String, Object> postLogin(User user) throws LibException;
 
@@ -31,18 +32,17 @@ public interface UserService {
      * 查询黑名单
      *
      * @return 黑名单
-     * @throws LibException
+     * @throws LibException 异常信息
      */
     List<Map<String, Object>> getBlackList() throws LibException;
 
     /**
      * 添加黑名单
      *
-     * @param user
-     * @return
-     * @throws LibException
+     * @param user 用户实体
+     * @return 修改数据库的记录数
      */
-    Map<String, Object> postAddBlackList(User user) throws LibException;
+    int postAddBlackList(User user);
 
     /**
      * 删除黑名单
@@ -56,9 +56,21 @@ public interface UserService {
     /**
      * 当前用户查询排队状态
      *
-     * @param userVo
+     * @param userVo 用户实体
      * @return 前面还有多少人
-     * @throws LibException 异常信息
      */
-    int getStatus(UserVo userVo);
+    int getStatus(UserVo userVo) throws LibException;
+
+    /**
+     * 上传 xlsx 导入学生
+     *
+     * @param fileName 上传后的文件名
+     * @return RestData
+     */
+    RestData postStudent(String fileName);
+
+    /**
+     * 删除现有的学生账户
+     */
+    void deleteStudent();
 }

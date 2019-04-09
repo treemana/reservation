@@ -31,22 +31,33 @@ public class BookCaseProvider {
         }.toString();
     }
 
-    public String setByNumber(BookCase bookCase) {
+    public String setBookCaseByCondition(BookCaseVo bookCaseVo) {
         return new SQL() {
             {
                 UPDATE("bookcase");
-                SET("bc_status=1");
-                WHERE("bc_number=#{number}");
+                SET("bc_status=2");
+                if (null != bookCaseVo.getNumber()) {
+                    WHERE("bc_number=#{number}");
+                }
+                if (null != bookCaseVo.getSystemId()) {
+                    WHERE("bc_system_id=#{systemId}");
+                }
+                if (null != bookCaseVo.getStart() && null != bookCaseVo.getEnd()) {
+                    WHERE("bc_number between #{start} and #{end}");
+                }
+                if (null != bookCaseVo.getLocation()) {
+                    WHERE("bc_location=#{location}");
+                }
             }
         }.toString();
     }
 
-    public String deleteShipByNumber(BookCase bookCase) {
+    public String deleteShipById(BookCase bookCase) {
         return new SQL() {
             {
                 UPDATE("bookcase");
                 SET("bc_user_id=null, bc_status=0");
-                WHERE("bc_number=#{number}");
+                WHERE("bc_system_id=#{systemId}");
             }
         }.toString();
     }
@@ -56,12 +67,11 @@ public class BookCaseProvider {
             {
                 UPDATE("bookcase");
                 SET("bc_user_id=null, bc_status=0");
-                WHERE("bc_status=1");
             }
         }.toString();
     }
 
-    public String selectBagNum(@Param("location") int location) {
+    public String selectBagNum(@Param("location") String location) {
         return new SQL() {
             {
                 SELECT("count(*)");
@@ -87,19 +97,22 @@ public class BookCaseProvider {
                 FROM("bookcase");
                 if (null != bookCaseVo.getStatus() && 2 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
-                        WHERE(" bc_status=1");
+                        WHERE(" bc_status=2");
                     }
                     if (null != bookCaseVo.getId()) {
                         WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
+                    }
+                    if (null != bookCaseVo.getSystemIdLeft() && null != bookCaseVo.getSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
                     }
                     WHERE(" bc_user_id is null");
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 } else if (null != bookCaseVo.getStatus() && 1 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=1");
@@ -113,10 +126,13 @@ public class BookCaseProvider {
                     if (null != bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
                     }
+                    if (null != bookCaseVo.getSystemIdLeft() && null != bookCaseVo.getSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+                    }
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 } else {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=" + bookCaseVo.getStatus());
@@ -127,33 +143,38 @@ public class BookCaseProvider {
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
                     }
+                    if (null != bookCaseVo.getSystemIdLeft() && null != bookCaseVo.getSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+                    }
                     ORDER_BY(" bc_system_id LIMIT " + finalLimit);
                 }
             }
         }.toString();
     }
 
-
     public String countByCondition(BookCaseVo bookCaseVo) {
 
         return new SQL() {
             {
-                SELECT("count(bc_system_id) AS totalSize");
+                SELECT("count(bc_system_id) As totalSize");
                 FROM("bookcase");
                 if (null != bookCaseVo.getStatus() && 2 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
-                        WHERE(" bc_status=1");
+                        WHERE(" bc_status=2");
                     }
                     if (null != bookCaseVo.getId()) {
                         WHERE("( bc_number>=" + bookCaseVo.getL() + " and bc_number<= " + bookCaseVo.getR() + " )");
                     }
+                    if (null != bookCaseVo.getSystemIdLeft() && null != bookCaseVo.getSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+                    }
                     WHERE(" bc_user_id is null");
                 } else if (null != bookCaseVo.getStatus() && 1 == bookCaseVo.getStatus()) {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     WHERE(" bc_status=1");
                     if (null != bookCaseVo.getId()) {
@@ -165,9 +186,12 @@ public class BookCaseProvider {
                     if (null != bookCaseVo.getStudentId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
                     }
+                    if (null != bookCaseVo.getSystemIdLeft() && null != bookCaseVo.getSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+                    }
                 } else {
                     if (null != bookCaseVo.getLocation()) {
-                        WHERE(" bc_location=" + bookCaseVo.getLocation());
+                        WHERE(" bc_location like '" + bookCaseVo.getLocation() + "%'");
                     }
                     if (null != bookCaseVo.getStatus()) {
                         WHERE(" bc_status=" + bookCaseVo.getStatus());
@@ -178,12 +202,16 @@ public class BookCaseProvider {
                     if (null != bookCaseVo.getUserId()) {
                         WHERE(" bc_user_id=" + bookCaseVo.getUserId());
                     }
+                    if (null != bookCaseVo.getSystemIdLeft() && null != bookCaseVo.getSystemIdRight()) {
+                        WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+                    }
                 }
             }
         }.toString();
+
     }
 
-    public String selectBookCaseNumberByLocation(@Param("l") int l) {
+    public String selectBookCaseNumberByLocation(@Param("l") String l) {
         return new SQL() {
             {
                 SELECT("bc_system_id AS systemId,bc_number AS number");
@@ -198,10 +226,10 @@ public class BookCaseProvider {
     public String selectUserIdByStudentId(ShipVo shipVO) {
         return new SQL() {
             {
-                SELECT("user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
+                SELECT("user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword,user_student_name AS studentName, " +
                         "user_type AS type, user_token AS token");
                 FROM("user");
-                WHERE("user_username=#{studentId}");
+                WHERE("user_student_id=#{studentId}");
             }
         }.toString();
     }
@@ -212,11 +240,22 @@ public class BookCaseProvider {
                 UPDATE("bookcase");
                 SET("bc_user_id = #{userId}," +
                         "bc_status = #{status}");
-                WHERE("bc_number = #{number}");
+                WHERE("bc_system_id = #{systemId}");
             }
         }.toString();
     }
 
+
+    public String selectBySystemId(ShipVo shipVO) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                WHERE("bc_system_id = #{systemId}");
+            }
+        }.toString();
+    }
 
     public String selectByNumber(ShipVo shipVO) {
         return new SQL() {
@@ -229,6 +268,104 @@ public class BookCaseProvider {
         }.toString();
     }
 
+    public String selectBookCaseByUserId(@Param("userId") int userId) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                WHERE("bc_user_id=#{userId}");
+            }
+        }.toString();
+    }
+
+    public String selectConfigByLocation(String location) {
+        return new SQL() {
+            {
+                SELECT("config_system_id as configId , config_key as configKey , config_value as configValue");
+                FROM("config");
+                WHERE("config_key=#{loctation}");
+            }
+        }.toString();
+    }
+
+
+    public String deleteBookcaseByRange(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                DELETE_FROM("bookcase");
+                WHERE("bc_number between #{start} and #{end} and bc_location = #{location}");
+            }
+        }.toString();
+    }
+
+    public String deleteBookcaseById(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                DELETE_FROM("bookcase");
+                WHERE("bc_system_id = #{systemId}");
+            }
+
+        }.toString();
+    }
+
+    public String selectBookCaseByCondition(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        "bc_number AS number,  bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                if (null != bookCaseVo.getSystemId()) {
+                    WHERE("bc_system_id = #{systemId}");
+                }
+                if (null != bookCaseVo.getLocation()) {
+                    WHERE("bc_location = #{location}");
+                }
+                if (null != bookCaseVo.getNumber()) {
+                    WHERE("bc_number = #{number}");
+                }
+                if (null != bookCaseVo.getUserId()) {
+                    WHERE("bc_user_id = #{userId}");
+                }
+                if (null != bookCaseVo.getStatus()) {
+                    WHERE("bc_status = #{status}");
+                }
+            }
+
+        }.toString();
+    }
+
+    public String updateBookcaseByRange(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                UPDATE("bookcase");
+                SET("bc_status = 2");
+                WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+
+            }
+        }.toString();
+    }
+
+    public String deleteBookcaseByIdRange(BookCaseVo bookCaseVo) {
+        return new SQL() {
+            {
+                DELETE_FROM("bookcase");
+                WHERE("( bc_system_id>=" + bookCaseVo.getSystemIdLeft() + " and bc_system_id<= " + bookCaseVo.getSystemIdRight() + " )");
+
+            }
+        }.toString();
+    }
+
+    public String selectBookcase() {
+        return new SQL() {
+            {
+                SELECT("bc_system_id AS systemId, bc_location AS location," +
+                        " bc_user_id AS userId, bc_status AS status");
+                FROM("bookcase");
+                WHERE("bc_status = 1");
+            }
+        }.toString();
+    }
 }
 
 

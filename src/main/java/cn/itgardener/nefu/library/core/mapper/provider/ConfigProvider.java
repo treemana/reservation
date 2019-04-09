@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper.provider;
 
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import org.apache.ibatis.jdbc.SQL;
 
 /**
@@ -13,7 +14,8 @@ import org.apache.ibatis.jdbc.SQL;
  * @since : Java 8
  */
 public class ConfigProvider {
-    public String selectOpenAera() {
+
+    public String selectOpenArea() {
         return new SQL() {
             {
                 SELECT("config_system_id as systemId, config_key as configKey,config_value as configValue");
@@ -51,7 +53,7 @@ public class ConfigProvider {
         }.toString();
     }
 
-    public String updateOpenAera(Config config) {
+    public String selectOpenAreaBySystemId(Config config) {
         return new SQL() {
             {
                 UPDATE("config");
@@ -72,12 +74,42 @@ public class ConfigProvider {
         }.toString();
     }
 
+    public String selectEndTime() {
+        return new SQL() {
+            {
+                SELECT("config_key as configKey,config_value as configValue ");
+                FROM("config");
+                WHERE("config_key='endTime'");
+            }
+        }.toString();
+    }
+
     public String selectOpenGrade(Config config) {
         return new SQL() {
             {
                 SELECT("config_key as configKey,config_value as configValue");
                 FROM("config");
                 WHERE("config_key=#{configKey}");
+            }
+        }.toString();
+    }
+
+    public String selectFloorLocation(LocationVo locationVo) {
+        return new SQL() {
+            {
+                SELECT("config_key as configKey,config_value as configValue");
+                FROM("config");
+                WHERE("config_key like '" + locationVo.getFloor() + "%'");
+            }
+        }.toString();
+    }
+
+    public String selectLocation(String location) {
+        return new SQL() {
+            {
+                SELECT("config_key as configKey,config_value as configValue");
+                FROM("config");
+                WHERE("config_key=#{location}");
             }
         }.toString();
     }

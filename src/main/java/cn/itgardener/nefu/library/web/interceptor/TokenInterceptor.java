@@ -1,7 +1,10 @@
-package cn.itgardener.nefu.library.web.Interceptor;
+/*
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
+ */
+
+package cn.itgardener.nefu.library.web.interceptor;
 
 import cn.itgardener.nefu.library.common.ErrorMessage;
-import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
@@ -16,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
- * @author CMY
+ * @author CMY, Hunter
  * @date 2018/11/17
  * @since : Java 8
  */
@@ -26,24 +29,26 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws LibException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String path = request.getRequestURI();
-        logger.info("get TokenInterceptor");
-        User user = TokenUtil.getUserByToken(request);
-        boolean result = path.contains("login");
+        logger.debug("TokenInterceptor");
+
+        boolean result = path.contains("login") || "OPTIONS".equals(request.getMethod());
+
         if (result) {
             return true;
         } else {
+            User user = TokenUtil.getUserByToken(request);
             if (null == user) {
-                logger.info("token验证失败，请重新登陆");
+                logger.info("TokenInterceptor failed, token=" + request.getHeader("token"));
                 try {
                     responseJson(response, new RestData(2, ErrorMessage.PLEASE_RELOGIN));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getLocalizedMessage());
                 }
                 return false;
             } else {
-                logger.info("token验证成功");
+                logger.info("TokenInterceptor success, token=" + request.getHeader("token"));
                 return true;
             }
         }
@@ -51,10 +56,13 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 
     private void responseJson(HttpServletResponse response, RestData restData) throws Exception {
         response.setContentType("application/json; charset=utf-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "*");
+        response.addHeader("Access-Control-Allow-Headers", "*");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter writer = response.getWriter();
         writer.print(JsonUtil.getJsonString(restData));
         response.flushBuffer();
         writer.close();
-
     }
 }

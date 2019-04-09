@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper;
@@ -22,10 +22,20 @@ import java.util.List;
 public interface UserMapper {
 
     /**
+     * 插入学生
+     *
+     * @param user 数据
+     * @return 插入数据数量
+     */
+    @Insert("INSERT INTO user(user_student_id,user_password,user_student_name,user_type) VALUES(#{studentId},#{userPassword},#{studentName},#{type})")
+    @Options(useGeneratedKeys = true, keyProperty = "systemId")
+    int insert(User user);
+
+    /**
      * 根据条件筛选
      *
      * @param user
-     * @return
+     * @return user的集合
      */
     @SelectProvider(type = UserProvider.class, method = "selectByCondition")
     List<User> selectByCondition(User user);
@@ -34,7 +44,7 @@ public interface UserMapper {
      * 设置token
      *
      * @param user
-     * @return
+     * @return 更新数量
      */
     @Update("UPDATE user SET user_token=#{token} WHERE user_system_id=#{systemId}")
     int updateTokenBySystemId(User user);
@@ -42,17 +52,17 @@ public interface UserMapper {
     /**
      * 查询用户类别
      *
-     * @return
+     * @return user集合
      */
     @SelectProvider(type = UserProvider.class, method = "selectByType")
     List<User> selectByType();
 
 
     /**
-     * 删除黑名单t
+     * 删除黑名单
      *
      * @param user
-     * @return
+     * @return 删除黑名单个数
      */
     @UpdateProvider(type = UserProvider.class, method = "deleteBlackListByStudentId")
     int deleteBlackListByStudentId(User user);
@@ -61,17 +71,44 @@ public interface UserMapper {
      * 添加黑名单
      *
      * @param user
-     * @return
+     * @return 添加黑名单个数
      */
-    @Update("UPDATE user SET user_type=2 WHERE user_username=#{studentId}")
+    @Update("UPDATE user SET user_type=2 WHERE user_student_id=#{studentId}")
     int updateTypeByStudentId(User user);
 
     /**
+     * 根据userId查询用户
+     *
      * @param bookCase
-     * @return
+     * @return User
      */
-    @Select("SELECT user_system_id AS systemId, user_username AS studentId, user_password AS studentName, " +
-            "user_type AS type, user_token AS token from user where user_system_id=#{userId}")
+    @Select("SELECT user_system_id AS systemId, user_student_id AS studentId, user_password AS userPassword, " +
+            "user_student_name AS studentName, user_type AS type, user_token AS token from user where user_system_id=#{userId}")
     User selectByUserId(BookCase bookCase);
 
+    /**
+     * 根据studentId查出user
+     *
+     * @param studentId
+     * @return List<User>
+     */
+    @SelectProvider(type = UserProvider.class, method = "selectByStudentId")
+    List<User> selectByStudentId(@Param("studentId") String studentId);
+
+    /**
+     * 根据token查找类型
+     *
+     * @param user token
+     * @return user
+     */
+    @SelectProvider(type = UserProvider.class, method = "selectByToken")
+    User selectByToken(User user);
+
+    /**
+     * 删除
+     *
+     * @return
+     */
+    @Delete("DELETE FROM `user` WHERE user_type <> 1")
+    int deleteAllStudent();
 }

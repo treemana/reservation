@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.web;
@@ -53,7 +53,7 @@ public class WebTestRoot {
 
         Map<String, String> user = new HashMap<>(2);
         user.put("studentId", "admin");
-        user.put("studentName", "admin");
+        user.put("userPassword", "admin1");
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/api/login");
         builder.contentType(MediaType.APPLICATION_JSON_UTF8).content(JsonUtil.getJsonString(user));

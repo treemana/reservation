@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper;
@@ -38,6 +38,7 @@ public interface RedisDao {
      *
      * @param key   关键词
      * @param value 内容
+     * @return
      */
     boolean pushValue(String key, String value);
 
@@ -46,6 +47,7 @@ public interface RedisDao {
      *
      * @param key
      * @param list
+     * @return
      */
     boolean pushList(String key, List<String> list);
 
@@ -53,14 +55,16 @@ public interface RedisDao {
      * 单值出队
      *
      * @param key 键
+     * @return
      */
     String popValue(String key);
 
     /**
-     * 根据value值，移除list中的数据
+     * 根据value值,移除list中的数据
      *
      * @param key   键
      * @param value 移除的内容
+     * @return
      */
     boolean removeListValue(String key, String value);
 
@@ -127,7 +131,31 @@ public interface RedisDao {
 
     /**
      * 同步MySQL和Redis
+     *
      * @return
      */
     boolean updateRedis();
+
+    /**
+     * @param key
+     * @param filed
+     * @param value
+     * @return
+     */
+    void pushHash(String key, String filed, String value);
+
+    /**
+     * @param key
+     * @param filed
+     * @return
+     */
+    String getHash(String key, String filed);
+
+    /**
+     * 删除所有的key
+     *
+     * @return true or false
+     */
+    boolean removeAllKey();
+
 }

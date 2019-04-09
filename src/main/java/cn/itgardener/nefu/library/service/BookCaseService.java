@@ -1,17 +1,17 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service;
 
 import cn.itgardener.nefu.library.common.LibException;
-import cn.itgardener.nefu.library.common.Page;
 import cn.itgardener.nefu.library.common.RestData;
-import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.ShipVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -31,20 +31,29 @@ public interface BookCaseService {
      */
     Map<String, Object> getLocationByUserId(User user) throws LibException;
 
+
     /**
-     * 设置预留的书包柜
+     * 根据Id设置预留的书包柜
      *
-     * @param data 书包柜编号
+     * @param bookCaseVo
      * @return 是否预留成功
-     * @throws LibException 是否预留成功
      */
-    RestData setKeepByNumber(List<Integer> data);
+    RestData setKeepById(BookCaseVo bookCaseVo);
+
+    /**
+     * 根据number设置预留的书包柜
+     *
+     * @param bookCaseVo
+     * @return 是否预留成功
+     */
+    RestData setKeepByNumber(BookCaseVo bookCaseVo);
 
     /**
      * 修改单个关系
      *
-     * @param shipVO 书包柜的编号贺学号
+     * @param shipVO 书包柜的id和学号
      * @return 是否修改成功
+     * @throws LibException 异常信息
      */
     boolean putShip(ShipVo shipVO) throws LibException;
 
@@ -60,36 +69,24 @@ public interface BookCaseService {
      * 获取书包柜数量
      *
      * @return 书包柜位置和数量的列表
-     * @throws LibException
      */
-    List<Map<String, Object>> getBagNum() throws LibException;
+    List<Map<String, Object>> getBagNum(String floor);
 
     /**
      * 根据条件获取书包柜详情
      *
-     * @param bookCaseVo
-     * @return
+     * @param bookCaseVo 书包柜实体
+     * @return 书包柜详情
      */
     RestData selectDetailByCondition(BookCaseVo bookCaseVo);
 
     /**
      * 统一处理参数
      *
-     * @param bookCaseVo
+     * @param bookCaseVo 书包柜实体
      * @return bookCaseVo
      */
     String processParameter(BookCaseVo bookCaseVo);
-
-    /**
-     * 统一封装数据
-     *
-     * @param bookCases
-     * @param bookCaseVo
-     * @param page
-     * @return
-     */
-    RestData encapsulate(List<BookCase> bookCases, BookCaseVo bookCaseVo, Page page);
-
 
     /**
      * 预约书包柜
@@ -97,12 +94,12 @@ public interface BookCaseService {
      * @param bookCaseVo
      * @return 是否成功
      */
-    Boolean postBoxOrder(BookCaseVo bookCaseVo);
+    boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException;
 
     /**
      * redis书包柜队列
      *
-     * @param
+     * @param studentId
      */
     void boxQueue(String studentId);
 
@@ -113,4 +110,69 @@ public interface BookCaseService {
      */
     String popQueue();
 
+    /**
+     * 删除书包柜
+     *
+     * @param bookCaseVo vo
+     * @return restdata
+     * @throws LibException 异常
+     */
+
+    RestData deleteBookcaseById(BookCaseVo bookCaseVo) throws LibException;
+
+    /**
+     * 按照编号删除书包柜
+     *
+     * @param bookCaseVo list
+     * @return restdata
+     * @throws LibException 异常
+     */
+    RestData deleteBookcaseByNumber(BookCaseVo bookCaseVo) throws LibException;
+
+    /**
+     * 批量增加柜子
+     *
+     * @param bookCaseVo
+     * @return 结果
+     */
+    boolean addBookcase(BookCaseVo bookCaseVo);
+
+    /**
+     * 增加区域
+     *
+     * @param locationVo 实例
+     * @return Boolean
+     */
+    boolean addLocation(LocationVo locationVo);
+
+    /**
+     * 删除区域
+     *
+     * @param location location
+     * @return restData
+     * @throws LibException exp
+     */
+
+    RestData deleteLocation(String location) throws LibException;
+
+    /**
+     * 按照systemid范围预留鬼子
+     *
+     * @param bookCaseVo 范围
+     * @return restData
+     */
+    RestData postBookcase(BookCaseVo bookCaseVo);
+
+    /**
+     * 按照systemid范围预留鬼子
+     *
+     * @param bookCaseVo 范围
+     * @return restData
+     */
+    RestData deleteBookcase(BookCaseVo bookCaseVo);
+
+    /**
+     * 下载
+     */
+    void downMessage(HttpServletResponse response);
 }

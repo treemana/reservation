@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper.redis;
@@ -7,7 +7,11 @@ package cn.itgardener.nefu.library.core.mapper.redis;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.mapper.UserMapper;
+import cn.itgardener.nefu.library.core.model.BookCase;
 import cn.itgardener.nefu.library.core.model.Config;
+import cn.itgardener.nefu.library.core.model.User;
+import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,15 +28,18 @@ import java.util.List;
 @Repository
 public class RedisDaoImpl implements RedisDao {
 
-    private final StringRedisTemplate stringRedisTemplate;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final StringRedisTemplate stringRedisTemplate;
     private final BookCaseMapper bookCaseMapper;
     private final ConfigMapper configMapper;
+    private final UserMapper userMapper;
 
-    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate, BookCaseMapper bookCaseMapper, ConfigMapper configMapper) {
+    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate, BookCaseMapper bookCaseMapper, ConfigMapper configMapper, UserMapper userMapper) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.bookCaseMapper = bookCaseMapper;
         this.configMapper = configMapper;
+        this.userMapper = userMapper;
     }
 
 
@@ -158,7 +165,14 @@ public class RedisDaoImpl implements RedisDao {
 
     @Override
     public boolean isMember(String key, String value) {
-        return stringRedisTemplate.opsForSet().isMember(key, value);
+        Boolean rt = stringRedisTemplate.opsForSet().isMember(key, value);
+
+        if (rt == null) {
+            return false;
+        } else {
+            return rt;
+        }
+
     }
 
     @Override
@@ -175,21 +189,65 @@ public class RedisDaoImpl implements RedisDao {
     @Override
     public boolean updateRedis() {
         try {
-            int count =0;
-            for (int i = 1; i <= 4; i++) {
-                int num = bookCaseMapper.selectBagNum(i);
-                count += num;
-                this.set("location_" + i, String.valueOf(num));
+            int count = 0;
+            LocationVo locationVo = new LocationVo();
+            for (int i = 1; i <= 6; i++) {
+                locationVo.setFloor(i);
+                List<Config> list = configMapper.selectFloorLocation(locationVo);
+                this.set("floor_" + i, String.valueOf(list.size()));
+                for (int j = 1; j <= list.size(); j++) {
+                    if ("0".equals(configMapper.selectLocation(i + "_" + j).get(0).getConfigValue())) {
+                        this.set("location_" + i + "_" + j, "-1");
+                        continue;
+                    }
+                    int num = bookCaseMapper.selectBagNum(i + "_" + j);
+                    count += num;
+                    this.set("location_" + i + "_" + j, String.valueOf(num));
+                }
             }
             this.set("popCount", "0");
             this.set("total", String.valueOf(count));
-            this.remove("finish");
-            Config config = configMapper.selectStartTime();
-            this.set("openTime", config.getConfigValue());
+            Config configOpenTime = configMapper.selectStartTime();
+            Config configEndTime = configMapper.selectEndTime();
+            this.set("openTime", configOpenTime.getConfigValue());
+            this.set("endTime", configEndTime.getConfigValue());
+            List<BookCase> bookCases = bookCaseMapper.selectBookcase();
+            for (BookCase bookcase : bookCases) {
+                User user = new User();
+                user.setSystemId(bookcase.getUserId());
+                List<User> users = userMapper.selectByCondition(user);
+                this.add("finish", users.get(0).getStudentId());
+            }
+
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.info("updateRedis" + e);
             return false;
         }
+    }
+
+    @Override
+    public void pushHash(String key, String filed, String value) {
+        try {
+            stringRedisTemplate.opsForHash().put(key, filed, value);
+        } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public String getHash(String key, String filed) {
+        try {
+            return (String) stringRedisTemplate.opsForHash().get(key, filed);
+        } catch (Exception e) {
+            logger.info("get" + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public boolean removeAllKey() {
+        Long delete = stringRedisTemplate.delete(stringRedisTemplate.keys("*"));
+        return delete > 0;
     }
 }

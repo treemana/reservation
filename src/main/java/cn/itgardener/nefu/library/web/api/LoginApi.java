@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.web.api;
@@ -8,21 +8,23 @@ import cn.itgardener.nefu.library.common.ErrorMessage;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
-import cn.itgardener.nefu.library.common.util.TokenUtil;
+import cn.itgardener.nefu.library.core.mapper.RedisDao;
+import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.service.UserService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -39,16 +41,26 @@ public class LoginApi {
 
     private final UserService userService;
     private final DefaultKaptcha defaultKaptcha;
+    private final UserMapper userMapper;
+    private final RedisDao redisDao;
 
     @Autowired
-    public LoginApi(UserService userService, DefaultKaptcha defaultKaptcha) {
+    public LoginApi(UserService userService, DefaultKaptcha defaultKaptcha, UserMapper userMapper, RedisDao redisDao) {
         this.userService = userService;
         this.defaultKaptcha = defaultKaptcha;
+        this.userMapper = userMapper;
+        this.redisDao = redisDao;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user) {
         logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
+
+        if (null == user.getStudentId() || 1 > user.getStudentId().length() ||
+                null == user.getUserPassword() || 6 != user.getUserPassword().length()) {
+            return new RestData(1, ErrorMessage.PARAMATER_ERROR);
+        }
+
         try {
             Map<String, Object> data = userService.postLogin(user);
             return new RestData(data);
@@ -57,56 +69,33 @@ public class LoginApi {
         }
     }
 
-
     @RequestMapping(value = "/code", method = RequestMethod.GET)
-    public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
-        byte[] captchaChallengeAsJpeg;
+    public RestData getCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        logger.info("GET getCode");
+
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
+        User user = userMapper.selectByCondition(new User(httpServletRequest.getHeader("token"))).get(0);
+        try {
+            //生产验证码字符串并保存到redis中
+            String createText = defaultKaptcha.createText();
+            logger.info(createText);
+            redisDao.pushHash("code", user.getStudentId(), createText);
 
-        User currentUser = TokenUtil.getUserByToken(httpServletRequest);
-        if (null != currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
+            //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
+            BufferedImage challenge = defaultKaptcha.createImage(createText);
+            ImageIO.write(challenge, "jpg", jpegOutputStream);
+        } catch (Exception e) {
             try {
-                //生产验证码字符串并保存到session中
-                String createText = defaultKaptcha.createText();
-                System.out.println(createText);
-                httpServletRequest.getSession().setAttribute("vrifyCode", createText);
-
-                //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
-                BufferedImage challenge = defaultKaptcha.createImage(createText);
-                ImageIO.write(challenge, "jpg", jpegOutputStream);
-            } catch (IllegalArgumentException e) {
                 httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
+            } catch (IOException e1) {
+                logger.warn(e1.getLocalizedMessage());
             }
-
-            //定义response输出类型为image/jpeg类型，使用base64输出流输出图片的byte数组
-            captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
-            BASE64Encoder encoder = new BASE64Encoder();
-            return new RestData(encoder.encode(captchaChallengeAsJpeg));
-        }
-    }
-
-
-    @RequestMapping(value = "/vrifycode/{vrifyCode}", method = RequestMethod.GET)
-    public RestData vrifyCode(@PathVariable(value = "vrifyCode") String vrifyCode, HttpServletRequest httpServletRequest) {
-
-
-        User currentUser = TokenUtil.getUserByToken(httpServletRequest);
-        if (null != currentUser) {
-            logger.info(ErrorMessage.PLEASE_RELOGIN);
-            return new RestData(2, ErrorMessage.PLEASE_RELOGIN);
-        } else {
-            String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
-
-            if (captchaId.equals(vrifyCode)) {
-                return new RestData("请求成功");
-            } else {
-                return new RestData(1, "验证码错误");
-            }
+            return new RestData(1, ErrorMessage.SYSTEM_ERROR);
         }
 
+        //定义response输出类型为image/jpeg类型,使用base64输出流输出图片的byte数组
+        byte[] captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+        String apache = new String(Base64.encodeBase64(captchaChallengeAsJpeg));
+        return new RestData(apache);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.model;
@@ -19,7 +19,11 @@ public class User {
     private String studentId;
 
     /**
-     * 姓名 or 密码
+     * 密码
+     */
+    private String userPassword;
+    /**
+     * 姓名
      */
     private String studentName;
 
@@ -32,6 +36,13 @@ public class User {
      * token
      */
     private String token;
+
+    public User() {
+    }
+
+    public User(String token) {
+        this.token = token;
+    }
 
     public Integer getSystemId() {
         return systemId;
@@ -47,6 +58,14 @@ public class User {
 
     public void setStudentId(String studentId) {
         this.studentId = studentId;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getStudentName() {
