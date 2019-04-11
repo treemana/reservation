@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.web.api;
@@ -66,7 +66,6 @@ public class StudentApi {
         } catch (ParseException e) {
             logger.error(e.getLocalizedMessage());
         }
-
 
         try {
             return new RestData(bookCaseService.postBoxOrder(bookCaseVo));

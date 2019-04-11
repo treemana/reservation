@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.model.vo;
@@ -15,6 +15,7 @@ public class UserVo {
      * 学号
      */
     private String studentId;
+
     /**
      * 验证码
      */

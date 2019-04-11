@@ -59,18 +59,22 @@ public class BookCaseVo {
      * 验证码
      */
     private String verifyCode;
+
     /**
      * 楼层
      */
     private Integer floor;
+
     /**
      * 区域
      */
     private Integer area;
+
     /**
      * systemId的数组
      */
     private List<Integer> array;
+
     /**
      * 柜子开始的编号
      */
@@ -79,18 +83,22 @@ public class BookCaseVo {
      * 柜子结束的编号
      */
     private Integer end;
+
     /**
      * 柜子的编号
      */
     private Integer number;
+
     /**
      * 新添加柜子的数量
      */
     private Integer total;
+
     /**
      * strSystemId左范围
      */
     private Integer systemIdLeft;
+
     /**
      * strSystemId右范围
      */
@@ -135,7 +143,6 @@ public class BookCaseVo {
     public void setTotal(Integer total) {
         this.total = total;
     }
-
 
     public Integer getSystemId() {
         return systemId;

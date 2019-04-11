@@ -180,7 +180,7 @@ public class TeacherApi {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         if (1 == userService.postAddBlackList(user)) {
-            return new RestData(null);
+            return new RestData(true);
         } else {
             return new RestData(1, "添加黑名单失败");
         }
@@ -268,7 +268,7 @@ public class TeacherApi {
             return new RestData(1, e.getMessage());
         }
         if (bookCaseService.addBookcase(bookCaseVo)) {
-            return new RestData(null);
+            return new RestData(true);
         } else {
             return new RestData(1, "批量添加柜子失败");
         }
