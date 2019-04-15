@@ -26,14 +26,6 @@ public interface RedisDao {
     List<String> getList(String key, long start, long end);
 
     /**
-     * 获取队列长度
-     *
-     * @param key 键
-     * @return
-     */
-    Long getListSize(String key);
-
-    /**
      * 把单值加入队列
      *
      * @param key   关键词
@@ -43,30 +35,12 @@ public interface RedisDao {
     boolean pushValue(String key, String value);
 
     /**
-     * 把list加入队列
-     *
-     * @param key
-     * @param list
-     * @return
-     */
-    boolean pushList(String key, List<String> list);
-
-    /**
      * 单值出队
      *
      * @param key 键
      * @return
      */
     String popValue(String key);
-
-    /**
-     * 根据value值,移除list中的数据
-     *
-     * @param key   键
-     * @param value 移除的内容
-     * @return
-     */
-    boolean removeListValue(String key, String value);
 
     /**
      * 递减
@@ -121,35 +95,9 @@ public interface RedisDao {
      */
     boolean isMember(String key, String value);
 
-    /**
-     * 移除数据库中key值
-     *
-     * @param key
-     * @return
-     */
-    boolean remove(String key);
+    void putHash(String hashName, String key, String value);
 
-    /**
-     * 同步MySQL和Redis
-     *
-     * @return
-     */
-    boolean updateRedis();
-
-    /**
-     * @param key
-     * @param filed
-     * @param value
-     * @return
-     */
-    void pushHash(String key, String filed, String value);
-
-    /**
-     * @param key
-     * @param filed
-     * @return
-     */
-    String getHash(String key, String filed);
+    String getHash(String hashName, String key);
 
     /**
      * 删除所有的key
@@ -158,4 +106,34 @@ public interface RedisDao {
      */
     boolean removeAllKey();
 
+    /**
+     * 将 value 添加到 set 后计算 set 长度
+     *
+     * @param setName setName
+     * @param value   value
+     * @return 结果集
+     */
+    List<Object> addAndSize(String setName, String value);
+
+    /**
+     * @param setName setName
+     * @param value   value
+     */
+    void setRemove(String setName, String value);
+
+    /**
+     * 按照 String 格式 存储 K-V
+     *
+     * @param key   key
+     * @param value value
+     */
+    void putMap(String key, String value);
+
+    /**
+     * 按照 String 格式 存储 K-V
+     *
+     * @param key key
+     * @return value
+     */
+    String getMap(String key);
 }

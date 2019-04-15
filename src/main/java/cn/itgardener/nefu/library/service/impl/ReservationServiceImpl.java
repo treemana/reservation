@@ -8,14 +8,13 @@ import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.TimeUtil;
 import cn.itgardener.nefu.library.common.util.TokenUtil;
-import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
-import cn.itgardener.nefu.library.core.mapper.UserMapper;
 import cn.itgardener.nefu.library.core.model.Config;
 import cn.itgardener.nefu.library.core.model.vo.AreaVo;
 import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import cn.itgardener.nefu.library.core.model.vo.TimeVo;
+import cn.itgardener.nefu.library.service.RedisService;
 import cn.itgardener.nefu.library.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,16 +35,14 @@ public class ReservationServiceImpl implements ReservationService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ConfigMapper configMapper;
-    private final BookCaseMapper bookCaseMapper;
     private final RedisDao redisDao;
-    private final UserMapper userMapper;
+    private final RedisService redisService;
 
     @Autowired
-    public ReservationServiceImpl(ConfigMapper configMapper, BookCaseMapper bookCaseMapper, RedisDao redisDao, UserMapper userMapper) {
+    public ReservationServiceImpl(ConfigMapper configMapper, RedisDao redisDao, RedisService redisService) {
         this.configMapper = configMapper;
-        this.bookCaseMapper = bookCaseMapper;
         this.redisDao = redisDao;
-        this.userMapper = userMapper;
+        this.redisService = redisService;
     }
 
     @Override
@@ -61,7 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
         redisDao.removeAllKey();
-        redisDao.updateRedis();
+        redisService.updateRedis();
         return true;
     }
 
@@ -115,7 +112,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         if (0 < configMapper.updateOpenTime(config) * configMapper.updateOpenTime(config1)) {
             redisDao.removeAllKey();
-            redisDao.updateRedis();
+            redisService.updateRedis();
             return new RestData(0, "修改成功");
         } else {
             return new RestData(1, "修改失败");
@@ -130,9 +127,8 @@ public class ReservationServiceImpl implements ReservationService {
         Map<String, Object> rtv = new HashMap<>(2);
         rtv.put("startTime", redisDao.get("openTime"));
         rtv.put("nowTime", nowTime);
-        rtv.put("endTime",redisDao.get("endTime"));
+        rtv.put("endTime", redisDao.get("endTime"));
         return rtv;
-
     }
 
     @Override
@@ -209,11 +205,12 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public void verifyCode(String verifyCode, String studentId) throws LibException {
-        String captchaId = redisDao.getHash("code", studentId);
+    public boolean verifyCode(String verifyCode, String studentId) {
+        String captchaId = redisService.getCaptcha(studentId);
         if (!captchaId.equals(verifyCode)) {
-            throw new LibException("验证码出错!");
+            return false;
         }
-        redisDao.pushHash("code", studentId, TokenUtil.getToken());
+        redisService.putCaptcha(studentId, TokenUtil.getToken());
+        return true;
     }
 }

@@ -74,8 +74,8 @@ public interface ReservationService {
     /**
      * 验证码校验
      *
-     * @param verifyCode
-     * @param studentId
+     * @param verifyCode 验证码
+     * @param studentId  学号
      */
-    void verifyCode(String verifyCode, String studentId) throws LibException;
+    boolean verifyCode(String verifyCode, String studentId);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.common;
@@ -52,4 +52,31 @@ public class GlobalConst {
      * 上传文件路径
      */
     public static final String UPLOAD_PATH = "/tmp/";
+
+
+    /* redis key start */
+    /**
+     * 所有预约学生学号 set 的 key
+     */
+    public static final String ALL_RESERVATION_SET = "AllReservationSet";
+
+    /**
+     * 此次可预约柜子总数
+     */
+    public static final String TOTAL = "total";
+
+    /**
+     * 排队队列
+     */
+    public static final String QUEUE_LIST = "queue_list";
+
+    /**
+     * 预约:学号-位置对应关系
+     */
+    public static final String LOCATION_HASH = "location_hash";
+
+    /**
+     * 验证码 HASH
+     */
+    public static final String CAPTCHA_HASH = "captcha_hash";
 }

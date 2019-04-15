@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.common.util;
@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +43,14 @@ public class JsonUtil {
             rtv = new HashMap<>(0);
         }
 
+        return rtv;
+    }
+
+    public static List getListFromJson(String jsonString) {
+        List<String> rtv = getObjFromJson(jsonString, List.class);
+        if (null == rtv) {
+            rtv = new ArrayList();
+        }
         return rtv;
     }
 

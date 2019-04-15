@@ -91,10 +91,10 @@ public interface BookCaseService {
     /**
      * 预约书包柜
      *
-     * @param bookCaseVo
-     * @return 是否成功
+     * @param bookCaseVo 预约参数
+     * @return 预约结果
      */
-    boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException;
+    RestData postBoxOrder(BookCaseVo bookCaseVo);
 
     /**
      * redis书包柜队列
