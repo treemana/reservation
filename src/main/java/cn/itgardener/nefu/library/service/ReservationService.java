@@ -42,9 +42,8 @@ public interface ReservationService {
      * 查询预约时间
      *
      * @return map
-     * @throws LibException 异常信息
      */
-    Map<String, String> getReservationTime() throws LibException;
+    RestData getReservationTime();
 
     /**
      * 修改预约时间

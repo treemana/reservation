@@ -22,20 +22,12 @@ import java.util.List;
 public interface ConfigMapper {
 
     /**
-     * 查询开放区域
-     *
-     * @return 数组<config>
-     */
-    @SelectProvider(type = ConfigProvider.class, method = "selectOpenArea")
-    List<Config> selectOpenArea();
-
-    /**
      * 查询预约时间
      *
      * @return 返回list
      */
-    @SelectProvider(type = ConfigProvider.class, method = "selectOpenTime")
-    List<Config> selectOpenTime();
+    @SelectProvider(type = ConfigProvider.class, method = "selectAll")
+    List<Config> selectAll();
 
     /**
      * 修改开始时间

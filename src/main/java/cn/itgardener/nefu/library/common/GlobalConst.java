@@ -39,14 +39,14 @@ public class GlobalConst {
     public static final int USER_ADMIN = 1;
 
     /**
-     * 3 查
-     */
-    public static final int USER_OTHER_ADMIN = 3;
-
-    /**
      * 2 黑名单
      */
     public static final int USER_DISABLE = 2;
+
+    /**
+     * 3 查
+     */
+    public static final int USER_MONITOR = 3;
 
     /**
      * 上传文件路径

@@ -65,7 +65,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Map<String, String>> getReservationArea(int floor) throws LibException {
 
-        List<Config> configs = configMapper.selectOpenArea();
+        List<Config> configs = configMapper.selectAll();
         if (null == configs) {
             throw new LibException("预约区域为空");
         } else {
@@ -85,20 +85,21 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Map<String, String> getReservationTime() throws LibException {
-        Map<String, String> rtv = new HashMap<>(2);
-        List<Config> configs = configMapper.selectOpenTime();
+    public RestData getReservationTime() {
+
+        List<Config> configs = configMapper.selectAll();
         if (null == configs) {
-            throw new LibException("查询失败");
-        } else {
-            rtv.put("startTime", redisDao.get("openTime"));
-            for (Config config : configs) {
-                if ("endTime".equals(config.getConfigKey())) {
-                    rtv.put("endTime", config.getConfigValue());
-                }
+            return new RestData(1, "系统当前不可用");
+        }
+        Map<String, String> rtv = new HashMap<>(2);
+        rtv.put("startTime", redisDao.get("openTime"));
+        for (Config config : configs) {
+            if ("endTime".equals(config.getConfigKey())) {
+                rtv.put("endTime", config.getConfigValue());
             }
         }
-        return rtv;
+
+        return new RestData(rtv);
     }
 
     @Override

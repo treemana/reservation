@@ -15,16 +15,7 @@ import org.apache.ibatis.jdbc.SQL;
  */
 public class ConfigProvider {
 
-    public String selectOpenArea() {
-        return new SQL() {
-            {
-                SELECT("config_system_id as systemId, config_key as configKey,config_value as configValue");
-                FROM("config");
-            }
-        }.toString();
-    }
-
-    public String selectOpenTime() {
+    public String selectAll() {
         return new SQL() {
             {
                 SELECT("config_system_id as systemId ,config_key as configKey,config_value as configValue");

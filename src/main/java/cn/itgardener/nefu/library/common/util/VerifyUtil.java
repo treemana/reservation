@@ -4,6 +4,7 @@
 
 package cn.itgardener.nefu.library.common.util;
 
+import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
 import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
@@ -21,9 +22,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import static cn.itgardener.nefu.library.common.GlobalConst.USER_ADMIN;
-import static cn.itgardener.nefu.library.common.GlobalConst.USER_OTHER_ADMIN;
 
 /**
  * @author : Jimi
@@ -46,7 +44,7 @@ public class VerifyUtil {
     }
 
     public static boolean verifyOpenTime() {
-        List<Config> configList = configMapper.selectOpenArea();
+        List<Config> configList = configMapper.selectAll();
 
         String startTime = null;
         String endTime = null;
@@ -74,7 +72,6 @@ public class VerifyUtil {
             return false;
         }
 
-
         long now = nowDate.getTime();
         long start = startDate.getTime();
         long end = endDate.getTime();
@@ -85,7 +82,7 @@ public class VerifyUtil {
     public static boolean verifyTime() throws LibException {
         String nowTime = TimeUtil.getCurrentTime();
 
-        List<Config> configs = configMapper.selectOpenTime();
+        List<Config> configs = configMapper.selectAll();
         long startTime = 0L;
         long endTime = 0L;
         long currentTime;
@@ -117,12 +114,12 @@ public class VerifyUtil {
         return true;
     }
 
-    public static boolean verifyType(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        User user = new User();
-        user.setToken(token);
-        User user1 = userMapper.selectByToken(user);
-        return USER_ADMIN == user1.getType() || USER_OTHER_ADMIN == user1.getType();
+    public static boolean verifyAdmin(HttpServletRequest request) {
+        return verifyType(GlobalConst.USER_ADMIN, request);
+    }
+
+    public static boolean verifyMonitor(HttpServletRequest request) {
+        return verifyType(GlobalConst.USER_MONITOR, request);
     }
 
     private static long dateToStamp(String s) throws ParseException {
@@ -136,5 +133,14 @@ public class VerifyUtil {
         List<Config> configs = bookCaseMapper.selectConfigByLocation(location);
         return 0 != configs.size();
     }
+
+    private static boolean verifyType(int targetType, HttpServletRequest request) {
+        String token = request.getHeader("token");
+        User user = new User();
+        user.setToken(token);
+        User user1 = userMapper.selectByToken(user);
+        return targetType == user1.getType();
+    }
+
 }
 
