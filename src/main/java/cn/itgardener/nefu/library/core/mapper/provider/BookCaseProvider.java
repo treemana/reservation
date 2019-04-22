@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.core.mapper.provider;
@@ -66,7 +66,7 @@ public class BookCaseProvider {
         return new SQL() {
             {
                 UPDATE("bookcase");
-                SET("bc_user_id=null, bc_status=0");
+                SET("bc_user_id=bc_system_id, bc_status=0");
             }
         }.toString();
     }

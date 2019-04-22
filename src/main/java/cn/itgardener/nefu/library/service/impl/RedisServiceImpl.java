@@ -89,7 +89,12 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public boolean pushQueue(String studentId) {
-        return redisDao.pushValue(GlobalConst.QUEUE_LIST, studentId);
+        return redisDao.listRightPush(GlobalConst.QUEUE_LIST, studentId);
+    }
+
+    @Override
+    public String popQueue() {
+        return redisDao.listLiftPop(GlobalConst.QUEUE_LIST);
     }
 
     @Override
@@ -118,6 +123,21 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public String getLocation(String studentId) {
         return redisDao.getHash(GlobalConst.LOCATION_HASH, studentId);
+    }
+
+    @Override
+    public int decrLocation(String location) {
+        int rtv = -1;
+        Long result = redisDao.stringDecr(GlobalConst.LOCATION_PREFIX + location);
+        if (null != result) {
+            rtv = Math.toIntExact(result);
+        }
+        return rtv;
+    }
+
+    @Override
+    public boolean incrLocation(String location) {
+        return redisDao.stringIncr(GlobalConst.LOCATION_PREFIX + location);
     }
 
     @Override

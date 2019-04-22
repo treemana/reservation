@@ -307,7 +307,7 @@
 
 - PUT /open-area
 - payload :
-  - status : 0代表关闭，1代表开放
+  - status : 0代表关闭,1代表开放
 
 ```json
 {

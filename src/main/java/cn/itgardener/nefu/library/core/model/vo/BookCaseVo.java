@@ -7,7 +7,7 @@ package cn.itgardener.nefu.library.core.model.vo;
 import java.util.List;
 
 /**
- * @author : chenchenT ，pc
+ * @author : chenchenT ,pc
  * @date : 2018/10/29
  * @since : Java 8
  */

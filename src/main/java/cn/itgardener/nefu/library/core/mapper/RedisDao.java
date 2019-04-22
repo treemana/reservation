@@ -30,9 +30,9 @@ public interface RedisDao {
      *
      * @param key   关键词
      * @param value 内容
-     * @return
+     * @return status
      */
-    boolean pushValue(String key, String value);
+    boolean listRightPush(String key, String value);
 
     /**
      * 单值出队
@@ -40,7 +40,23 @@ public interface RedisDao {
      * @param key 键
      * @return
      */
-    String popValue(String key);
+    String listLiftPop(String key);
+
+    /**
+     * 目标键 -1
+     *
+     * @param key 键
+     * @return 操作后的值
+     */
+    Long stringDecr(String key);
+
+    /**
+     * 目标键 +1
+     *
+     * @param key 键
+     * @return 状态
+     */
+    boolean stringIncr(String key);
 
     /**
      * 递减

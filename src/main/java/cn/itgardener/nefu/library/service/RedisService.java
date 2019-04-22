@@ -32,6 +32,13 @@ public interface RedisService {
     boolean pushQueue(String studentId);
 
     /**
+     * 获取一个排队的学生
+     *
+     * @return 学号
+     */
+    String popQueue();
+
+    /**
      * 将学号添加到 set 并计算大小
      *
      * @param studentId 学号
@@ -57,10 +64,26 @@ public interface RedisService {
     /**
      * 根据学号获取位置
      *
-     * @param stucentId 学号
+     * @param studentId 学号
      * @return 位置
      */
-    String getLocation(String stucentId);
+    String getLocation(String studentId);
+
+    /**
+     * 指定区域总数 -1
+     *
+     * @param location 区域
+     * @return 操作后的值
+     */
+    int decrLocation(String location);
+
+    /**
+     * 指定区域总数 +1
+     *
+     * @param location 区域
+     * @return 操作后的值
+     */
+    boolean incrLocation(String location);
 
     /**
      * 存储验证码

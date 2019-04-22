@@ -469,6 +469,20 @@ public class BookCaseServiceImpl implements BookCaseService {
     @Override
     public void boxQueue(String studentId) {
 
+        String location = redisService.getLocation(studentId);
+
+        if (null == location) {
+            // todo
+            return;
+        }
+        if (0 > redisService.decrLocation(location)) {
+            if (!redisService.incrLocation(location)) {
+                logger.error("区域 {} 恢复失败!", location);
+            }
+            // todo
+            return;
+        }
+
         // 当前是否是第一次排队,如果不是不处理
         if (redisDao.dec("c_" + studentId, 1) == 0) {
             logger.info("====当前处理{}", studentId);
@@ -531,15 +545,6 @@ public class BookCaseServiceImpl implements BookCaseService {
     }
 
     @Override
-    public String popQueue() {
-        String studentId = redisDao.popValue("userQueue");
-        if (studentId != null) {
-            redisDao.inc("popCount", 1);
-        }
-        return studentId;
-    }
-
-    @Override
     public boolean addBookcase(BookCaseVo bookCaseVo) {
         List<Integer> list;
         List<Config> list1;
@@ -597,7 +602,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     public RestData postBookcase(BookCaseVo bookCaseVo) {
         if (null != bookCaseVo.getSystemIdRight() && null != bookCaseVo.getSystemIdLeft()) {
             if (bookCaseVo.getSystemIdRight() < bookCaseVo.getSystemIdLeft()) {
-                return new RestData(1, "输入数据异常，请重新输入");
+                return new RestData(1, "输入数据异常,请重新输入");
             } else {
                 if (bookCaseMapper.updateBookcaseByRange(bookCaseVo) > 0) {
                     return new RestData(true);
@@ -606,7 +611,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 }
             }
         } else {
-            return new RestData(1, "输入数据异常，请重新输入");
+            return new RestData(1, "输入数据异常,请重新输入");
         }
 
     }
@@ -615,7 +620,7 @@ public class BookCaseServiceImpl implements BookCaseService {
     public RestData deleteBookcase(BookCaseVo bookCaseVo) {
         if (null != bookCaseVo.getSystemIdRight() && null != bookCaseVo.getSystemIdLeft()) {
             if (bookCaseVo.getSystemIdRight() < bookCaseVo.getSystemIdLeft()) {
-                return new RestData(1, "输入数据异常，请重新输入");
+                return new RestData(1, "输入数据异常,请重新输入");
             } else {
                 if (bookCaseMapper.deleteBookcaseByIdRange(bookCaseVo) > 0) {
                     return new RestData(true);
@@ -624,7 +629,7 @@ public class BookCaseServiceImpl implements BookCaseService {
                 }
             }
         } else {
-            return new RestData(1, "输入数据异常，请重新输入");
+            return new RestData(1, "输入数据异常,请重新输入");
         }
     }
 

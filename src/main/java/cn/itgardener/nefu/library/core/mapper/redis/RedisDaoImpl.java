@@ -45,24 +45,25 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public boolean pushValue(String key, String value) {
-        try {
-            stringRedisTemplate.opsForList().rightPush(key, value);
-            return true;
-        } catch (Exception e) {
-            logger.info("pushValue" + e.getMessage());
-            return false;
-        }
+    public boolean listRightPush(String key, String value) {
+        Long result = stringRedisTemplate.opsForList().rightPush(key, value);
+        return null != result && 0 >= result;
     }
 
     @Override
-    public String popValue(String key) {
-        try {
-            return stringRedisTemplate.opsForList().leftPop(key);
-        } catch (Exception e) {
-            logger.info("popValue" + e.getMessage());
-            return null;
-        }
+    public String listLiftPop(String key) {
+        return stringRedisTemplate.opsForList().leftPop(key);
+    }
+
+    @Override
+    public Long stringDecr(String key) {
+        return stringRedisTemplate.opsForValue().decrement(key);
+    }
+
+    @Override
+    public boolean stringIncr(String key) {
+        Long result = stringRedisTemplate.opsForValue().increment(key);
+        return null != result;
     }
 
     @Override

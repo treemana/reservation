@@ -54,7 +54,7 @@ public interface ReservationService {
     RestData putReservationTime(TimeVo timeVO);
 
     /**
-     * 查询开放时间,结束时间，系统当前时间
+     * 查询开放时间,结束时间,系统当前时间
      *
      * @return map
      */

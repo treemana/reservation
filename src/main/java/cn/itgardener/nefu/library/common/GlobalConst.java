@@ -79,4 +79,9 @@ public class GlobalConst {
      * 验证码 HASH
      */
     public static final String CAPTCHA_HASH = "captcha_hash";
+
+    /**
+     * 区域数量前缀
+     */
+    public static final String LOCATION_PREFIX = "location_";
 }

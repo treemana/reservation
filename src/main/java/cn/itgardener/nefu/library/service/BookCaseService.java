@@ -104,13 +104,6 @@ public interface BookCaseService {
     void boxQueue(String studentId);
 
     /**
-     * redis 队列出队
-     *
-     * @return
-     */
-    String popQueue();
-
-    /**
      * 删除书包柜
      *
      * @param bookCaseVo vo
