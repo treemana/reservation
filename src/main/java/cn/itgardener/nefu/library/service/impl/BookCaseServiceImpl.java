@@ -451,7 +451,7 @@ public class BookCaseServiceImpl implements BookCaseService {
             return new RestData(1, "请勿重复预约!");
         }
 
-        if (redisService.getTotal() < result.get(1)) {
+        if (redisService.getFreeTotal() < result.get(1)) {
             redisService.totalSetRemove(studentId);
             return new RestData(1, "预约失败,请点击页面刷新状态按钮获取最新数据!");
         }
@@ -506,6 +506,11 @@ public class BookCaseServiceImpl implements BookCaseService {
                 logger.info(studentId + "已经分配柜子,无需再分配");
             }
         }
+    }
+
+    @Override
+    public void boxRandom(String studentId) {
+
     }
 
 

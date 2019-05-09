@@ -41,11 +41,19 @@ public class ScheduledTask {
         while (true) {
             logger.debug("ScheduledTask : 查询排队队列");
             studentId = redisService.popQueue();
-            if (studentId == null) {
+
+            if (null != studentId) {
+                bookCaseService.boxQueue(studentId);
+                logger.debug("ScheduledTask : {}已经分配完毕", studentId);
+                continue;
+            }
+
+            if (redisService.getFreeTotal() > redisService.getSetSize()) {
                 break;
             }
-            bookCaseService.boxQueue(studentId);
-            logger.debug("ScheduledTask : {}已经分配完毕", studentId);
+
+            // todo 判断 set 数量,新添加一个查询 size 的方法
+
         }
     }
 }

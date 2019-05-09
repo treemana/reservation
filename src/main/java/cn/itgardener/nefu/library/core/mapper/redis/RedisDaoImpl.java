@@ -177,6 +177,11 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
+    public Long getSetSize(String setName) {
+        return stringRedisTemplate.opsForSet().size(setName);
+    }
+
+    @Override
     public void setRemove(String setName, String value) {
         stringRedisTemplate.opsForSet().remove(setName, value);
     }

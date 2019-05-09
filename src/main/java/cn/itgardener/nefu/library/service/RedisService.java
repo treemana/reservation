@@ -21,7 +21,7 @@ public interface RedisService {
     /**
      * @return 此次可预约柜子总数
      */
-    int getTotal();
+    int getFreeTotal();
 
     /**
      * 将学生添加到排队队列
@@ -39,6 +39,21 @@ public interface RedisService {
     String popQueue();
 
     /**
+     * 将学生添加到随机队列
+     *
+     * @param studentId 学号
+     * @return 是否添加成功
+     */
+    boolean pushRandom(String studentId);
+
+    /**
+     * 获取一个随机预约的学生
+     *
+     * @return 学号
+     */
+    String popRandom();
+
+    /**
      * 将学号添加到 set 并计算大小
      *
      * @param studentId 学号
@@ -52,6 +67,11 @@ public interface RedisService {
      * @param studentId 学号
      */
     void totalSetRemove(String studentId);
+
+    /**
+     * @return 去重队列总数
+     */
+    int getSetSize();
 
     /**
      * 添加目标位置记录

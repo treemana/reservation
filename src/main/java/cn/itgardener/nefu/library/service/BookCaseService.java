@@ -97,11 +97,18 @@ public interface BookCaseService {
     RestData postBoxOrder(BookCaseVo bookCaseVo);
 
     /**
-     * redis书包柜队列
+     * redis 书包柜队列
      *
-     * @param studentId
+     * @param studentId 学号
      */
     void boxQueue(String studentId);
+
+    /**
+     * 处理随机柜子
+     *
+     * @param studentId 学号
+     */
+    void boxRandom(String studentId);
 
     /**
      * 删除书包柜
@@ -110,7 +117,6 @@ public interface BookCaseService {
      * @return restdata
      * @throws LibException 异常
      */
-
     RestData deleteBookcaseById(BookCaseVo bookCaseVo) throws LibException;
 
     /**

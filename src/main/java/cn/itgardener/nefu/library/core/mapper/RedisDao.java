@@ -133,6 +133,12 @@ public interface RedisDao {
 
     /**
      * @param setName setName
+     * @return SET size
+     */
+    Long getSetSize(String setName);
+
+    /**
+     * @param setName setName
      * @param value   value
      */
     void setRemove(String setName, String value);

@@ -71,6 +71,11 @@ public class GlobalConst {
     public static final String QUEUE_LIST = "queue_list";
 
     /**
+     * 随机队列
+     */
+    public static final String RANDOM_LIST = "random_list";
+
+    /**
      * 预约:学号-位置对应关系
      */
     public static final String LOCATION_HASH = "location_hash";
@@ -84,4 +89,5 @@ public class GlobalConst {
      * 区域数量前缀
      */
     public static final String LOCATION_PREFIX = "location_";
+    /* redis key end */
 }

@@ -83,7 +83,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public int getTotal() {
+    public int getFreeTotal() {
         return Integer.parseInt(redisDao.get(GlobalConst.TOTAL));
     }
 
@@ -95,6 +95,16 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public String popQueue() {
         return redisDao.listLiftPop(GlobalConst.QUEUE_LIST);
+    }
+
+    @Override
+    public boolean pushRandom(String studentId) {
+        return redisDao.listRightPush(GlobalConst.RANDOM_LIST, studentId);
+    }
+
+    @Override
+    public String popRandom() {
+        return redisDao.listLiftPop(GlobalConst.RANDOM_LIST);
     }
 
     @Override
@@ -116,6 +126,15 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public int getSetSize() {
+        Long result = redisDao.getSetSize(GlobalConst.ALL_RESERVATION_SET);
+        if (null == result) {
+            return Integer.MAX_VALUE;
+        }
+        return Math.toIntExact(result);
+    }
+
+    @Override
     public void addLocation(String studentId, String location) {
         redisDao.putHash(GlobalConst.LOCATION_HASH, studentId, location);
     }
@@ -127,12 +146,11 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public int decrLocation(String location) {
-        int rtv = -1;
         Long result = redisDao.stringDecr(GlobalConst.LOCATION_PREFIX + location);
-        if (null != result) {
-            rtv = Math.toIntExact(result);
+        if (null == result) {
+            return -1;
         }
-        return rtv;
+        return Math.toIntExact(result);
     }
 
     @Override
