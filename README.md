@@ -61,10 +61,10 @@
 
 - Java 8
 - MySQL 5.7
-- SpringBoot 2.1.1
-- Mybatis 1.3.2
+- SpringBoot 2.1.8
+- Mybatis 2.1.0
 - Redis 5.0.0
 - nginx 1.15.5
-- MySQL Connector 5.1.47
+- MySQL Connector 5.1.48
 - Tomcat 8.5
-- Apache POI 3.17
+- Apache POI 4.1.0

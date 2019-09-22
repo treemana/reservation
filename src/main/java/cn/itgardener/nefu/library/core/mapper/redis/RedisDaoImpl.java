@@ -39,7 +39,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForList().range(key, 0, -1);
         } catch (Exception e) {
-            logger.info("getList" + e.getMessage());
+            logger.error("getList" + e.getMessage());
             return null;
         }
     }
@@ -72,7 +72,7 @@ public class RedisDaoImpl implements RedisDao {
             Long l = stringRedisTemplate.opsForValue().increment(key, -number);
             return l;
         } catch (Exception e) {
-            logger.info("dec" + e.getMessage());
+            logger.error("dec" + e.getMessage());
             return 0;
         }
     }
@@ -83,7 +83,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {
-            logger.info("set" + e.getMessage());
+            logger.error("set" + e.getMessage());
             return false;
         }
     }
@@ -93,7 +93,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            logger.info("get" + e.getMessage());
+            logger.error("get" + e.getMessage());
             return null;
         }
     }
@@ -104,7 +104,7 @@ public class RedisDaoImpl implements RedisDao {
             Long l = stringRedisTemplate.opsForValue().increment(key, number);
             return l;
         } catch (Exception e) {
-            logger.info("inc" + e.getMessage());
+            logger.error("inc" + e.getMessage());
             return 0;
         }
     }
@@ -115,7 +115,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForSet().add(key, value);
             return true;
         } catch (Exception e) {
-            logger.info("add" + e.getMessage());
+            logger.error("add" + e.getMessage());
             return false;
         }
     }

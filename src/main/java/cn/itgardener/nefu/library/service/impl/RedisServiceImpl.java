@@ -84,7 +84,11 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public int getFreeTotal() {
-        return Integer.parseInt(redisDao.get(GlobalConst.TOTAL));
+        String total = redisDao.get(GlobalConst.TOTAL);
+        if (null == total) {
+            return 0;
+        }
+        return Integer.parseInt(total);
     }
 
     @Override
