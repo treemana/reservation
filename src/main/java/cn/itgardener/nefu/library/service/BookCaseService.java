@@ -91,24 +91,24 @@ public interface BookCaseService {
     /**
      * 预约书包柜
      *
-     * @param bookCaseVo
-     * @return 是否成功
+     * @param bookCaseVo 预约参数
+     * @return 预约结果
      */
-    boolean postBoxOrder(BookCaseVo bookCaseVo) throws LibException;
+    RestData postBoxOrder(BookCaseVo bookCaseVo);
 
     /**
-     * redis书包柜队列
+     * redis 书包柜队列
      *
-     * @param studentId
+     * @param studentId 学号
      */
     void boxQueue(String studentId);
 
     /**
-     * redis 队列出队
+     * 处理随机柜子
      *
-     * @return
+     * @param studentId 学号
      */
-    String popQueue();
+    void boxRandom(String studentId);
 
     /**
      * 删除书包柜
@@ -117,7 +117,6 @@ public interface BookCaseService {
      * @return restdata
      * @throws LibException 异常
      */
-
     RestData deleteBookcaseById(BookCaseVo bookCaseVo) throws LibException;
 
     /**

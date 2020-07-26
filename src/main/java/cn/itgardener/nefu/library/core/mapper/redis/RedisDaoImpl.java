@@ -4,19 +4,17 @@
 
 package cn.itgardener.nefu.library.core.mapper.redis;
 
-import cn.itgardener.nefu.library.core.mapper.BookCaseMapper;
-import cn.itgardener.nefu.library.core.mapper.ConfigMapper;
+import cn.itgardener.nefu.library.common.util.JsonUtil;
 import cn.itgardener.nefu.library.core.mapper.RedisDao;
-import cn.itgardener.nefu.library.core.mapper.UserMapper;
-import cn.itgardener.nefu.library.core.model.BookCase;
-import cn.itgardener.nefu.library.core.model.Config;
-import cn.itgardener.nefu.library.core.model.User;
-import cn.itgardener.nefu.library.core.model.vo.LocationVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,15 +28,9 @@ public class RedisDaoImpl implements RedisDao {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final StringRedisTemplate stringRedisTemplate;
-    private final BookCaseMapper bookCaseMapper;
-    private final ConfigMapper configMapper;
-    private final UserMapper userMapper;
 
-    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate, BookCaseMapper bookCaseMapper, ConfigMapper configMapper, UserMapper userMapper) {
+    public RedisDaoImpl(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
-        this.bookCaseMapper = bookCaseMapper;
-        this.configMapper = configMapper;
-        this.userMapper = userMapper;
     }
 
 
@@ -47,65 +39,31 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForList().range(key, 0, -1);
         } catch (Exception e) {
-            logger.info("getList" + e.getMessage());
+            logger.error("getList" + e.getMessage());
             return null;
         }
     }
 
     @Override
-    public Long getListSize(String key) {
-        try {
-            return stringRedisTemplate.opsForList().size(key);
-        } catch (Exception e) {
-            logger.info("add" + e.getMessage());
-            return null;
-        }
-
+    public boolean listRightPush(String key, String value) {
+        Long result = stringRedisTemplate.opsForList().rightPush(key, value);
+        return null != result && 0 >= result;
     }
 
     @Override
-    public boolean pushValue(String key, String value) {
-        try {
-            stringRedisTemplate.opsForList().rightPush(key, value);
-            return true;
-        } catch (Exception e) {
-            logger.info("pushValue" + e.getMessage());
-            return false;
-        }
-
+    public String listLiftPop(String key) {
+        return stringRedisTemplate.opsForList().leftPop(key);
     }
 
     @Override
-    public boolean pushList(String key, List<String> list) {
-        try {
-            stringRedisTemplate.opsForList().rightPushAll(key, list);
-            return true;
-        } catch (Exception e) {
-            logger.info("pushList" + e.getMessage());
-            return false;
-        }
-
+    public Long stringDecr(String key) {
+        return stringRedisTemplate.opsForValue().decrement(key);
     }
 
     @Override
-    public String popValue(String key) {
-        try {
-            return stringRedisTemplate.opsForList().leftPop(key);
-        } catch (Exception e) {
-            logger.info("popValue" + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public boolean removeListValue(String key, String value) {
-        try {
-            stringRedisTemplate.opsForList().remove(key, 1, value);
-            return true;
-        } catch (Exception e) {
-            logger.info("removeListValue" + e.getMessage());
-            return false;
-        }
+    public boolean stringIncr(String key) {
+        Long result = stringRedisTemplate.opsForValue().increment(key);
+        return null != result;
     }
 
     @Override
@@ -114,7 +72,7 @@ public class RedisDaoImpl implements RedisDao {
             Long l = stringRedisTemplate.opsForValue().increment(key, -number);
             return l;
         } catch (Exception e) {
-            logger.info("dec" + e.getMessage());
+            logger.error("dec" + e.getMessage());
             return 0;
         }
     }
@@ -125,7 +83,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {
-            logger.info("set" + e.getMessage());
+            logger.error("set" + e.getMessage());
             return false;
         }
     }
@@ -135,7 +93,7 @@ public class RedisDaoImpl implements RedisDao {
         try {
             return stringRedisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            logger.info("get" + e.getMessage());
+            logger.error("get" + e.getMessage());
             return null;
         }
     }
@@ -146,7 +104,7 @@ public class RedisDaoImpl implements RedisDao {
             Long l = stringRedisTemplate.opsForValue().increment(key, number);
             return l;
         } catch (Exception e) {
-            logger.info("inc" + e.getMessage());
+            logger.error("inc" + e.getMessage());
             return 0;
         }
     }
@@ -157,7 +115,7 @@ public class RedisDaoImpl implements RedisDao {
             stringRedisTemplate.opsForSet().add(key, value);
             return true;
         } catch (Exception e) {
-            logger.info("add" + e.getMessage());
+            logger.error("add" + e.getMessage());
             return false;
         }
     }
@@ -175,78 +133,66 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public boolean remove(String key) {
-        try {
-            stringRedisTemplate.delete(key);
-            return true;
-        } catch (Exception e) {
-            logger.info("remove" + e.getMessage());
-            return false;
-        }
+    public void putHash(String hashName, String key, String value) {
+        stringRedisTemplate.opsForHash().put(hashName, key, value);
     }
 
     @Override
-    public boolean updateRedis() {
-        try {
-            int count = 0;
-            LocationVo locationVo = new LocationVo();
-            for (int i = 1; i <= 6; i++) {
-                locationVo.setFloor(i);
-                List<Config> list = configMapper.selectFloorLocation(locationVo);
-                this.set("floor_" + i, String.valueOf(list.size()));
-                for (int j = 1; j <= list.size(); j++) {
-                    if ("0".equals(configMapper.selectLocation(i + "_" + j).get(0).getConfigValue())) {
-                        this.set("location_" + i + "_" + j, "-1");
-                        continue;
-                    }
-                    int num = bookCaseMapper.selectBagNum(i + "_" + j);
-                    count += num;
-                    this.set("location_" + i + "_" + j, String.valueOf(num));
-                }
-            }
-            this.set("popCount", "0");
-            this.set("total", String.valueOf(count));
-            Config configOpenTime = configMapper.selectStartTime();
-            Config configEndTime = configMapper.selectEndTime();
-            this.set("openTime", configOpenTime.getConfigValue());
-            this.set("endTime", configEndTime.getConfigValue());
-            List<BookCase> bookCases = bookCaseMapper.selectBookcase();
-            for (BookCase bookcase : bookCases) {
-                User user = new User();
-                user.setSystemId(bookcase.getUserId());
-                List<User> users = userMapper.selectByCondition(user);
-                this.add("finish", users.get(0).getStudentId());
-            }
+    public String getHash(String hashName, String key) {
+        String rtv = null;
 
-            return true;
-        } catch (Exception e) {
-            logger.info("updateRedis" + e);
-            return false;
+        Object object = stringRedisTemplate.opsForHash().get(hashName, key);
+        if (null != object) {
+            rtv = object.toString();
         }
-    }
 
-    @Override
-    public void pushHash(String key, String filed, String value) {
-        try {
-            stringRedisTemplate.opsForHash().put(key, filed, value);
-        } catch (Exception e) {
-            logger.error(e.getLocalizedMessage());
-        }
-    }
-
-    @Override
-    public String getHash(String key, String filed) {
-        try {
-            return (String) stringRedisTemplate.opsForHash().get(key, filed);
-        } catch (Exception e) {
-            logger.info("get" + e.getMessage());
-            return null;
-        }
+        return rtv;
     }
 
     @Override
     public boolean removeAllKey() {
         Long delete = stringRedisTemplate.delete(stringRedisTemplate.keys("*"));
         return delete > 0;
+    }
+
+    @Override
+    public List<Object> addAndSize(String setName, String value) {
+
+        SessionCallback sessionCallback = new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                redisOperations.multi();
+                stringRedisTemplate.opsForSet().add(setName, value);
+                stringRedisTemplate.opsForSet().size(setName);
+                return redisOperations.exec();
+            }
+        };
+
+        Object object = stringRedisTemplate.execute(sessionCallback);
+        if (null == object || 1 > object.toString().length()) {
+            return new ArrayList<>();
+        }
+
+        return JsonUtil.getListFromJson(object.toString());
+    }
+
+    @Override
+    public Long getSetSize(String setName) {
+        return stringRedisTemplate.opsForSet().size(setName);
+    }
+
+    @Override
+    public void setRemove(String setName, String value) {
+        stringRedisTemplate.opsForSet().remove(setName, value);
+    }
+
+    @Override
+    public void putMap(String key, String value) {
+        stringRedisTemplate.opsForValue().set(key, value);
+    }
+
+    @Override
+    public String getMap(String key) {
+        return stringRedisTemplate.opsForValue().get(key);
     }
 }

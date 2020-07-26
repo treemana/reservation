@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2014-2018 www.itgardener.cn. All rights reserved.
+ * Copyright (c) 2014-2019 www.itgardener.cn. All rights reserved.
  */
 
 package cn.itgardener.nefu.library.service.schedule;
 
 import cn.itgardener.nefu.library.service.BookCaseService;
+import cn.itgardener.nefu.library.service.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class ScheduledTask {
 
     private Logger logger = LoggerFactory.getLogger(ScheduledTask.class);
 
-    private int fixedRateCount = 1;
-
+    private final RedisService redisService;
     private final BookCaseService bookCaseService;
 
     @Autowired
-    public ScheduledTask(BookCaseService bookCaseService) {
+    public ScheduledTask(RedisService redisService, BookCaseService bookCaseService) {
+        this.redisService = redisService;
         this.bookCaseService = bookCaseService;
     }
 
@@ -36,14 +37,23 @@ public class ScheduledTask {
      */
     @Scheduled(fixedDelay = 1000)
     public void doPopList() {
+        String studentId;
         while (true) {
-            logger.debug("ScheduledTask: 第{}次查询队列", fixedRateCount++);
-            String studentId = bookCaseService.popQueue();
-            if (studentId == null) {
+            logger.debug("ScheduledTask : 查询排队队列");
+            studentId = redisService.popQueue();
+
+            if (null != studentId) {
+                bookCaseService.boxQueue(studentId);
+                logger.debug("ScheduledTask : {}已经分配完毕", studentId);
+                continue;
+            }
+
+            if (redisService.getFreeTotal() > redisService.getSetSize()) {
                 break;
             }
-            bookCaseService.boxQueue(studentId);
-            logger.debug("ScheduledTask: 当前{}已经分配完毕", studentId);
+
+            // todo 判断 set 数量,新添加一个查询 size 的方法
+
         }
     }
 }

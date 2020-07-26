@@ -7,6 +7,7 @@ package cn.itgardener.nefu.library.web.api;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
+import cn.itgardener.nefu.library.common.util.TokenUtil;
 import cn.itgardener.nefu.library.common.util.VerifyUtil;
 import cn.itgardener.nefu.library.core.model.User;
 import cn.itgardener.nefu.library.core.model.vo.BookCaseVo;
@@ -59,19 +60,14 @@ public class StudentApi {
     public RestData postBoxOrder(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("POST postBoxOrder : " + JsonUtil.getJsonString(bookCaseVo));
 
-        try {
-            VerifyUtil.verify(request.getHeader("token"));
-        } catch (LibException e) {
-            return new RestData(1, e.getMessage());
-        } catch (ParseException e) {
-            logger.error(e.getLocalizedMessage());
+        if (!VerifyUtil.verifyOpenTime()) {
+            return new RestData(1, "不在预约时间内!");
         }
 
-        try {
-            return new RestData(bookCaseService.postBoxOrder(bookCaseVo));
-        } catch (LibException e) {
-            return new RestData(1, e.getMessage());
-        }
+        User user = TokenUtil.getUserByToken(request);
+        bookCaseVo.setStudentId(user.getStudentId());
+
+        return bookCaseService.postBoxOrder(bookCaseVo);
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)

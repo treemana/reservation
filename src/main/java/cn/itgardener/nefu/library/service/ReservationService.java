@@ -42,9 +42,8 @@ public interface ReservationService {
      * 查询预约时间
      *
      * @return map
-     * @throws LibException 异常信息
      */
-    Map<String, String> getReservationTime() throws LibException;
+    RestData getReservationTime();
 
     /**
      * 修改预约时间
@@ -55,7 +54,7 @@ public interface ReservationService {
     RestData putReservationTime(TimeVo timeVO);
 
     /**
-     * 查询开放时间,结束时间，系统当前时间
+     * 查询开放时间,结束时间,系统当前时间
      *
      * @return map
      */
@@ -74,8 +73,8 @@ public interface ReservationService {
     /**
      * 验证码校验
      *
-     * @param verifyCode
-     * @param studentId
+     * @param verifyCode 验证码
+     * @param studentId  学号
      */
-    void verifyCode(String verifyCode, String studentId) throws LibException;
+    boolean verifyCode(String verifyCode, String studentId);
 }

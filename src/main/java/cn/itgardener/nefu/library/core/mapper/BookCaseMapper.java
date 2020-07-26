@@ -89,6 +89,28 @@ public interface BookCaseMapper {
     @Update("UPDATE bookcase SET bc_user_id=#{studentId},bc_status=1 WHERE bc_system_id=#{bcSystemId}")
     int updateOwnerByBcId(@Param("bcSystemId") int bcSystemId, @Param("studentId") int studentId);
 
+    /**
+     * 给特定区域的一个柜子增加使用者,按照主键递增顺序
+     *
+     * @param studentId 学号
+     * @param location  区域
+     * @return 修改数量
+     */
+    @Update("UPDATE bookcase SET bc_user_id = #{studentId}, bc_status = 1 WHERE bc_system_id = (SELECT * FROM (" +
+            "SELECT MIN(bc_system_id) AS sys_id FROM bookcase bc1 " +
+            "WHERE bc_user_id = bc_system_id AND bc_status = 0 AND bc_location = #{location}) bc2);")
+    int updateSetUserIdAndStatusByLocation(int studentId, String location);
+
+    /**
+     * 给一个柜子增加使用者,按照主键递增顺序
+     *
+     * @param studentId 学号
+     * @return 修改数量
+     */
+    @Update("UPDATE bookcase SET bc_user_id = #{studentId}, bc_status = 1 WHERE bc_system_id = (SELECT * FROM (" +
+            "SELECT MIN(bc_system_id) AS sys_id FROM bookcase bc1 " +
+            "WHERE bc_user_id = bc_system_id AND bc_status = 0) bc2);")
+    int updateSetUserIdAndStatusByRandom(int studentId);
 
     /**
      * 根据条件查询书包柜详情

@@ -56,21 +56,14 @@ public class TeacherApi {
     public RestData getReservationTime() {
         logger.info("GET getReservationTime");
 
-        try {
-            final Map<String, String> reservationTime = reservationService.getReservationTime();
-            logger.info("get get reservationTime success");
-            return new RestData(reservationTime);
-
-        } catch (LibException e) {
-            return new RestData(e.getMessage());
-        }
+        return reservationService.getReservationTime();
     }
 
     @RequestMapping(value = "/open-time", method = RequestMethod.PUT)
     public RestData putReservationTime(@RequestBody TimeVo timeVO, HttpServletRequest request) {
         logger.info("PUT putReservationTime" + JsonUtil.getJsonString(timeVO));
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         return reservationService.putReservationTime(timeVO);
@@ -80,7 +73,7 @@ public class TeacherApi {
     public RestData getDetail(BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("GET getDetail");
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request) && !VerifyUtil.verifyMonitor(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         return bookCaseService.selectDetailByCondition(bookCaseVo);
@@ -90,7 +83,7 @@ public class TeacherApi {
     public RestData putShip(@RequestBody ShipVo shipVO, HttpServletRequest request) {
         logger.info("PUT putShip: " + JsonUtil.getJsonString(shipVO));
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -104,7 +97,7 @@ public class TeacherApi {
     public RestData deleteShip(@RequestBody List<Integer> data, HttpServletRequest request) {
         logger.info("DELETE deleteShip: " + JsonUtil.getJsonString(data));
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         return bookCaseService.deleteShip(data);
@@ -112,8 +105,9 @@ public class TeacherApi {
 
     @RequestMapping(value = "/reserved-id", method = RequestMethod.POST)
     public RestData postKeepById(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
-        logger.info("POST postKeep: " + JsonUtil.getJsonString(bookCaseVo));
-        if (!VerifyUtil.verifyType(request)) {
+        logger.info("POST postKeepById : " + JsonUtil.getJsonString(bookCaseVo));
+
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -126,9 +120,9 @@ public class TeacherApi {
 
     @RequestMapping(value = "/reserved-number", method = RequestMethod.POST)
     public RestData postKeepByNumber(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
-        logger.info("POST postKeep: " + JsonUtil.getJsonString(bookCaseVo));
+        logger.info("POST postKeepByNumber : " + JsonUtil.getJsonString(bookCaseVo));
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -143,7 +137,7 @@ public class TeacherApi {
     public RestData getBlackList(HttpServletRequest request) {
         logger.info("GET getBlackList");
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -158,7 +152,7 @@ public class TeacherApi {
     public RestData deleteBlackList(@PathVariable String studentId, HttpServletRequest request) {
         logger.info("DELETE deleteBlackList : studentId = " + studentId);
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
 
@@ -174,9 +168,9 @@ public class TeacherApi {
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public RestData postLogin(@RequestBody User user, HttpServletRequest request) {
-        logger.info("POST postAddBlackApi : " + JsonUtil.getJsonString(user));
+        logger.info("POST postLogin : " + JsonUtil.getJsonString(user));
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         if (1 == userService.postAddBlackList(user)) {
@@ -222,7 +216,7 @@ public class TeacherApi {
     public RestData postStudent(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         logger.info("POST postStudent : ");
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
 
@@ -248,7 +242,7 @@ public class TeacherApi {
     public RestData deleteStudent(HttpServletRequest request) {
         logger.info("DELETE deleteStudent : ");
 
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
 
@@ -259,7 +253,7 @@ public class TeacherApi {
     @RequestMapping(value = "/bookcase", method = RequestMethod.POST)
     public RestData AddBookCase(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("get AddBookCase" + JsonUtil.getJsonString(bookCaseVo));
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -277,7 +271,7 @@ public class TeacherApi {
     @RequestMapping(value = "/location", method = RequestMethod.POST)
     public RestData addLocation(@RequestBody LocationVo locationVo, HttpServletRequest request) {
         logger.info("get addLocation:" + JsonUtil.getJsonString(locationVo));
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -297,7 +291,7 @@ public class TeacherApi {
     @RequestMapping(value = "/location/{location}", method = RequestMethod.DELETE)
     public RestData deleteLocation(@PathVariable String location, HttpServletRequest request) {
         logger.info("deleteLocation:" + JsonUtil.getJsonString(location));
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
 
@@ -313,7 +307,7 @@ public class TeacherApi {
     @RequestMapping(value = "/bookcase-systemId", method = RequestMethod.POST)
     public RestData postBookcase(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("postBookcase:");
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -328,7 +322,7 @@ public class TeacherApi {
     @RequestMapping(value = "/bookcase-systemId", method = RequestMethod.DELETE)
     public RestData deleteBookcase(@RequestBody BookCaseVo bookCaseVo, HttpServletRequest request) {
         logger.info("deleteBookcase:");
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request)) {
             return new RestData(1, ErrorMessage.OPERATIOND_ENIED);
         }
         try {
@@ -343,7 +337,7 @@ public class TeacherApi {
     @RequestMapping(value = "/downMessage", method = RequestMethod.GET)
     public void downMessage(HttpServletResponse response, HttpServletRequest request) {
         logger.info("downMessage");
-        if (!VerifyUtil.verifyType(request)) {
+        if (!VerifyUtil.verifyAdmin(request) && !VerifyUtil.verifyMonitor(request)) {
             return;
         }
         bookCaseService.downMessage(response);

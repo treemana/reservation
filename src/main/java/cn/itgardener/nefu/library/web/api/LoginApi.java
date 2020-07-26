@@ -5,6 +5,7 @@
 package cn.itgardener.nefu.library.web.api;
 
 import cn.itgardener.nefu.library.common.ErrorMessage;
+import cn.itgardener.nefu.library.common.GlobalConst;
 import cn.itgardener.nefu.library.common.LibException;
 import cn.itgardener.nefu.library.common.RestData;
 import cn.itgardener.nefu.library.common.util.JsonUtil;
@@ -79,7 +80,7 @@ public class LoginApi {
             //生产验证码字符串并保存到redis中
             String createText = defaultKaptcha.createText();
             logger.info(createText);
-            redisDao.pushHash("code", user.getStudentId(), createText);
+            redisDao.putHash(GlobalConst.CAPTCHA_HASH, user.getStudentId(), createText);
 
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
